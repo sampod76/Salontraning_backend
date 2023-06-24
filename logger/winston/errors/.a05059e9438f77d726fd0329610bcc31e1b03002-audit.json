@@ -1,0 +1,60 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\.a05059e9438f77d726fd0329610bcc31e1b03002-audit.json",
+    "files": [
+        {
+            "date": 1687535393981,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-23-21-error.log",
+            "hash": "16dde23649d6b7c911fceeaa8080cc15e24327028c5f5cab6c2e7750a848c7dd"
+        },
+        {
+            "date": 1687536695926,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-23-22-error.log",
+            "hash": "7f19297b8c66beae2cf380598f3ff9083df2e80e3dfbe1bacdbeaec0dd58e08e"
+        },
+        {
+            "date": 1687539653864,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-23-23-error.log",
+            "hash": "e463e91fc80551fc3e934700c1a1e6bf1e09e0529fc28126b4835077f714ff70"
+        },
+        {
+            "date": 1687547010748,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-01-error.log",
+            "hash": "3b24523eabde4810bc57a12ef18950f74d2dd3dd46766abaf97497a47b3a2866"
+        },
+        {
+            "date": 1687550677991,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-02-error.log",
+            "hash": "bfe7a9db1c0c7fed824e2c488d2719aba355125975af32b17fcc73b8c3ed34ff"
+        },
+        {
+            "date": 1687556081443,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-03-error.log",
+            "hash": "d908ab16560dbaa667e2092363d487ea92fa072e7713a1ea80a246de9f131fc9"
+        },
+        {
+            "date": 1687557755457,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-04-error.log",
+            "hash": "0fc5c881497ae5e85cb694f71c2e2e807276d347f57ea9b62eb81b473f0998fb"
+        },
+        {
+            "date": 1687598387650,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-15-error.log",
+            "hash": "741bfefcc6133073d8988a2859373e1ce4d74a30048455c5a1ab3cc02379fd48"
+        },
+        {
+            "date": 1687600809725,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-16-error.log",
+            "hash": "88a59e78c767f92ea8ff4ff9c98cf9f270541931c5b5f2349202409ccb12c43a"
+        },
+        {
+            "date": 1687604441882,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\errors\\PHU-2023-06-24-17-error.log",
+            "hash": "61826e194996bb6fc618763c3fbf1fb80487a07206a27659c3a15f9d4c301696"
+        }
+    ],
+    "hashType": "sha256"
+}

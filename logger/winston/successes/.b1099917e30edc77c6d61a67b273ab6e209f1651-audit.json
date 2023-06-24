@@ -1,0 +1,60 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\.b1099917e30edc77c6d61a67b273ab6e209f1651-audit.json",
+    "files": [
+        {
+            "date": 1687535393975,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-23-21-success.log",
+            "hash": "cea1e1906f568b30714e08ece7125a3a0de7597ac56f5795c676bbe85e68a26d"
+        },
+        {
+            "date": 1687536695903,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-23-22-success.log",
+            "hash": "70f2e1f7d63591701fbf611cd6c7095bb014610ebec1cc5620fc3f9c92caa0a7"
+        },
+        {
+            "date": 1687539653858,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-23-23-success.log",
+            "hash": "fbf4014a0ec5e09247db00cfa679edd126e138faf15266af784d7ff975edfa5b"
+        },
+        {
+            "date": 1687547010738,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-01-success.log",
+            "hash": "db467337ce38e13b1dad34d3334da19f89c9a06f1c18c0bd36e09c74ac39c188"
+        },
+        {
+            "date": 1687550677985,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-02-success.log",
+            "hash": "495a465268cadb1072df1a34b4cf8edb6232e3c1d67e5b81919184b26e59508e"
+        },
+        {
+            "date": 1687556081435,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-03-success.log",
+            "hash": "0feaa2b5c5e9fbbfa480cf5ba1994530d93fe45ff0b1f09d346ba06d8c72f90a"
+        },
+        {
+            "date": 1687557755449,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-04-success.log",
+            "hash": "a2bfc5c789cff6baa374848e5d6d3d3f9a039fa8f43b82dd29c3710679b037f6"
+        },
+        {
+            "date": 1687598387637,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-15-success.log",
+            "hash": "55b29e538b8f5139dbd0809b08ffe9eb2f0210ff16a4b76625f024d45a08b284"
+        },
+        {
+            "date": 1687600809719,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-16-success.log",
+            "hash": "5ec8deb4221b6c09b313f8e0dac9ceb1f9de9f227ad168a6997715ec0153aaf5"
+        },
+        {
+            "date": 1687604441874,
+            "name": "F:\\programming hero\\INTERSHIP\\CourshVedio\\logger\\winston\\successes\\PHU-2023-06-24-17-success.log",
+            "hash": "c9d55335d91d30701f98cec6e42ac4b207f9ebe36444f340d3a53097dec99477"
+        }
+    ],
+    "hashType": "sha256"
+}
