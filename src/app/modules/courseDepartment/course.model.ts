@@ -11,6 +11,7 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     title: {
       type: String,
       required: true,
+      trim: true,
     },
     price: {
       type: Number,
@@ -44,6 +45,12 @@ const courseSchema = new Schema<ICourse, CourseModel>(
       enum: ['active', 'deactive'],
       default: 'active',
     },
+    tag: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
   },
   {
     timestamps: true,

@@ -16,6 +16,7 @@ const createCourseZodSchema = z.object({
     publisherName: z.string({
       required_error: 'publisher Name field is required',
     }),
+    tag: z.array(z.string().optional()).optional(),
   }),
 });
 
@@ -33,6 +34,7 @@ const updateCourseZodSchema = z.object({
       .optional(), // Assuming publish is a string representing the ID of a related document
     publisher: z.string().optional(), // Assuming publisher is a string representing the ID of a related document
     publisherName: z.string().optional(),
+    tag: z.array(z.string().optional()).optional(),
   }),
 });
 export const CourseValidation = {

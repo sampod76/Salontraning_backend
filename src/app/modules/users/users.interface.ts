@@ -15,6 +15,7 @@ export type IUser = {
   moderator?: Types.ObjectId | IModerator;
   admin?: Types.ObjectId | IAdmin;
 };
+
 export type UserModel = {
   isUserExist(
     email: string

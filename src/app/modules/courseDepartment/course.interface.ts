@@ -35,6 +35,7 @@ export type ICourse = {
   publisher: Types.ObjectId | IUser;
   publisherName: string;
   status?: 'active' | 'deactive';
+  tag?: string[];
 };
 
 export type CourseModel = Model<ICourse, Record<string, unknown>>;
