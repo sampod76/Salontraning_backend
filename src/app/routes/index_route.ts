@@ -3,10 +3,11 @@ import express from 'express';
 import { AuthRouter } from '../modules/auth/auth.route';
 
 import { AdminRoutes } from '../modules/admin/admin.route';
+import { CourseRoute } from '../modules/course/course.route';
 import { GeneralUserRoutes } from '../modules/generalUser/route.GeneralUser';
+import { LessionRoute } from '../modules/lession/lession.route';
 import { ModeratorRoutes } from '../modules/moderator/moderator.route';
 import { UserRoute } from '../modules/users/users.router';
-import { CourseRoute } from '../modules/courseDepartment/course.route';
 
 const router = express.Router();
 
@@ -35,6 +36,10 @@ const moduleRoutes = [
   {
     path: '/course',
     route: CourseRoute,
+  },
+  {
+    path: '/lession',
+    route: LessionRoute,
   },
 ];
 

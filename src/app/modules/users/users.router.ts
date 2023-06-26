@@ -2,6 +2,8 @@ import express from 'express';
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { UserController } from './users.controller';
 import { UserValidation } from './users.validation';
+import { GeneralUserValidation } from '../generalUser/validation.GeneralUser';
+import { GeneralUserController } from '../generalUser/controller.GeneralUser';
 
 const router = express.Router();
 
@@ -12,7 +14,7 @@ router
     UserController.createGeneralUser
   );
 
-/* router
+router
   .route('/sign-up')
   .post(
     validateRequestZod(
@@ -20,7 +22,7 @@ router
     ),
     GeneralUserController.createGeneralUserByFirebase
   );
- */
+
 router
   .route('/create-admin')
   .post(

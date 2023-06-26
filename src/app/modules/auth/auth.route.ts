@@ -10,6 +10,7 @@ router
     validateRequestZod(AuthValidation.loginZodSchema),
     AuthController.loginUser
   );
+  
 router
   .route('/refresh-token')
   .post(

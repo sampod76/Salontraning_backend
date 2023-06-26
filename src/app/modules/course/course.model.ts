@@ -12,6 +12,7 @@ const courseSchema = new Schema<ICourse, CourseModel>(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     price: {
       type: Number,
