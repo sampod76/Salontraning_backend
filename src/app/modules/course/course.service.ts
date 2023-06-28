@@ -86,10 +86,12 @@ const getAllCourseFromDb = async (
   const whereConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  /*   const result = await Course.find(whereConditions)
+  /* 
+  const result = await Course.find(whereConditions)
     .sort(sortConditions)
     .skip(Number(skip))
-    .limit(Number(limit)); */
+    .limit(Number(limit)); 
+    */
   const pipeline: PipelineStage[] = [
     { $match: whereConditions },
     {
@@ -98,6 +100,14 @@ const getAllCourseFromDb = async (
         localField: 'courseId',
         foreignField: 'courseId',
         as: 'All_lessions',
+      },
+    },
+    {
+      $lookup: {
+        from: 'quizzes',
+        localField: 'courseId',
+        foreignField: 'courseId',
+        as: 'quizzes',
       },
     },
     { $sort: sortConditions },

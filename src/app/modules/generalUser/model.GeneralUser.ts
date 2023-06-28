@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { GENDER } from './constant.GeneralUser';
 import { GeneralUserModel, IGeneralUser } from './interface.GeneralUser';
 import { ENUM_USER_ROLE } from '../../../enums/users';
@@ -46,6 +46,12 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       enum: ['active', 'deactive'],
       default: 'active',
     },
+    purchase_courses: [
+      {
+        courseId: { type: Types.ObjectId, ref: 'Course' },
+        total_completed_vedio: [Types.ObjectId],
+      },
+    ],
   },
   {
     timestamps: true,

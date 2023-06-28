@@ -8,6 +8,7 @@ import { GeneralUserRoutes } from '../modules/generalUser/route.GeneralUser';
 import { LessionRoute } from '../modules/lession/lession.route';
 import { ModeratorRoutes } from '../modules/moderator/moderator.route';
 import { UserRoute } from '../modules/users/users.router';
+import { QuizRoute } from '../modules/quiz/quiz.route';
 
 const router = express.Router();
 
@@ -40,6 +41,10 @@ const moduleRoutes = [
   {
     path: '/lession',
     route: LessionRoute,
+  },
+  {
+    path: '/quiz',
+    route: QuizRoute,
   },
 ];
 

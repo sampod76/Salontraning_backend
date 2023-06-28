@@ -18,6 +18,7 @@ const LessionSchema = new Schema<ILession, LessionModel>(
       trim: true,
       required: true,
     },
+    time: Number,
     header_1: {
       type: String,
       trim: true,

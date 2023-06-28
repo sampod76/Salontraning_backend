@@ -12,6 +12,7 @@ const createLessionZodSchema = z.object({
     courseId: z.string({ required_error: 'courseId is required' }),
     tag: z.array(z.string().optional()).optional(),
     vedio_link: z.string({ required_error: 'Vedio lini is required' }),
+    time: z.string().optional(),
   }),
 });
 
@@ -27,6 +28,7 @@ const updateLessionZodSchema = z.object({
     courseId: z.string(),
     tag: z.array(z.string().optional()).optional(),
     vedio_link: z.string().optional(),
+    time: z.string().optional(),
   }),
 });
 export const LessionValidation = {
