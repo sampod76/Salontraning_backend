@@ -5,6 +5,7 @@ import { ILoginUser, ILoginUserResponse } from './auth.interface';
 import { Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import { jwtHelpers } from '../../../helper/jwtHelpers';
+import { GeneralUser } from '../generalUser/model.GeneralUser';
 
 const loginUserFromDb = async (
   payload: ILoginUser
@@ -34,6 +35,39 @@ const loginUserFromDb = async (
     {
       role: isUserExist.role,
       email: isUserExist?.email,
+    },
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_expires_in as string
+  );
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+const loginUserByUidFromDb = async (
+  uid: string
+): Promise<ILoginUserResponse> => {
+  const isUserExist = await GeneralUser.findOne({ uid: uid });
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  const accessToken = jwtHelpers.createToken(
+    {
+      role: isUserExist.role,
+      email: isUserExist?.email,
+      name: isUserExist.name,
+      _id: isUserExist._id,
+    },
+    config.jwt.secret as Secret,
+    config.jwt.expires_in as string
+  );
+  const refreshToken = jwtHelpers.createToken(
+    {
+      role: isUserExist.role,
+      email: isUserExist?.email,
+      _id: isUserExist._id,
     },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
@@ -75,5 +109,6 @@ const refreshToken = async (token: string) => {
 
 export const AuthService = {
   loginUserFromDb,
+  loginUserByUidFromDb,
   refreshToken,
 };

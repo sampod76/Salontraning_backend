@@ -21,10 +21,10 @@ export type ILession = {
   header_1?: string;
   header_2?: string;
   description?: string;
-  thimble?: string;
+  thumbnail?: string;
   status?: 'active' | 'deactive';
   tag?: string[];
-  time?: string;
+  duration?: string;
   vedio_link: string;
   course: Types.ObjectId | ICourse;
   courseId: string;

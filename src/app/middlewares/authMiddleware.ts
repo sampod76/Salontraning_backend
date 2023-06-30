@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import ApiError from '../errors/ApiError';
 import httpStatus from 'http-status';
-import { jwtHelpers } from '../../helper/jwtHelpers';
-import config from '../../config';
 import { Secret } from 'jsonwebtoken';
-import { User } from '../modules/users/users.model';
+import config from '../../config';
 import { ENUM_USER_ROLE } from '../../enums/users';
-import { GeneralUser } from '../modules/generalUser/model.GeneralUser';
+import { jwtHelpers } from '../../helper/jwtHelpers';
+import ApiError from '../errors/ApiError';
 
 const authMiddleware =
   (...requiredRoles: string[]) =>
@@ -45,12 +43,12 @@ const authMiddleware =
       }
 
       //chack token user
-      if (
-        !(await User.isUserExist(verifiedUser?.email)) &&
-        !(await GeneralUser.findOne({ uid: verifiedUser?.uid }))
-      ) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden access');
-      }
+      // if (
+      //   !(await User.isUserExist(verifiedUser?.email)) &&
+      //   !(await GeneralUser.findOne({ uid: verifiedUser?.uid }))
+      // ) {
+      //   throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden access');
+      // }
       next();
     } catch (error) {
       next(error);

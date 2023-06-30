@@ -1,9 +1,10 @@
 import { Schema, Types, model } from 'mongoose';
-import { LessionModel, ILession } from './lession.interface';
+import { ILession, LessionModel } from './lession.interface';
 
 const LessionSchema = new Schema<ILession, LessionModel>(
   {
     lessionId: {
+      // auto generate
       type: String,
       required: true,
       unique: true,
@@ -18,7 +19,7 @@ const LessionSchema = new Schema<ILession, LessionModel>(
       trim: true,
       required: true,
     },
-    time: Number,
+    duration: Number,
     header_1: {
       type: String,
       trim: true,
@@ -31,13 +32,14 @@ const LessionSchema = new Schema<ILession, LessionModel>(
       type: String,
       trim: true,
     },
-    thimble: {
+    thumbnail: {
       type: String,
       trim: true,
     },
     status: {
       type: String,
       enum: ['active', 'deactive'],
+      default: 'active',
     },
     tag: [
       {

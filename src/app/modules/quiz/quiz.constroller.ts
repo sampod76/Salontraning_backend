@@ -7,8 +7,8 @@ import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
 
-import { IQuiz } from './quiz.interface';
 import { QUIZ_FILTERABLE_FIELDS } from './quiz.consent';
+import { IQuiz } from './quiz.interface';
 import { QuizService } from './quiz.service';
 
 // import { z } from 'zod'
@@ -53,7 +53,7 @@ const getAllQuiz = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleQuiz = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await QuizService.getSignleQuizFromDb(id);
+  const result = await QuizService.getSingleQuizFromDb(id);
   sendResponse<IQuiz>(res, {
     success: true,
     statusCode: httpStatus.OK,

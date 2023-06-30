@@ -55,7 +55,7 @@ const getAllCourse = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleCourse = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await CourseService.getSignleCourseFromDb(id);
+  const result = await CourseService.getSingleCourseFromDb(id);
   sendResponse<ICourse>(res, {
     success: true,
     statusCode: httpStatus.OK,

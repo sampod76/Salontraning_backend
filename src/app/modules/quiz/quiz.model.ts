@@ -18,6 +18,15 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
           type: [String],
           required: true,
         },
+        tag: {
+          type: [String],
+        },
+        hint: {
+          type: String,
+          trim: true,
+        },
+
+        // optional
         header_1: {
           type: String,
           trim: true,
@@ -30,14 +39,7 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
           type: String,
           trim: true,
         },
-        thimble: {
-          type: String,
-          trim: true,
-        },
-        tag: {
-          type: [String],
-        },
-        hint: {
+        thumbnail: {
           type: String,
           trim: true,
         },
@@ -46,6 +48,7 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
     status: {
       type: String,
       enum: ['active', 'deactive'],
+      default: 'active',
     },
     course: {
       type: Types.ObjectId,

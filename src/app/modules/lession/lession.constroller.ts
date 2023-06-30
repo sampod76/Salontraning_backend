@@ -6,9 +6,9 @@ import { PAGINATION_FIELDS } from '../../../constant/pagination';
 import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
+import { LESSION_FILTERABLE_FIELDS } from './lession.consent';
 import { ILession } from './lession.interface';
 import { LessionService } from './lession.service';
-import { LESSION_FILTERABLE_FIELDS } from './lession.consent';
 
 // import { z } from 'zod'
 const createLession = catchAsync(async (req: Request, res: Response) => {
@@ -55,7 +55,7 @@ const getAllLession = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleLession = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await LessionService.getSignleLessionFromDb(id);
+  const result = await LessionService.getSingleLessionFromDb(id);
   sendResponse<ILession>(res, {
     success: true,
     statusCode: httpStatus.OK,

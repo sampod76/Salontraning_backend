@@ -87,7 +87,7 @@ const getAllLessionFromDb = async (
 };
 
 // get single e form db
-const getSignleLessionFromDb = async (id: string): Promise<ILession | null> => {
+const getSingleLessionFromDb = async (id: string): Promise<ILession | null> => {
   const result = await Lession.findById(id);
   return result;
 };
@@ -114,7 +114,7 @@ const deleteLessionByIdFromDb = async (
 export const LessionService = {
   createLessionByDb,
   getAllLessionFromDb,
-  getSignleLessionFromDb,
+  getSingleLessionFromDb,
   updateLessionFromDb,
   deleteLessionByIdFromDb,
 };

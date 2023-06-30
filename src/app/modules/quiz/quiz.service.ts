@@ -4,9 +4,9 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
 
+import { QUIZ_SEARCHABLE_FIELDS } from './quiz.consent';
 import { IQuiz, IQuizFilters } from './quiz.interface';
 import { Quiz } from './quiz.model';
-import { QUIZ_SEARCHABLE_FIELDS } from './quiz.consent';
 
 const createQuizByDb = async (payload: IQuiz): Promise<IQuiz | null> => {
   const result = (await Quiz.create(payload)).populate({
@@ -84,7 +84,7 @@ const getAllQuizFromDb = async (
 };
 
 // get single e form db
-const getSignleQuizFromDb = async (id: string): Promise<IQuiz | null> => {
+const getSingleQuizFromDb = async (id: string): Promise<IQuiz | null> => {
   const result = await Quiz.findById(id);
   return result;
 };
@@ -109,7 +109,7 @@ const deleteQuizByIdFromDb = async (id: string): Promise<IQuiz | null> => {
 export const QuizService = {
   createQuizByDb,
   getAllQuizFromDb,
-  getSignleQuizFromDb,
+  getSingleQuizFromDb,
   updateQuizFromDb,
   deleteQuizByIdFromDb,
 };

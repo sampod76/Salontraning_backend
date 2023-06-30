@@ -1,4 +1,5 @@
 import express from 'express';
+
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { CourseController } from './course.constroller';
 import { CourseValidation } from './course.validation';

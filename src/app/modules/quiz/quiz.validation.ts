@@ -13,7 +13,7 @@ const createQuizZodSchema = z.object({
         header_1: z.string().trim().optional(),
         header_2: z.string().trim().optional(),
         description: z.string().trim().optional(),
-        thimble: z.string().trim().optional(),
+        thumbnail: z.string().trim().optional(),
         tag: z.array(z.string().optional()).optional(),
         hint: z.string().trim().optional(),
       })
@@ -38,7 +38,7 @@ const updateQuizZodSchema = z.object({
           header_1: z.optional(z.string().trim()),
           header_2: z.optional(z.string().trim()),
           description: z.optional(z.string().trim()),
-          thimble: z.optional(z.string().trim()),
+          thumbnail: z.optional(z.string().trim()),
           tag: z.optional(z.array(z.string().optional())),
           hint: z.optional(z.string().trim()),
         })

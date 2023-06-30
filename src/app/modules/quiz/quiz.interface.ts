@@ -23,7 +23,7 @@ export type IQuizList = {
   header_1?: string;
   header_2?: string;
   description?: string;
-  thimble?: string;
+  thumbnail?: string;
   tag?: string[];
 };
 

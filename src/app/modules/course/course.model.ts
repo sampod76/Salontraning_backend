@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { COURSE_TYPES } from './course.consent';
 import { CourseModel, ICourse } from './course.interface';
+// import { format } from 'date-fns';
 
 const courseSchema = new Schema<ICourse, CourseModel>(
   {
@@ -18,17 +20,43 @@ const courseSchema = new Schema<ICourse, CourseModel>(
       type: Number,
       required: true,
     },
+    type: {
+      type: String,
+      enum: COURSE_TYPES,
+    },
+    category: {
+      type: String,
+      lowercase: true,
+      trim: true,
+    },
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    vat: {
+      type: Number,
+      default: 0,
+    },
     header_1: String,
     header_2: String,
     description: String,
-    thimble: String,
+    thumbnail: String,
     publish: {
       type: {
         status: {
-          type: Boolean,
-          default: true,
+          type: String,
+          enum: ['active', 'deactive', 'save'],
+          default: 'active',
         },
-        time: String,
+        time: {
+          type: Date,
+          // default: () => {
+          //   // Get the current date
+          //   const today = new Date();
+          //   const dateString = format(today, 'yyyy-MM-dd');
+          //   return dateString;
+          // },
+        },
       },
     },
     publisher: {

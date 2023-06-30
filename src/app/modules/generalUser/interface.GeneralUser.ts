@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 type IOtherInfo = { uid: string; photoURL: string };
 
 type IPurchaseCourses = {
-  courseId: string;
+  course: string;
   total_completed_vedio: string[];
 };
 

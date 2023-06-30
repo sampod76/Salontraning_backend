@@ -14,3 +14,5 @@ export const COURSE_FILTERABLE_FIELDS = [
   'publish.status',
   'date',
 ];
+
+export const COURSE_TYPES = ['free', 'paid', 'open', 'close'];

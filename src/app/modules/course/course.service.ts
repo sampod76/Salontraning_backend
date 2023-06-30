@@ -129,7 +129,7 @@ const getAllCourseFromDb = async (
 };
 
 // get single e form db
-const getSignleCourseFromDb = async (id: string): Promise<ICourse | null> => {
+const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
   const result = await Course.findById(id);
   return result;
 };
@@ -163,7 +163,7 @@ const deleteCourseByIdFromDb = async (id: string): Promise<ICourse | null> => {
 export const CourseService = {
   createCourseByDb,
   getAllCourseFromDb,
-  getSignleCourseFromDb,
+  getSingleCourseFromDb,
   updateCourseFromDb,
   deleteCourseByIdFromDb,
 };

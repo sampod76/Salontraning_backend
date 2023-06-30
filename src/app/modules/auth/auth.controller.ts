@@ -8,7 +8,14 @@ import { AuthService } from './auth.service';
 import ApiError from '../../errors/ApiError';
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.loginUserFromDb(req.body);
+  const { uid, ...payload } = req.body;
+
+  let result = null;
+  if (uid) {
+    result = await AuthService.loginUserByUidFromDb(uid);
+  } else {
+    result = await AuthService.loginUserFromDb(payload);
+  }
   const { refreshToken, ...othersData } = result;
   // console.log(req.cookies, 13);
   // set refresh token into cookie

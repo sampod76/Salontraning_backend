@@ -8,7 +8,7 @@ import ApiError from '../errors/ApiError';
 import { handleValidationError } from '../errors/handleValidationError';
 import handleZodError from '../errors/handleZodError';
 import { IGenericErrorMessage } from '../interface/error';
-import { errorLogger } from '../share/logger';
+// import { errorLogger } from '../share/logger';
 import handleCastError from '../errors/handleCastError';
 // import path from 'path';
 
@@ -36,7 +36,8 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
 
   config.env === 'development'
     ? console.log(`globalErrorHandler:`, error)
-    : errorLogger.error(`globalErrorHandler:`, error);
+    : // : errorLogger.error(`globalErrorHandler:`, error);
+      console.log(`globalErrorHandler:`, error);
 
   let statusCode = 500;
   let message = 'Something went wrong';

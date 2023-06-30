@@ -1,7 +1,7 @@
 import { Schema, Types, model } from 'mongoose';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 import { GENDER } from './constant.GeneralUser';
 import { GeneralUserModel, IGeneralUser } from './interface.GeneralUser';
-import { ENUM_USER_ROLE } from '../../../enums/users';
 const GeneralUserSchema = new Schema<IGeneralUser>(
   {
     name: {
@@ -48,7 +48,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     },
     purchase_courses: [
       {
-        courseId: { type: Types.ObjectId, ref: 'Course' },
+        course: { type: Types.ObjectId, ref: 'Course' },
         total_completed_vedio: [Types.ObjectId],
       },
     ],
