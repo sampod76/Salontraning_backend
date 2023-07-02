@@ -6,13 +6,14 @@ import sendResponse from '../../share/sendResponse';
 import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 import ApiError from '../../errors/ApiError';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const { uid, ...payload } = req.body;
+  const { uid, role = ENUM_USER_ROLE.GENERAL_USER, ...payload } = req.body;
 
   let result = null;
   if (uid) {
-    result = await AuthService.loginUserByUidFromDb(uid);
+    result = await AuthService.loginUserByUidFromDb(uid, role);
   } else {
     result = await AuthService.loginUserFromDb(payload);
   }
@@ -43,7 +44,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   if (!refreshToken) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Token does not found');
   }
-  const result = await AuthService.refreshToken(refreshToken);
+  const resultByAccessToken = await AuthService.refreshToken(refreshToken);
 
   const cookieOptions = {
     // secure: config.env === 'production' ? true :false,
@@ -59,7 +60,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'successfull login',
-    data: result,
+    data: resultByAccessToken,
   });
 });
 

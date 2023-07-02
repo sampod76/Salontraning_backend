@@ -3,9 +3,6 @@ import { IQuiz, QuizModel } from './quiz.interface';
 
 const QuizSchema = new Schema<IQuiz, QuizModel>(
   {
-    // quizId: {
-    //   type: String,
-    // },
     quizList: [
       {
         title: {
@@ -17,6 +14,10 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
         answers: {
           type: [String],
           required: true,
+        },
+        correct_answer: {
+          type: String,
+          require: true,
         },
         tag: {
           type: [String],

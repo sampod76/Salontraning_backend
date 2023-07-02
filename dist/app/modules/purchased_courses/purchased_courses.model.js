@@ -11,9 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Purchased_courses = void 0;
 const mongoose_1 = require("mongoose");
-const mongoose_2 = require("mongoose");
 const course_model_1 = require("../course/course.model");
-const purchasedCoursesSchema = new mongoose_2.Schema({
+const purchasedCoursesSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Types.ObjectId,
         ref: 'General_user',
@@ -35,34 +34,42 @@ const purchasedCoursesSchema = new mongoose_2.Schema({
     payment: {
         type: {
             price: {
+                // not provide
                 type: Number,
                 trim: true,
-                required: true,
             },
             vat: {
+                // not provide
                 type: Number,
             },
             discount: {
+                // not provide
                 type: Number,
             },
             total: {
+                // not provide
                 type: Number,
             },
             method: {
+                //card not provide
                 type: String,
+                enum: ['card'],
             },
             method_TransactionID: {
+                //
                 type: String,
             },
         },
-        required: true,
+        default: {},
     },
     course: {
+        // couser-> _id
         type: mongoose_1.Types.ObjectId,
         ref: 'Course',
         required: true,
     },
     courseId: {
+        // gendrated course id
         type: String,
         trim: true,
     },
@@ -76,14 +83,21 @@ const purchasedCoursesSchema = new mongoose_2.Schema({
 //All calculations will be done here while buying any product
 purchasedCoursesSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { price = 0, discount = 0, vat = 0, } = (yield course_model_1.Course.findById(this.course));
-        const afterDiscount = price - (price / 100) * discount;
+        const { price = 0, discount = { value: 0 }, vat = 0, courseId, } = (yield course_model_1.Course.findById(this.course));
+        if (discount.expiryDate && new Date(discount.expiryDate) > new Date()) {
+            //unused only
+            discount.value = discount.value + 0;
+        }
+        else {
+            discount.value = 0;
+        }
+        const afterDiscount = price - (price / 100) * discount.value;
         this.payment.total = afterDiscount + (afterDiscount / 100) * vat;
-        this.payment.discount = discount;
+        // this.payment.total = afterDiscount;
+        this.payment.discount = discount.value;
         this.payment.vat = vat;
         this.payment.price = price;
-        this.transactionID =
-            this.courseId + '-' + Math.random().toString(16).slice(2);
+        this.transactionID = courseId + '-' + Math.random().toString(16).slice(2);
         next();
     });
 });

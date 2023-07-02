@@ -3,9 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Quiz = void 0;
 const mongoose_1 = require("mongoose");
 const QuizSchema = new mongoose_1.Schema({
-    // quizId: {
-    //   type: String,
-    // },
     quizList: [
         {
             title: {
@@ -18,6 +15,18 @@ const QuizSchema = new mongoose_1.Schema({
                 type: [String],
                 required: true,
             },
+            correct_answer: {
+                type: String,
+                require: true,
+            },
+            tag: {
+                type: [String],
+            },
+            hint: {
+                type: String,
+                trim: true,
+            },
+            // optional
             header_1: {
                 type: String,
                 trim: true,
@@ -31,13 +40,6 @@ const QuizSchema = new mongoose_1.Schema({
                 trim: true,
             },
             thumbnail: {
-                type: String,
-                trim: true,
-            },
-            tag: {
-                type: [String],
-            },
-            hint: {
                 type: String,
                 trim: true,
             },

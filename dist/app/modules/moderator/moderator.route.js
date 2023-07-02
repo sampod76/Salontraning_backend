@@ -9,7 +9,10 @@ const validateRequestZod_1 = __importDefault(require("../../middlewares/validate
 const moderator_controller_1 = require("./moderator.controller");
 const moderator_validations_1 = require("./moderator.validations");
 const router = express_1.default.Router();
-router.route('/').get(moderator_controller_1.ModeratorController.getAllModerators);
+router
+    .route('/')
+    .post(moderator_controller_1.ModeratorController.createModerator)
+    .get(moderator_controller_1.ModeratorController.getAllModerators);
 router
     .route('/:id')
     .get(moderator_controller_1.ModeratorController.getSingleModerator)

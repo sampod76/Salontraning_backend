@@ -29,7 +29,11 @@ export type ICourse = {
   price?: number;
   type: 'free' | 'paid' | 'open' | 'close';
   category: string;
-  discount?: number;
+  discount?: {
+    value: number;
+    startDate?: string;
+    expiryDate?: string;
+  };
   vat?: number;
   header_1?: string;
   header_2?: string;

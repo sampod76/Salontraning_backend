@@ -46,13 +46,13 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
-            $or: lession_consent_1.LESSION_SEARCHABLE_FIELDS.map(field =>
-                //search array value
-                field === 'tag'
-                    ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
-                    : {
-                        [field]: new RegExp(searchTerm, 'i'),
-                    }),
+            $or: lession_consent_1.LESSION_SEARCHABLE_FIELDS.map(field => 
+            //search array value
+            field === 'tag'
+                ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
+                : {
+                    [field]: new RegExp(searchTerm, 'i'),
+                }),
         });
     }
     if (Object.keys(filtersData).length) {

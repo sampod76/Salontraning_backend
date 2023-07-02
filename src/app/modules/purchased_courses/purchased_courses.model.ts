@@ -89,14 +89,21 @@ const purchasedCoursesSchema = new Schema<
 purchasedCoursesSchema.pre('save', async function (next) {
   const {
     price = 0,
-    discount = 0,
+    discount = { value: 0 },
     vat = 0,
     courseId,
   } = (await Course.findById(this.course)) as ICourse;
-  const afterDiscount = price - (price / 100) * discount;
+  if (discount.expiryDate && new Date(discount.expiryDate) > new Date()) {
+    //unused only
+    discount.value = discount.value + 0;
+  } else {
+    discount.value = 0;
+  }
+
+  const afterDiscount = price - (price / 100) * discount.value;
   this.payment.total = afterDiscount + (afterDiscount / 100) * vat;
   // this.payment.total = afterDiscount;
-  this.payment.discount = discount;
+  this.payment.discount = discount.value;
   this.payment.vat = vat;
   this.payment.price = price;
   this.transactionID = courseId + '-' + Math.random().toString(16).slice(2);

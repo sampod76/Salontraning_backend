@@ -4,13 +4,12 @@ import { AuthController } from './auth.controller';
 import { AuthValidation } from './auth.validation';
 const router = express.Router();
 
-router
-  .route('/login')
-  .post(
-    validateRequestZod(AuthValidation.loginZodSchema),
-    AuthController.loginUser
-  );
-  
+router.route('/login').post(
+  // any role login -- uid and role must be provide
+  validateRequestZod(AuthValidation.loginZodSchema),
+  AuthController.loginUser
+);
+
 router
   .route('/refresh-token')
   .post(

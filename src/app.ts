@@ -22,7 +22,7 @@ app.use(
 
 import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
-import { uploadSingleImage } from './app/middlewares/uploader.multer';
+// import { uploadSingleImage } from './app/middlewares/uploader.multer';
 import routers from './app/routes/index_route';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -45,30 +45,26 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   // res.send('server is running');
 });
 
-app.post(
-  '/',
-  uploadSingleImage,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      console.log(req.file);
-      // Obtain the MAC address
-      // const networkInterfaces = os.networkInterfaces();
-      // console.log(networkInterfaces);
+app.post('/', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Obtain the MAC address
+    // const networkInterfaces = os.networkInterfaces();
+    // console.log(networkInterfaces);
 
-      // const interfaceName = 'eth0'; // Adjust the interface name as needed
-      // if (networkInterfaces[interfaceName]) {
-      //   const macAddress = networkInterfaces[interfaceName][0].mac;
-      //   console.log('MAC address:', macAddress);
-      // } else {
-      //   console.log(`Network interface '${interfaceName}' not found.`);
-      // }
-      res.send({ message: 'server is running....' });
-    } catch (error) {
-      next(error);
-    }
-    // res.send('server is running');
+    // const interfaceName = 'eth0'; // Adjust the interface name as needed
+    // if (networkInterfaces[interfaceName]) {
+    //   const macAddress = networkInterfaces[interfaceName][0].mac;
+    //   console.log('MAC address:', macAddress);
+    // } else {
+    //   console.log(`Network interface '${interfaceName}' not found.`);
+    // }
+
+    res.send({ message: 'server is running....' });
+  } catch (error) {
+    next(error);
   }
-);
+  // res.send('server is running');
+});
 
 //Application route
 app.use('/api/v1', routers);
@@ -92,9 +88,19 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 const test = async () => {
-  /*  await AcademicDepartment.deleteMany();
-  await AcademicFaculty.deleteMany();
-  await AcademicSemester.deleteMany(); */
+  try {
+    // const result = await Course.updateMany(
+    //   {},
+    //   { $rename: { thimble: 'thumbnail' } }
+    // );
+    // const result2 = await Lession.updateMany(
+    //   {},
+    //   { $rename: { thimble: 'thumbnail' } }
+    // );
+    // console.log(result, result2);
+  } catch (error) {
+    console.log(error);
+  }
 };
 test();
 

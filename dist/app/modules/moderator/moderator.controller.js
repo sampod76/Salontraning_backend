@@ -42,6 +42,15 @@ const getSingleModerator = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const createModerator = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield moderator_service_1.ModeratorService.createModeratorFromDb(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Moderator retrieved successfully !',
+        data: result,
+    });
+}));
 const updateModerator = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const updatedData = req.body;
@@ -64,6 +73,7 @@ const deleteModerator = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     });
 }));
 exports.ModeratorController = {
+    createModerator,
     getAllModerators,
     getSingleModerator,
     updateModerator,

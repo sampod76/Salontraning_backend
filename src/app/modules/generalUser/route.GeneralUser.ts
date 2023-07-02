@@ -14,6 +14,15 @@ router
     ),
     GeneralUserController.createGeneralUserByFirebase
   );
+
+router
+  .route('/get-course/:id')
+  .get(GeneralUserController.getSingleGeneralUserToCourse);
+
+router
+  .route('/update-course-quiz/:id')
+  .patch(GeneralUserController.updateCourseVedioOrQuiz);
+
 router
   .route('/:id')
   .get(GeneralUserController.getSingleGeneralUser)

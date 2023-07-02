@@ -38,6 +38,16 @@ const getSingleModerator = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const createModerator = catchAsync(async (req: Request, res: Response) => {
+  const result = await ModeratorService.createModeratorFromDb(req.body);
+
+  sendResponse<IModerator>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Moderator retrieved successfully !',
+    data: result,
+  });
+});
 
 const updateModerator = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -65,6 +75,7 @@ const deleteModerator = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const ModeratorController = {
+  createModerator,
   getAllModerators,
   getSingleModerator,
   updateModerator,

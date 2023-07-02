@@ -19,8 +19,14 @@ const users_model_1 = require("../users/users.model");
 const config_1 = __importDefault(require("../../../config"));
 const jwtHelpers_1 = require("../../../helper/jwtHelpers");
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
+const users_1 = require("../../../enums/users");
+const admin_model_1 = require("../admin/admin.model");
+const moderator_model_1 = require("../moderator/moderator.model");
 const loginUserFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
+    if (!(email && password)) {
+        throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'Email and password not provide');
+    }
     const isUserExist = yield users_model_1.User.isUserExist(email === null || email === void 0 ? void 0 : email.toLowerCase());
     //chack user
     if (!isUserExist) {
@@ -43,20 +49,26 @@ const loginUserFromDb = (payload) => __awaiter(void 0, void 0, void 0, function*
         refreshToken,
     };
 });
-const loginUserByUidFromDb = (uid) => __awaiter(void 0, void 0, void 0, function* () {
-    const isUserExist = yield model_GeneralUser_1.GeneralUser.findOne({ uid: uid });
+const loginUserByUidFromDb = (uid, role) => __awaiter(void 0, void 0, void 0, function* () {
+    let isUserExist = null;
+    if (uid && role === users_1.ENUM_USER_ROLE.ADMIN) {
+        isUserExist = yield admin_model_1.Admin.findOne({ uid });
+    }
+    else if (role === users_1.ENUM_USER_ROLE.MODERATOR) {
+        isUserExist = yield moderator_model_1.Moderator.findOne({ uid: uid });
+    }
+    else if (role === users_1.ENUM_USER_ROLE.GENERAL_USER) {
+        isUserExist = yield model_GeneralUser_1.GeneralUser.findOne({ uid: uid });
+    }
     if (!isUserExist) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'User not found');
     }
     const accessToken = jwtHelpers_1.jwtHelpers.createToken({
         role: isUserExist.role,
-        email: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.email,
-        name: isUserExist.name,
         _id: isUserExist._id,
     }, config_1.default.jwt.secret, config_1.default.jwt.expires_in);
     const refreshToken = jwtHelpers_1.jwtHelpers.createToken({
         role: isUserExist.role,
-        email: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.email,
         _id: isUserExist._id,
     }, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
     return {
@@ -72,8 +84,18 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         throw new ApiError_1.default(http_status_1.default.FORBIDDEN, 'Invalid Refresh Token');
     }
-    //chack this user exist database
-    const isUserExist = yield users_model_1.User.isUserExist(verifiedToken === null || verifiedToken === void 0 ? void 0 : verifiedToken.userId);
+    // //chack this user exist database
+    // const isUserExist = await User.isUserExist(verifiedToken?.userId);
+    let isUserExist = null;
+    if (verifiedToken._id && verifiedToken.role === users_1.ENUM_USER_ROLE.ADMIN) {
+        isUserExist = yield admin_model_1.Admin.findById(verifiedToken._id);
+    }
+    else if (verifiedToken.role === users_1.ENUM_USER_ROLE.MODERATOR) {
+        isUserExist = yield moderator_model_1.Moderator.findById(verifiedToken._id);
+    }
+    else if (verifiedToken.role === users_1.ENUM_USER_ROLE.GENERAL_USER) {
+        isUserExist = yield model_GeneralUser_1.GeneralUser.findById(verifiedToken._id);
+    }
     if (!isUserExist) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'User does not exist');
     }

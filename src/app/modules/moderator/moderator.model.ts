@@ -23,14 +23,18 @@ const ModeratorSchema = new Schema<IModerator, ModeratorModel>(
     email: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
       lowercase: true,
       trim: true,
     },
     phone: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
+    },
+    uid: {
+      type: String,
+      unique: true,
     },
     emergencyphone: {
       type: String,

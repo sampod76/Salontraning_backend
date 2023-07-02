@@ -31,8 +31,8 @@ const pagination_1 = require("../../../constant/pagination");
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const pick_1 = __importDefault(require("../../share/pick"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
-const lession_service_1 = require("./lession.service");
 const lession_consent_1 = require("./lession.consent");
+const lession_service_1 = require("./lession.service");
 // import { z } from 'zod'
 const createLession = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const LessionData = __rest(req.body, []);

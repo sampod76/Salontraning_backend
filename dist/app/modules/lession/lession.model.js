@@ -19,7 +19,7 @@ const LessionSchema = new mongoose_1.Schema({
         trim: true,
         required: true,
     },
-    time: Number,
+    duration: Number,
     header_1: {
         type: String,
         trim: true,

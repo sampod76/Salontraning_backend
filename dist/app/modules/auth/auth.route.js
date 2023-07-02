@@ -9,9 +9,9 @@ const validateRequestZod_1 = __importDefault(require("../../middlewares/validate
 const auth_controller_1 = require("./auth.controller");
 const auth_validation_1 = require("./auth.validation");
 const router = express_1.default.Router();
-router
-    .route('/login')
-    .post((0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.loginZodSchema), auth_controller_1.AuthController.loginUser);
+router.route('/login').post(
+// any role login -- uid and role must be provide
+(0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.loginZodSchema), auth_controller_1.AuthController.loginUser);
 router
     .route('/refresh-token')
     .post((0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.refreshTokenZodSchema), auth_controller_1.AuthController.refreshToken);

@@ -7,7 +7,14 @@ const createCourseZodSchema = z.object({
     price: z.number().nonnegative().optional(),
     type: z.enum([...COURSE_TYPES] as [string, ...string[]]),
     category: z.string().optional(),
-    discount: z.number().nonnegative().max(100).optional(),
+    // discount: z.number().nonnegative().max(100).optional(),
+    discount: z
+      .object({
+        value: z.number().nonnegative().max(100).optional(),
+        startDate: z.string(),
+        expiryDate: z.string().optional(),
+      })
+      .optional(),
     vat: z.number().nonnegative().optional(),
     header_1: z.string().optional(),
     header_2: z.string().optional(),

@@ -6,7 +6,7 @@ const constant_GeneralUser_1 = require("../generalUser/constant.GeneralUser");
 const createGeneralUserZodSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z.string({ required_error: 'Name is required' }),
-        password: zod_1.z.string({ required_error: 'Password is required' }),
+        // password: z.string({ required_error: 'Password is required' }),
         gender: zod_1.z.enum([...constant_GeneralUser_1.GENDER]).optional(),
         dateOfBirth: zod_1.z.string().optional(),
         email: zod_1.z
@@ -27,7 +27,7 @@ const createGeneralUserZodSchema = zod_1.z.object({
 });
 const createModeratorZodSchema = zod_1.z.object({
     body: zod_1.z.object({
-        password: zod_1.z.string().optional(),
+        // password: z.string().optional(),
         name: zod_1.z.string({ required_error: 'Name is required' }),
         gender: zod_1.z.enum([...constant_GeneralUser_1.GENDER]).optional(),
         dateOfBirth: zod_1.z.string().optional(),
@@ -51,7 +51,7 @@ const createModeratorZodSchema = zod_1.z.object({
 });
 const createAdminZodSchema = zod_1.z.object({
     body: zod_1.z.object({
-        password: zod_1.z.string().optional(),
+        // password: z.string().optional(),
         name: zod_1.z.string({ required_error: 'Name is required' }),
         gender: zod_1.z.enum([...constant_GeneralUser_1.GENDER]).optional(),
         dateOfBirth: zod_1.z.string().optional(),

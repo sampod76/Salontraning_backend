@@ -2,11 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseValidation = void 0;
 const zod_1 = require("zod");
+const course_consent_1 = require("./course.consent");
 const createCourseZodSchema = zod_1.z.object({
     body: zod_1.z.object({
         title: zod_1.z.string({ required_error: 'title field is required' }),
         price: zod_1.z.number().nonnegative().optional(),
-        discount: zod_1.z.number().nonnegative().max(100).optional(),
+        type: zod_1.z.enum([...course_consent_1.COURSE_TYPES]),
+        category: zod_1.z.string().optional(),
+        // discount: z.number().nonnegative().max(100).optional(),
+        discount: zod_1.z
+            .object({
+            value: zod_1.z.number().nonnegative().max(100).optional(),
+            startDate: zod_1.z.string(),
+            expiryDate: zod_1.z.string().optional(),
+        })
+            .optional(),
         vat: zod_1.z.number().nonnegative().optional(),
         header_1: zod_1.z.string().optional(),
         header_2: zod_1.z.string().optional(),
@@ -27,6 +37,8 @@ const updateCourseZodSchema = zod_1.z.object({
     body: zod_1.z.object({
         title: zod_1.z.string().optional(),
         price: zod_1.z.number().optional(),
+        type: zod_1.z.enum([...course_consent_1.COURSE_TYPES]).optional(),
+        category: zod_1.z.string().optional(),
         header_1: zod_1.z.string().optional(),
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),

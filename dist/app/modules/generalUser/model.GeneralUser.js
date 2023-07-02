@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GeneralUser = void 0;
 const mongoose_1 = require("mongoose");
-const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const users_1 = require("../../../enums/users");
+const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const GeneralUserSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -47,12 +47,13 @@ const GeneralUserSchema = new mongoose_1.Schema({
         enum: ['active', 'deactive'],
         default: 'active',
     },
-    // purchase_courses: [
-    //   {
-    //     courseId: { type: Types.ObjectId, ref: 'Course' },
-    //     total_completed_vedio: [Types.ObjectId],
-    //   },
-    // ],
+    purchase_courses: [
+        {
+            course: { type: mongoose_1.Types.ObjectId, ref: 'Course' },
+            quiz: [{ quizId: String, provided_answer: String }],
+            total_completed_lessions: [mongoose_1.Types.ObjectId],
+        },
+    ],
 }, {
     timestamps: true,
     toJSON: {

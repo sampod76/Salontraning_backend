@@ -4,7 +4,8 @@ type IOtherInfo = { uid: string; photoURL: string };
 
 type IPurchaseCourses = {
   course: string;
-  total_completed_vedio: string[];
+  quiz: Array<{ quizId: string; provided_answer: string }>;
+  total_completed_lessions: string[];
 };
 
 export type IGeneralUser = {

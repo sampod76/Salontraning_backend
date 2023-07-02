@@ -19,49 +19,29 @@ const createPurchased_coursesByDb = async (
   payload: IPurchased_courses,
   userId: string
 ): Promise<IPurchased_courses | null> => {
-  let newCoursePurchase = null;
-  const session = await mongoose.startSession();
-  try {
-    session.startTransaction();
-    const addCourseByUser = await GeneralUser.updateOne(
-      {
-        _id: new ObjectId(userId),
-        'purchase_courses.course': { $ne: payload.course },
-      },
-      {
-        $push: {
-          purchase_courses: { course: payload.course } /* course --> _id */,
-        },
-      },
-      { session, runValidators: true }
-    );
+  const createPurchase = await Purchased_courses.create(payload);
 
-    if (!addCourseByUser.modifiedCount) {
-      throw new ApiError(404, 'Failed to by course');
+  if (!createPurchase) {
+    throw new ApiError(404, 'Failed to by course');
+  }
+  const addCourseByUser = await GeneralUser.updateOne(
+    {
+      _id: new ObjectId(userId),
+      'purchase_courses.course': { $ne: payload.course },
+    },
+    {
+      $push: {
+        purchase_courses: { course: payload.course } /* course --> _id */,
+      },
     }
-    const createPurchase = await Purchased_courses.create([payload], {
-      session,
-    });
+    // { session }
+  );
 
-    if (!createPurchase) {
-      throw new ApiError(404, 'Failed to by course');
-    }
-    session.commitTransaction();
-    session.endSession();
-    newCoursePurchase = createPurchase[0]._id ? createPurchase[0] : null;
-  } catch (error) {
-    await session.abortTransaction();
-    await session.endSession();
-    throw error;
+  if (!addCourseByUser.modifiedCount) {
+    throw new ApiError(404, 'Failed to by course');
   }
 
-  if (newCoursePurchase?._id) {
-    newCoursePurchase = await Purchased_courses.findById(
-      newCoursePurchase?._id
-    ).populate('course');
-  }
-
-  return newCoursePurchase;
+  return createPurchase;
 };
 
 //getAllPurchased_coursesFromDb
@@ -138,6 +118,7 @@ const updatePurchased_coursesFromDb = async (
     payload,
     {
       new: true,
+      runValidators: true,
     }
   );
   return result;
@@ -158,3 +139,54 @@ export const Purchased_coursesService = {
   updatePurchased_coursesFromDb,
   deletePurchased_coursesByIdFromDb,
 };
+
+//suport session to solve
+
+// const createPurchased_coursesByDb = async (
+//   payload: IPurchased_courses,
+//   userId: string
+// ): Promise<IPurchased_courses | null> => {
+//   let newCoursePurchase = null;
+//   const session = await mongoose.startSession();
+//   try {
+//     session.startTransaction();
+//     const addCourseByUser = await GeneralUser.updateOne(
+//       {
+//         _id: new ObjectId(userId),
+//         'purchase_courses.course': { $ne: payload.course },
+//       },
+//       {
+//         $push: {
+//           purchase_courses: { course: payload.course } /* course --> _id */,
+//         },
+//       },
+//       { session }
+//     );
+
+//     if (!addCourseByUser.modifiedCount) {
+//       throw new ApiError(404, 'Failed to by course');
+//     }
+//     const createPurchase = await Purchased_courses.create([payload], {
+//       session,
+//     });
+
+//     if (!createPurchase) {
+//       throw new ApiError(404, 'Failed to by course');
+//     }
+//     newCoursePurchase = createPurchase[0]._id ? createPurchase[0] : null;
+//     session.commitTransaction();
+//     session.endSession();
+//   } catch (error) {
+//     await session.abortTransaction();
+//     await session.endSession();
+//     throw error;
+//   }
+
+//   if (newCoursePurchase?._id) {
+//     newCoursePurchase = await Purchased_courses.findById(
+//       newCoursePurchase?._id
+//     ).populate('course');
+//   }
+
+//   return newCoursePurchase;
+// };

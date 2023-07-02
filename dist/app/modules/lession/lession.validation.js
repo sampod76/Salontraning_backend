@@ -14,7 +14,7 @@ const createLessionZodSchema = zod_1.z.object({
         courseId: zod_1.z.string({ required_error: 'courseId is required' }),
         tag: zod_1.z.array(zod_1.z.string().optional()).optional(),
         vedio_link: zod_1.z.string({ required_error: 'Vedio lini is required' }),
-        time: zod_1.z.string().optional(),
+        duration: zod_1.z.string().optional(),
     }),
 });
 const updateLessionZodSchema = zod_1.z.object({
@@ -29,7 +29,7 @@ const updateLessionZodSchema = zod_1.z.object({
         courseId: zod_1.z.string(),
         tag: zod_1.z.array(zod_1.z.string().optional()).optional(),
         vedio_link: zod_1.z.string().optional(),
-        time: zod_1.z.string().optional(),
+        duration: zod_1.z.string().optional(),
     }),
 });
 exports.LessionValidation = {

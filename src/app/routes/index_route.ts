@@ -10,15 +10,16 @@ import { LessionRoute } from '../modules/lession/lession.route';
 import { ModeratorRoutes } from '../modules/moderator/moderator.route';
 import { Purchased_coursesRoute } from '../modules/purchased_courses/purchased_courses.route';
 import { QuizRoute } from '../modules/quiz/quiz.route';
-import { UserRoute } from '../modules/users/users.router';
+// import { UserRoute } from '../modules/users/users.router';
 
+//https://docs.google.com/document/d/1gTsTpFvhfZB-2y0_BbZQVzmbG3YwsZwPrwAbsYqpOzM/edit
 const router = express.Router();
 
 const moduleRoutes = [
-  {
-    path: '/users',
-    route: UserRoute,
-  },
+  // {
+  //   path: '/users',
+  //   route: UserRoute,
+  // },
 
   {
     path: '/general-user',
@@ -33,6 +34,7 @@ const moduleRoutes = [
     route: ModeratorRoutes,
   },
   {
+    // only user login and refresh-token
     path: '/auth',
     route: AuthRouter,
   },

@@ -30,11 +30,12 @@ const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const auth_service_1 = require("./auth.service");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const users_1 = require("../../../enums/users");
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const _a = req.body, { uid } = _a, payload = __rest(_a, ["uid"]);
+    const _a = req.body, { uid, role = users_1.ENUM_USER_ROLE.GENERAL_USER } = _a, payload = __rest(_a, ["uid", "role"]);
     let result = null;
     if (uid) {
-        result = yield auth_service_1.AuthService.loginUserByUidFromDb(uid);
+        result = yield auth_service_1.AuthService.loginUserByUidFromDb(uid, role);
     }
     else {
         result = yield auth_service_1.AuthService.loginUserFromDb(payload);
@@ -64,7 +65,7 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     if (!refreshToken) {
         throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'Token does not found');
     }
-    const result = yield auth_service_1.AuthService.refreshToken(refreshToken);
+    const resultByAccessToken = yield auth_service_1.AuthService.refreshToken(refreshToken);
     const cookieOptions = {
         // secure: config.env === 'production' ? true :false,
         //same
@@ -78,7 +79,7 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'successfull login',
-        data: result,
+        data: resultByAccessToken,
     });
 }));
 exports.AuthController = {

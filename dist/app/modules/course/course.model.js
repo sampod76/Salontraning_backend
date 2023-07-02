@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Course = void 0;
 const mongoose_1 = require("mongoose");
+const course_consent_1 = require("./course.consent");
 // import { format } from 'date-fns';
 const courseSchema = new mongoose_1.Schema({
     courseId: {
@@ -18,10 +19,30 @@ const courseSchema = new mongoose_1.Schema({
     price: {
         type: Number,
         required: true,
+        min: 0,
+    },
+    type: {
+        type: String,
+        enum: course_consent_1.COURSE_TYPES, // ['free', 'paid', 'open', 'close']
+    },
+    category: {
+        type: String,
+        lowercase: true,
+        trim: true,
     },
     discount: {
-        type: Number,
-        default: 0,
+        type: {
+            value: {
+                type: Number,
+                default: 0,
+            },
+            startDate: {
+                type: Date,
+            },
+            expiryDate: {
+                type: Date,
+            },
+        },
     },
     vat: {
         type: Number,

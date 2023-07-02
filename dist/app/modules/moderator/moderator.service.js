@@ -95,6 +95,10 @@ const updateModeratorFromDb = (id, payload) => __awaiter(void 0, void 0, void 0,
     });
     return result;
 });
+const createModeratorFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield moderator_model_1.Moderator.create(payload);
+    return result;
+});
 const deleteModeratorFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the Moderator is exist
     const isExist = yield moderator_model_1.Moderator.findOne({ id });
@@ -121,6 +125,7 @@ const deleteModeratorFromDb = (id) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.ModeratorService = {
+    createModeratorFromDb,
     getAllModeratorsFromDb,
     getSingleModeratorFromDb,
     updateModeratorFromDb,

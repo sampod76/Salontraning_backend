@@ -14,15 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GeneralUserController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
+const config_1 = __importDefault(require("../../../config"));
 const pagination_1 = require("../../../constant/pagination");
+const jwtHelpers_1 = require("../../../helper/jwtHelpers");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const pick_1 = __importDefault(require("../../share/pick"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const service_GeneralUser_1 = require("./service.GeneralUser");
-const config_1 = __importDefault(require("../../../config"));
-const jwtHelpers_1 = require("../../../helper/jwtHelpers");
-const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filter = (0, pick_1.default)(req.query, constant_GeneralUser_1.GeneralUserFilterableFields);
     const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
@@ -55,7 +55,10 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'user found successfully !',
-        data: result,
+        // data:result,
+        data: {
+            accessToken,
+        },
     });
 }));
 const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -68,6 +71,16 @@ const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(v
         data: result,
     });
 }));
+const getSingleGeneralUserToCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield service_GeneralUser_1.GeneralUserService.getSingleGeneralUserFromDb(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Course found successfully !',
+        data: result,
+    });
+}));
 const updateGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const updatedData = req.body;
@@ -76,6 +89,17 @@ const updateGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'user updated successfully !',
+        data: result,
+    });
+}));
+const updateCourseVedioOrQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const result = yield service_GeneralUser_1.GeneralUserService.updateCourseVedioOrQuizFromDb(id, updatedData);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Course or quiz updated successfully !',
         data: result,
     });
 }));
@@ -93,6 +117,8 @@ exports.GeneralUserController = {
     createGeneralUserByFirebase,
     getAllGeneralUsers,
     getSingleGeneralUser,
+    getSingleGeneralUserToCourse,
+    updateCourseVedioOrQuiz,
     updateGeneralUser,
     deleteGeneralUser,
 };

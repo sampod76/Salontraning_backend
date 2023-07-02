@@ -15,6 +15,12 @@ router
     // sign up user
     .post((0, validateRequestZod_1.default)(validation_GeneralUser_1.GeneralUserValidation.createGeneralUserByFirebaseZodSchema), controller_GeneralUser_1.GeneralUserController.createGeneralUserByFirebase);
 router
+    .route('/get-course/:id')
+    .get(controller_GeneralUser_1.GeneralUserController.getSingleGeneralUserToCourse);
+router
+    .route('/update-course-quiz/:id')
+    .patch(controller_GeneralUser_1.GeneralUserController.updateCourseVedioOrQuiz);
+router
     .route('/:id')
     .get(controller_GeneralUser_1.GeneralUserController.getSingleGeneralUser)
     .delete(controller_GeneralUser_1.GeneralUserController.deleteGeneralUser)

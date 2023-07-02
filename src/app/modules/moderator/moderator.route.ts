@@ -5,7 +5,10 @@ import { ModeratorController } from './moderator.controller';
 import { ModeratorValidation } from './moderator.validations';
 
 const router = express.Router();
-router.route('/').get(ModeratorController.getAllModerators);
+router
+  .route('/')
+  .post(ModeratorController.createModerator)
+  .get(ModeratorController.getAllModerators);
 
 router
   .route('/:id')

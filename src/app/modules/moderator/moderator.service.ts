@@ -104,6 +104,12 @@ const updateModeratorFromDb = async (
   );
   return result;
 };
+const createModeratorFromDb = async (
+  payload: Partial<IModerator>
+): Promise<IModerator | null> => {
+  const result = await Moderator.create(payload);
+  return result;
+};
 
 const deleteModeratorFromDb = async (
   id: string
@@ -137,6 +143,7 @@ const deleteModeratorFromDb = async (
 };
 
 export const ModeratorService = {
+  createModeratorFromDb,
   getAllModeratorsFromDb,
   getSingleModeratorFromDb,
   updateModeratorFromDb,

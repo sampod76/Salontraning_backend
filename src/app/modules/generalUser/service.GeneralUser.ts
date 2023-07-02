@@ -6,9 +6,11 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
-import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
+import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
+// import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
+// const {ObjectId}=mongoose.Types
 
 const createGeneralUserByFirebaseFromDb = async (
   payload: IGeneralUser
@@ -78,7 +80,61 @@ const getAllGeneralUsersFromDb = async (
 const getSingleGeneralUserFromDb = async (
   id: string
 ): Promise<IGeneralUser | null> => {
-  const result = await GeneralUser.findOne({ id });
+  const result = await GeneralUser.findById(id).populate(
+    'purchase_courses.course',
+    'courseId title thumbnail createdAt'
+  );
+  return result;
+};
+
+// user to course
+const getUserToCourseFromDb = async (
+  id: string
+): Promise<IGeneralUser | null> => {
+  const result = await GeneralUser.findById(id).populate(
+    'purchase_courses.course'
+  );
+  return result;
+};
+
+// update user course vedio or quiz
+const updateCourseVedioOrQuizFromDb = async (
+  id: string,
+  payload: any
+): Promise<IGeneralUser | null> => {
+  const { course_id, lessionId, quiz } = payload;
+  let result = null;
+  if (course_id && lessionId) {
+    result = await GeneralUser.findOneAndUpdate(
+      {
+        _id: id,
+        'purchase_courses.course': course_id,
+        'purchase_courses.total_completed_lessions': { $ne: lessionId },
+      },
+      {
+        $push: {
+          'purchase_courses.$.total_completed_lessions': lessionId,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+  }
+  if (quiz) {
+    result = await GeneralUser.findOneAndUpdate(
+      { _id: id, 'purchase_courses.course': course_id },
+      {
+        $set: {
+          'purchase_courses.$.quiz': quiz,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+  }
+
   return result;
 };
 
@@ -92,9 +148,7 @@ const updateGeneralUserFromDb = async (
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found !');
   }
-
   const { ...GeneralUserData } = payload;
-
   const updatedGeneralUserData: Partial<IGeneralUser> = { ...GeneralUserData };
 
   const result = await GeneralUser.findOneAndUpdate(
@@ -118,6 +172,8 @@ export const GeneralUserService = {
   createGeneralUserByFirebaseFromDb,
   getAllGeneralUsersFromDb,
   getSingleGeneralUserFromDb,
+  getUserToCourseFromDb,
   updateGeneralUserFromDb,
+  updateCourseVedioOrQuizFromDb,
   deleteGeneralUserFromDb,
 };

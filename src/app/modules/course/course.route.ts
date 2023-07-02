@@ -3,12 +3,13 @@ import express from 'express';
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { CourseController } from './course.constroller';
 import { CourseValidation } from './course.validation';
+import authMiddleware from '../../middlewares/authMiddleware';
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(CourseController.getAllCourse)
+  .get(authMiddleware(), CourseController.getAllCourse)
   .post(
     validateRequestZod(CourseValidation.createCourseZodSchema),
     CourseController.createCourse

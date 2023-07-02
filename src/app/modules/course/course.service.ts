@@ -1,4 +1,5 @@
-import { PipelineStage } from 'mongoose';
+import mongoose, { PipelineStage } from 'mongoose';
+
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
@@ -8,7 +9,7 @@ import { COURSE_SEARCHABLE_FIELDS } from './course.consent';
 import { ICourse, ICourseFilters } from './course.interface';
 import { Course } from './course.model';
 import { generateCourseId } from './course.utils';
-
+const { ObjectId } = mongoose.Types;
 const createCourseByDb = async (payload: ICourse): Promise<ICourse> => {
   payload.courseId = await generateCourseId();
   const result = (await Course.create(payload)).populate({
@@ -65,7 +66,6 @@ const getAllCourseFromDb = async (
   //****************search and filters end**********/
 
   //****************pagination start **************/
-
   // const { page, limit, skip, sortBy, sortOrder } =
   //   paginationHelper.calculatePagination(paginationOptions);
 
@@ -91,9 +91,47 @@ const getAllCourseFromDb = async (
     .sort(sortConditions)
     .skip(Number(skip))
     .limit(Number(limit)); 
-    */
+  */
   const pipeline: PipelineStage[] = [
     { $match: whereConditions },
+    // {
+    //   $lookup: {
+    //     from: 'lessions',
+    //     localField: 'courseId',
+    //     foreignField: 'courseId',
+    //     as: 'All_lessions',
+    //   },
+    // },
+    // {
+    //   $lookup: {
+    //     from: 'quizzes',
+    //     localField: 'courseId',
+    //     foreignField: 'courseId',
+    //     as: 'quizzes',
+    //   },
+    // },
+    { $sort: sortConditions },
+    { $skip: Number(skip) || 0 },
+    { $limit: Number(limit) || 15 },
+  ];
+
+  const result = await Course.aggregate(pipeline);
+
+  const total = await Course.countDocuments(whereConditions);
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
+
+// get single e form db
+const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
+  const result = await Course.aggregate([
+    { $match: { _id: new ObjectId(id) } },
     {
       $lookup: {
         from: 'lessions',
@@ -110,28 +148,9 @@ const getAllCourseFromDb = async (
         as: 'quizzes',
       },
     },
-    { $sort: sortConditions },
-    { $skip: Number(skip) || 0 },
-    { $limit: Number(limit) || 15 },
-  ];
+  ]);
 
-  const result = await Course.aggregate(pipeline);
-
-  const total = await Course.countDocuments();
-  return {
-    meta: {
-      page,
-      limit,
-      total,
-    },
-    data: result,
-  };
-};
-
-// get single e form db
-const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
-  const result = await Course.findById(id);
-  return result;
+  return result[0];
 };
 
 // update e form db

@@ -19,12 +19,17 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const course_consent_1 = require("./course.consent");
 const course_model_1 = require("./course.model");
 const course_utils_1 = require("./course.utils");
+const { ObjectId } = mongoose_1.default.Types;
 const createCourseByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     payload.courseId = yield (0, course_utils_1.generateCourseId)();
     const result = (yield course_model_1.Course.create(payload)).populate({
@@ -50,13 +55,13 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
-            $or: course_consent_1.COURSE_SEARCHABLE_FIELDS.map(field =>
-                //search array value
-                field === 'tag'
-                    ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
-                    : {
-                        [field]: new RegExp(searchTerm, 'i'),
-                    }),
+            $or: course_consent_1.COURSE_SEARCHABLE_FIELDS.map(field => 
+            //search array value
+            field === 'tag'
+                ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
+                : {
+                    [field]: new RegExp(searchTerm, 'i'),
+                }),
         });
     }
     if (Object.keys(filtersData).length) {
@@ -88,9 +93,44 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
       .sort(sortConditions)
       .skip(Number(skip))
       .limit(Number(limit));
-      */
+    */
     const pipeline = [
         { $match: whereConditions },
+        // {
+        //   $lookup: {
+        //     from: 'lessions',
+        //     localField: 'courseId',
+        //     foreignField: 'courseId',
+        //     as: 'All_lessions',
+        //   },
+        // },
+        // {
+        //   $lookup: {
+        //     from: 'quizzes',
+        //     localField: 'courseId',
+        //     foreignField: 'courseId',
+        //     as: 'quizzes',
+        //   },
+        // },
+        { $sort: sortConditions },
+        { $skip: Number(skip) || 0 },
+        { $limit: Number(limit) || 15 },
+    ];
+    const result = yield course_model_1.Course.aggregate(pipeline);
+    const total = yield course_model_1.Course.countDocuments(whereConditions);
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+        },
+        data: result,
+    };
+});
+// get single e form db
+const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield course_model_1.Course.aggregate([
+        { $match: { _id: new ObjectId(id) } },
         {
             $lookup: {
                 from: 'lessions',
@@ -107,25 +147,8 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
                 as: 'quizzes',
             },
         },
-        { $sort: sortConditions },
-        { $skip: Number(skip) || 0 },
-        { $limit: Number(limit) || 15 },
-    ];
-    const result = yield course_model_1.Course.aggregate(pipeline);
-    const total = yield course_model_1.Course.countDocuments();
-    return {
-        meta: {
-            page,
-            limit,
-            total,
-        },
-        data: result,
-    };
-});
-// get single e form db
-const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield course_model_1.Course.findById(id);
-    return result;
+    ]);
+    return result[0];
 });
 // update e form db
 const updateCourseFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {

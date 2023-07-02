@@ -1,16 +1,17 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { Secret } from 'jsonwebtoken';
+import config from '../../../config';
 import { PAGINATION_FIELDS } from '../../../constant/pagination';
+import { jwtHelpers } from '../../../helper/jwtHelpers';
+import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
+import { ILoginUserResponse } from '../auth/auth.interface';
 import { GeneralUserFilterableFields } from './constant.GeneralUser';
 import { IGeneralUser } from './interface.GeneralUser';
 import { GeneralUserService } from './service.GeneralUser';
-import config from '../../../config';
-import { jwtHelpers } from '../../../helper/jwtHelpers';
-import { Secret } from 'jsonwebtoken';
-import ApiError from '../../errors/ApiError';
 
 const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
   const filter = pick(req.query, GeneralUserFilterableFields);
@@ -57,11 +58,14 @@ const createGeneralUserByFirebase = catchAsync(
     res.cookie('refreshToken', refreshToken, cookieOptions);
     res.cookie('accessToken', accessToken, cookieOptions);
 
-    sendResponse<IGeneralUser>(res, {
+    sendResponse<ILoginUserResponse>(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'user found successfully !',
-      data: result,
+      // data:result,
+      data: {
+        accessToken,
+      },
     });
   }
 );
@@ -76,6 +80,18 @@ const getSingleGeneralUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getSingleGeneralUserToCourse = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await GeneralUserService.getSingleGeneralUserFromDb(id);
+    sendResponse<IGeneralUser>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Course found successfully !',
+      data: result,
+    });
+  }
+);
 
 const updateGeneralUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -94,6 +110,24 @@ const updateGeneralUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateCourseVedioOrQuiz = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const result = await GeneralUserService.updateCourseVedioOrQuizFromDb(
+      id,
+      updatedData
+    );
+
+    sendResponse<IGeneralUser>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Course or quiz updated successfully !',
+      data: result,
+    });
+  }
+);
+
 const deleteGeneralUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
@@ -111,6 +145,8 @@ export const GeneralUserController = {
   createGeneralUserByFirebase,
   getAllGeneralUsers,
   getSingleGeneralUser,
+  getSingleGeneralUserToCourse,
+  updateCourseVedioOrQuiz,
   updateGeneralUser,
   deleteGeneralUser,
 };

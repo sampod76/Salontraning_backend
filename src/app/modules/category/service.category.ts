@@ -60,7 +60,7 @@ const getAllCategoryFromDb = async (
     .skip(Number(skip))
     .limit(Number(limit));
 
-  const total = await Category.countDocuments();
+  const total = await Category.countDocuments(whereConditions);
   return {
     meta: {
       page,

@@ -67,7 +67,7 @@ const getAllFileUploadeFromDb = async (
     .skip(Number(skip))
     .limit(Number(limit));
 
-  const total = await FileUploade.countDocuments();
+  const total = await FileUploade.countDocuments(whereConditions);
   return {
     meta: {
       page,

@@ -30,6 +30,8 @@ const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const model_GeneralUser_1 = require("./model.GeneralUser");
+// import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
+// const {ObjectId}=mongoose.Types
 const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     let result = null;
     result = yield model_GeneralUser_1.GeneralUser.findOne({ uid: payload === null || payload === void 0 ? void 0 : payload.uid });
@@ -79,7 +81,40 @@ const getAllGeneralUsersFromDb = (filters, paginationOptions) => __awaiter(void 
     };
 });
 const getSingleGeneralUserFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield model_GeneralUser_1.GeneralUser.findOne({ id });
+    const result = yield model_GeneralUser_1.GeneralUser.findById(id).populate('purchase_courses.course', 'courseId title thumbnail createdAt');
+    return result;
+});
+// user to course
+const getUserToCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield model_GeneralUser_1.GeneralUser.findById(id).populate('purchase_courses.course');
+    return result;
+});
+// update user course vedio or quiz
+const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { course_id, lessionId, quiz } = payload;
+    let result = null;
+    if (course_id && lessionId) {
+        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({
+            _id: id,
+            'purchase_courses.course': course_id,
+            'purchase_courses.total_completed_lessions': { $ne: lessionId },
+        }, {
+            $push: {
+                'purchase_courses.$.total_completed_lessions': lessionId,
+            },
+        }, {
+            new: true,
+        });
+    }
+    if (quiz) {
+        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ _id: id, 'purchase_courses.course': course_id }, {
+            $set: {
+                'purchase_courses.$.quiz': quiz,
+            },
+        }, {
+            new: true,
+        });
+    }
     return result;
 });
 // module 15 --> 14,15 vedio
@@ -103,6 +138,8 @@ exports.GeneralUserService = {
     createGeneralUserByFirebaseFromDb,
     getAllGeneralUsersFromDb,
     getSingleGeneralUserFromDb,
+    getUserToCourseFromDb,
     updateGeneralUserFromDb,
+    updateCourseVedioOrQuizFromDb,
     deleteGeneralUserFromDb,
 };

@@ -49,7 +49,8 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     purchase_courses: [
       {
         course: { type: Types.ObjectId, ref: 'Course' },
-        total_completed_vedio: [Types.ObjectId],
+        quiz: [{ quizId: String, provided_answer: String }],
+        total_completed_lessions: [Types.ObjectId],
       },
     ],
   },

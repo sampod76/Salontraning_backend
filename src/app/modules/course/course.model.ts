@@ -19,10 +19,11 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     price: {
       type: Number,
       required: true,
+      min: 0,
     },
     type: {
       type: String,
-      enum: COURSE_TYPES,
+      enum: COURSE_TYPES, // ['free', 'paid', 'open', 'close']
     },
     category: {
       type: String,
@@ -30,8 +31,18 @@ const courseSchema = new Schema<ICourse, CourseModel>(
       trim: true,
     },
     discount: {
-      type: Number,
-      default: 0,
+      type: {
+        value: {
+          type: Number,
+          default: 0,
+        },
+        startDate: {
+          type: Date,
+        },
+        expiryDate: {
+          type: Date,
+        },
+      },
     },
     vat: {
       type: Number,

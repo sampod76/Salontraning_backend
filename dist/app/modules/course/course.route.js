@@ -8,10 +8,11 @@ const express_1 = __importDefault(require("express"));
 const validateRequestZod_1 = __importDefault(require("../../middlewares/validateRequestZod"));
 const course_constroller_1 = require("./course.constroller");
 const course_validation_1 = require("./course.validation");
+const authMiddleware_1 = __importDefault(require("../../middlewares/authMiddleware"));
 const router = express_1.default.Router();
 router
     .route('/')
-    .get(course_constroller_1.CourseController.getAllCourse)
+    .get((0, authMiddleware_1.default)(), course_constroller_1.CourseController.getAllCourse)
     .post((0, validateRequestZod_1.default)(course_validation_1.CourseValidation.createCourseZodSchema), course_constroller_1.CourseController.createCourse);
 router
     .route('/:id')
