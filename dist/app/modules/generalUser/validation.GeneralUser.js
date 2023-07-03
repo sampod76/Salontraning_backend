@@ -26,6 +26,12 @@ const updateGeneralUserZodSchema = zod_1.z.object({
         address: zod_1.z.string().optional(),
         profileImage: zod_1.z.string().optional(),
         status: zod_1.z.enum(['active', 'deactive']).optional(),
+        learnedToday: zod_1.z
+            .object({
+            date: zod_1.z.string().optional(),
+            time: zod_1.z.number().optional(),
+        })
+            .optional(),
     }),
 });
 // const updateCourseOrQuizZodSchema = z.object({

@@ -19,7 +19,7 @@ const createPurchased_courses = catchAsync(
       Purchased_coursesData,
       userId
     );
-    console.log(result);
+
     sendResponse<IPurchased_courses>(res, {
       success: true,
       statusCode: httpStatus.OK,

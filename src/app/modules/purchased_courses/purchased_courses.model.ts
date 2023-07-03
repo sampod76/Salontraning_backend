@@ -55,6 +55,9 @@ const purchasedCoursesSchema = new Schema<
           type: String,
           enum: ['card'],
         },
+        paymentType: {
+          type: String,
+        },
 
         method_TransactionID: {
           //
@@ -70,11 +73,7 @@ const purchasedCoursesSchema = new Schema<
       ref: 'Course',
       required: true,
     },
-    courseId: {
-      // gendrated course id
-      type: String,
-      trim: true,
-    },
+
     transactionID: String, // not provide
   },
   {
@@ -93,10 +92,11 @@ purchasedCoursesSchema.pre('save', async function (next) {
     vat = 0,
     courseId,
   } = (await Course.findById(this.course)) as ICourse;
-  if (discount.expiryDate && new Date(discount.expiryDate) > new Date()) {
-    //unused only
-    discount.value = discount.value + 0;
-  } else {
+
+  if (
+    (discount.expiryDate && new Date(discount.expiryDate) < new Date()) ||
+    (discount.startDate && new Date(discount.startDate) > new Date())
+  ) {
     discount.value = 0;
   }
 

@@ -4,6 +4,7 @@ const IPaymentSchema = z
   .object({
     method: z.string().trim().optional(),
     method_TransactionID: z.string().trim().optional(),
+    paymentType: z.string().optional(),
   })
   .optional();
 

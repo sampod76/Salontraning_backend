@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
@@ -24,12 +25,23 @@ app.use((0, xss_clean_1.default)());
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/images', express_1.default.static(path_1.default.join(__dirname, './uploadFile/images/')));
-app.use('/vedios', express_1.default.static(path_1.default.join(__dirname, './uploadFile/vedios/')));
+const run = (req, res, next) => {
+    try {
+        jwtHelpers_1.jwtHelpers.verifyToken(`${req.params.id}`, config_1.default.jwt.secret);
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
+};
+app.use(`/images/:id`, run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/images/')));
+app.use('/vedios/:id', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/vedios/')));
 const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 const index_route_1 = __importDefault(require("./app/routes/index_route"));
+const config_1 = __importDefault(require("./config"));
+const jwtHelpers_1 = require("./helper/jwtHelpers");
 app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtain the MAC address
@@ -87,6 +99,7 @@ app.use((req, res, next) => {
     next();
 });
 const test = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         // const result = await Course.updateMany(
         //   {},
@@ -97,6 +110,26 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         //   { $rename: { thimble: 'thumbnail' } }
         // );
         // console.log(result, result2);
+        const item_list = {
+            items: [
+                {
+                    name: 'Item 1',
+                    sku: 'SKU-001',
+                    price: 50.0,
+                    currency: 'USD',
+                    quantity: 2,
+                },
+                {
+                    name: 'Item 2',
+                    sku: 'SKU-002',
+                    price: 30.0,
+                    currency: 'USD',
+                    quantity: 1,
+                },
+            ],
+        };
+        const mappedData = (_a = item_list === null || item_list === void 0 ? void 0 : item_list.items) === null || _a === void 0 ? void 0 : _a.map(item => (Object.assign(Object.assign({}, item), { price: String(item.price) })));
+        console.log(mappedData);
     }
     catch (error) {
         console.log(error);

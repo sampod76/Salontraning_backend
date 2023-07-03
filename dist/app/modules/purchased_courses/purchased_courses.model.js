@@ -55,6 +55,9 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
                 type: String,
                 enum: ['card'],
             },
+            paymentType: {
+                type: String,
+            },
             method_TransactionID: {
                 //
                 type: String,
@@ -68,11 +71,6 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
         ref: 'Course',
         required: true,
     },
-    courseId: {
-        // gendrated course id
-        type: String,
-        trim: true,
-    },
     transactionID: String, // not provide
 }, {
     timestamps: true,
@@ -84,11 +82,8 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
 purchasedCoursesSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const { price = 0, discount = { value: 0 }, vat = 0, courseId, } = (yield course_model_1.Course.findById(this.course));
-        if (discount.expiryDate && new Date(discount.expiryDate) > new Date()) {
-            //unused only
-            discount.value = discount.value + 0;
-        }
-        else {
+        if ((discount.expiryDate && new Date(discount.expiryDate) < new Date()) ||
+            (discount.startDate && new Date(discount.startDate) > new Date())) {
             discount.value = 0;
         }
         const afterDiscount = price - (price / 100) * discount.value;

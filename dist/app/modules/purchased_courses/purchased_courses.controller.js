@@ -38,7 +38,6 @@ const createPurchased_courses = (0, catchAsync_1.default)((req, res) => __awaite
     const Purchased_coursesData = __rest(req.body, []);
     const userId = Purchased_coursesData === null || Purchased_coursesData === void 0 ? void 0 : Purchased_coursesData.userId;
     const result = yield purchased_courses_service_1.Purchased_coursesService.createPurchased_coursesByDb(Purchased_coursesData, userId);
-    console.log(result);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

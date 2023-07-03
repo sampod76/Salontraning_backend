@@ -121,7 +121,7 @@ const createModeratorFromDb = (moderator, user) => __awaiter(void 0, void 0, voi
     if (newUserAllData) {
         newUserAllData = yield users_model_1.User.findOne({ _id: newUserAllData._id }).populate('moderator');
     }
-    console.log(newUserAllData);
+    // console.log(newUserAllData);
     return newUserAllData;
 });
 exports.UserServices = {

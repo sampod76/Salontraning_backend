@@ -47,6 +47,16 @@ const GeneralUserSchema = new mongoose_1.Schema({
         enum: ['active', 'deactive'],
         default: 'active',
     },
+    learnedToday: {
+        type: {
+            date: {
+                type: Date,
+            },
+            time: {
+                type: Number,
+            },
+        },
+    },
     purchase_courses: [
         {
             course: { type: mongoose_1.Types.ObjectId, ref: 'Course' },

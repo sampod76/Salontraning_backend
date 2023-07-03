@@ -21,6 +21,10 @@ export type IGeneralUser = {
   otherInfo?: IOtherInfo;
   role: string;
   status?: 'active' | 'deactive';
+  learnedToday?: {
+    date?: string;
+    time?: number;
+  };
   purchase_courses?: IPurchaseCourses[];
 };
 

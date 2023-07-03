@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 import config from '../../../config';
 import { PAGINATION_FIELDS } from '../../../constant/pagination';
 import { jwtHelpers } from '../../../helper/jwtHelpers';
@@ -8,7 +9,6 @@ import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
-import { ILoginUserResponse } from '../auth/auth.interface';
 import { GeneralUserFilterableFields } from './constant.GeneralUser';
 import { IGeneralUser } from './interface.GeneralUser';
 import { GeneralUserService } from './service.GeneralUser';
@@ -32,9 +32,9 @@ const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
 
 const createGeneralUserByFirebase = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await GeneralUserService.createGeneralUserByFirebaseFromDb(
+    const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
       req.body
-    );
+    )) as IGeneralUser & { _id: Types.ObjectId };
     if (!result) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
     }
@@ -58,15 +58,33 @@ const createGeneralUserByFirebase = catchAsync(
     res.cookie('refreshToken', refreshToken, cookieOptions);
     res.cookie('accessToken', accessToken, cookieOptions);
 
-    sendResponse<ILoginUserResponse>(res, {
+    // const result2 = { ...result.toObject() };
+
+    res.status(200).send({
       statusCode: httpStatus.OK,
       success: true,
       message: 'user found successfully !',
       // data:result,
       data: {
+        _id: result?._id,
+        name: result?.name,
+        uid: result?.uid,
+        status: result?.status,
+        email: result?.email,
+        // ...result,
         accessToken,
       },
     });
+
+    // sendResponse<ILoginUserResponse>(res, {
+    //   statusCode: httpStatus.OK,
+    //   success: true,
+    //   message: 'user found successfully !',
+    //   // data:result,
+    //   data: {
+    //     accessToken,
+    //   },
+    // });
   }
 );
 
@@ -80,11 +98,14 @@ const getSingleGeneralUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+//single user _id to get all course and lession
 const getSingleGeneralUserToCourse = catchAsync(
   async (req: Request, res: Response) => {
     const id = req.params.id;
-    const result = await GeneralUserService.getSingleGeneralUserFromDb(id);
-    sendResponse<IGeneralUser>(res, {
+
+    const result = await GeneralUserService.getUserToCourseFromDb(id);
+    sendResponse<any>(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Course found successfully !',

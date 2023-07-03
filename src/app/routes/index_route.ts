@@ -10,6 +10,7 @@ import { LessionRoute } from '../modules/lession/lession.route';
 import { ModeratorRoutes } from '../modules/moderator/moderator.route';
 import { Purchased_coursesRoute } from '../modules/purchased_courses/purchased_courses.route';
 import { QuizRoute } from '../modules/quiz/quiz.route';
+import { PaymentRoute } from '../modules/paymenet/payment.router';
 // import { UserRoute } from '../modules/users/users.router';
 
 //https://docs.google.com/document/d/1gTsTpFvhfZB-2y0_BbZQVzmbG3YwsZwPrwAbsYqpOzM/edit
@@ -57,6 +58,10 @@ const moduleRoutes = [
   {
     path: '/category',
     route: CategoryRoute,
+  },
+  {
+    path: '/payment',
+    route: PaymentRoute,
   },
 ];
 

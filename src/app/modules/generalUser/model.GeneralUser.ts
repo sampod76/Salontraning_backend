@@ -46,6 +46,16 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       enum: ['active', 'deactive'],
       default: 'active',
     },
+    learnedToday: {
+      type: {
+        date: {
+          type: Date,
+        },
+        time: {
+          type: Number,
+        },
+      },
+    },
     purchase_courses: [
       {
         course: { type: Types.ObjectId, ref: 'Course' },

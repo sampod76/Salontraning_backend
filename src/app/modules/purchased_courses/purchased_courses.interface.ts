@@ -22,6 +22,7 @@ export type IPayment = {
   discount?: number;
   total: number;
   method: string;
+  paymentType: string;
   method_TransactionID?: string;
 };
 

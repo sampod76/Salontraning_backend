@@ -25,6 +25,12 @@ const updateGeneralUserZodSchema = z.object({
     address: z.string().optional(),
     profileImage: z.string().optional(),
     status: z.enum(['active', 'deactive']).optional(),
+    learnedToday: z
+      .object({
+        date: z.string().optional(),
+        time: z.number().optional(),
+      })
+      .optional(),
   }),
 });
 

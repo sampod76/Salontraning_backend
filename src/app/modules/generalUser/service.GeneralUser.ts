@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import httpStatus from 'http-status';
-import { SortOrder } from 'mongoose';
+import { SortOrder, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
@@ -90,10 +90,71 @@ const getSingleGeneralUserFromDb = async (
 // user to course
 const getUserToCourseFromDb = async (
   id: string
-): Promise<IGeneralUser | null> => {
-  const result = await GeneralUser.findById(id).populate(
-    'purchase_courses.course'
-  );
+): Promise<IGeneralUser[] | null> => {
+  // const result = await GeneralUser.findById(id).populate({
+  //   path: 'purchase_courses.course',
+  //   populate: {
+  //     path: 'Lession',
+  //     model: 'Comment',
+  //   },
+  // });
+  const result = await GeneralUser.aggregate([
+    { $match: { _id: new Types.ObjectId(id) } },
+    {
+      $unwind: '$purchase_courses', // এটার মাধ্যমে আমরা কোন একটা array multipal ভ্যালুগুলাকে তার parent সাথে  আলাদা আলাদা করে প্রত্যেকটা ডকুমেন্ট তৈরি করা
+    },
+    {
+      $lookup: {
+        from: 'courses',
+        let: { id: '$purchase_courses.course' },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ['$_id', '$$id'] },
+              // Additional filter conditions for collection2
+            },
+          },
+          // Additional stages for collection2
+          // প্রথম লুকাপ চালানোর পরে যে ডাটা আসছে তার উপরে যদি আমি যেই কোন কিছু করতে চাই তাহলে এখানে করতে হবে |যেমন আমি এখানে project করেছি
+          {
+            $project: {
+              password: 0,
+              document: 0,
+            },
+          },
+        ],
+        as: 'course',
+      },
+    },
+    {
+      $unwind: '$course', // এটার মাধ্যমে আমরা কোন একটা array multipal ভ্যালুগুলাকে তার parent সাথে  আলাদা আলাদা করে প্রত্যেকটা ডকুমেন্ট তৈরি করা
+    },
+    {
+      $lookup: {
+        from: 'lessions',
+        let: { id: '$course._id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ['$course', '$$id'] },
+              // Additional filter conditions for collection2
+            },
+          },
+        ],
+        as: 'lessions',
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        purchase_courses: 1,
+        course: { _id: 1, title: 1, thumbnail: 1 },
+        lessions: { _id: 1, title: 1 },
+      },
+    },
+  ]);
+
   return result;
 };
 
@@ -102,7 +163,7 @@ const updateCourseVedioOrQuizFromDb = async (
   id: string,
   payload: any
 ): Promise<IGeneralUser | null> => {
-  const { course_id, lessionId, quiz } = payload;
+  const { course_id, lessionId, quiz, learnedToday } = payload;
   let result = null;
   if (course_id && lessionId) {
     result = await GeneralUser.findOneAndUpdate(
@@ -115,6 +176,7 @@ const updateCourseVedioOrQuizFromDb = async (
         $push: {
           'purchase_courses.$.total_completed_lessions': lessionId,
         },
+        learnedToday,
       },
       {
         new: true,
@@ -133,6 +195,7 @@ const updateCourseVedioOrQuizFromDb = async (
         new: true,
       }
     );
+    // .projection({name:1, active:1, purchase_courses:1});
   }
 
   return result;

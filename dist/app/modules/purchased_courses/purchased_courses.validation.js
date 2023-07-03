@@ -9,6 +9,7 @@ const IPaymentSchema = zod_1.default
     .object({
     method: zod_1.default.string().trim().optional(),
     method_TransactionID: zod_1.default.string().trim().optional(),
+    paymentType: zod_1.default.string().optional(),
 })
     .optional();
 const cteateZodPurchasedCoursesSchema = zod_1.default.object({

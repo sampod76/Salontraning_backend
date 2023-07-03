@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, {
+  Application,
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from 'express';
 // create xss-clean.d.ts file after work this xss
 import path from 'path';
 import xss from 'xss-clean';
@@ -11,12 +18,25 @@ app.use(xss());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+const run: RequestHandler = (req, res, next) => {
+  try {
+    jwtHelpers.verifyToken(`${req.params.id}`, config.jwt.secret as string);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 app.use(
-  '/images',
+  `/images/:id`,
+  run,
   express.static(path.join(__dirname, './uploadFile/images/'))
 );
+
 app.use(
-  '/vedios',
+  '/vedios/:id',
+  run,
   express.static(path.join(__dirname, './uploadFile/vedios/'))
 );
 
@@ -24,6 +44,8 @@ import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 import routers from './app/routes/index_route';
+import config from './config';
+import { jwtHelpers } from './helper/jwtHelpers';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -98,6 +120,30 @@ const test = async () => {
     //   { $rename: { thimble: 'thumbnail' } }
     // );
     // console.log(result, result2);
+    const item_list = {
+      items: [
+        {
+          name: 'Item 1',
+          sku: 'SKU-001',
+          price: 50.0,
+          currency: 'USD',
+          quantity: 2,
+        },
+        {
+          name: 'Item 2',
+          sku: 'SKU-002',
+          price: 30.0,
+          currency: 'USD',
+          quantity: 1,
+        },
+      ],
+    };
+
+    const mappedData = item_list?.items?.map(item => ({
+      ...item,
+      price: String(item.price),
+    }));
+    console.log(mappedData);
   } catch (error) {
     console.log(error);
   }

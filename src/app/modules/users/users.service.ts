@@ -145,7 +145,7 @@ const createModeratorFromDb = async (
       'moderator'
     );
   }
-  console.log(newUserAllData);
+  // console.log(newUserAllData);
   return newUserAllData;
 };
 

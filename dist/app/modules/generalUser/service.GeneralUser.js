@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GeneralUserService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
+const mongoose_1 = require("mongoose");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
@@ -86,12 +87,74 @@ const getSingleGeneralUserFromDb = (id) => __awaiter(void 0, void 0, void 0, fun
 });
 // user to course
 const getUserToCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield model_GeneralUser_1.GeneralUser.findById(id).populate('purchase_courses.course');
+    // const result = await GeneralUser.findById(id).populate({
+    //   path: 'purchase_courses.course',
+    //   populate: {
+    //     path: 'Lession',
+    //     model: 'Comment',
+    //   },
+    // });
+    const result = yield model_GeneralUser_1.GeneralUser.aggregate([
+        { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
+        {
+            $unwind: '$purchase_courses', // এটার মাধ্যমে আমরা কোন একটা array multipal ভ্যালুগুলাকে তার parent সাথে  আলাদা আলাদা করে প্রত্যেকটা ডকুমেন্ট তৈরি করা
+        },
+        {
+            $lookup: {
+                from: 'courses',
+                let: { id: '$purchase_courses.course' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ['$_id', '$$id'] },
+                            // Additional filter conditions for collection2
+                        },
+                    },
+                    // Additional stages for collection2
+                    // প্রথম লুকাপ চালানোর পরে যে ডাটা আসছে তার উপরে যদি আমি যেই কোন কিছু করতে চাই তাহলে এখানে করতে হবে |যেমন আমি এখানে project করেছি
+                    {
+                        $project: {
+                            password: 0,
+                            document: 0,
+                        },
+                    },
+                ],
+                as: 'course',
+            },
+        },
+        {
+            $unwind: '$course', // এটার মাধ্যমে আমরা কোন একটা array multipal ভ্যালুগুলাকে তার parent সাথে  আলাদা আলাদা করে প্রত্যেকটা ডকুমেন্ট তৈরি করা
+        },
+        {
+            $lookup: {
+                from: 'lessions',
+                let: { id: '$course._id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ['$course', '$$id'] },
+                            // Additional filter conditions for collection2
+                        },
+                    },
+                ],
+                as: 'lessions',
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                purchase_courses: 1,
+                course: { _id: 1, title: 1, thumbnail: 1 },
+                lessions: { _id: 1, title: 1 },
+            },
+        },
+    ]);
     return result;
 });
 // update user course vedio or quiz
 const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const { course_id, lessionId, quiz } = payload;
+    const { course_id, lessionId, quiz, learnedToday } = payload;
     let result = null;
     if (course_id && lessionId) {
         result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({
@@ -102,6 +165,7 @@ const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0,
             $push: {
                 'purchase_courses.$.total_completed_lessions': lessionId,
             },
+            learnedToday,
         }, {
             new: true,
         });
@@ -114,6 +178,7 @@ const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0,
         }, {
             new: true,
         });
+        // .projection({name:1, active:1, purchase_courses:1});
     }
     return result;
 });

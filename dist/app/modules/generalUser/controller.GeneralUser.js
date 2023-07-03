@@ -36,7 +36,7 @@ const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     });
 }));
 const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield service_GeneralUser_1.GeneralUserService.createGeneralUserByFirebaseFromDb(req.body);
+    const result = (yield service_GeneralUser_1.GeneralUserService.createGeneralUserByFirebaseFromDb(req.body));
     if (!result) {
         throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'forbidden access!');
     }
@@ -51,15 +51,31 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
     //এটার মাধ্যমে ক্লাইন সাইডে আমার পাঠানো রেসপন্স এর বাইরেও অটোমেটিকলি সে এই cookie সেট করে দেবে
     res.cookie('refreshToken', refreshToken, cookieOptions);
     res.cookie('accessToken', accessToken, cookieOptions);
-    (0, sendResponse_1.default)(res, {
+    // const result2 = { ...result.toObject() };
+    res.status(200).send({
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'user found successfully !',
         // data:result,
         data: {
+            _id: result === null || result === void 0 ? void 0 : result._id,
+            name: result === null || result === void 0 ? void 0 : result.name,
+            uid: result === null || result === void 0 ? void 0 : result.uid,
+            status: result === null || result === void 0 ? void 0 : result.status,
+            email: result === null || result === void 0 ? void 0 : result.email,
+            // ...result,
             accessToken,
         },
     });
+    // sendResponse<ILoginUserResponse>(res, {
+    //   statusCode: httpStatus.OK,
+    //   success: true,
+    //   message: 'user found successfully !',
+    //   // data:result,
+    //   data: {
+    //     accessToken,
+    //   },
+    // });
 }));
 const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
@@ -71,9 +87,10 @@ const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(v
         data: result,
     });
 }));
+//single user _id to get all course and lession
 const getSingleGeneralUserToCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
-    const result = yield service_GeneralUser_1.GeneralUserService.getSingleGeneralUserFromDb(id);
+    const result = yield service_GeneralUser_1.GeneralUserService.getUserToCourseFromDb(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
