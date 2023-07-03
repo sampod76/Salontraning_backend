@@ -17,7 +17,7 @@ const createPaypleZodSchema = z.object({
           z.object({
             name: z.string(),
             sku: z.string().optional(),
-            price: z.number(),
+            price: z.string(),
             currency: z.string().optional(),
             quantity: z.number().optional(),
           })
@@ -26,7 +26,7 @@ const createPaypleZodSchema = z.object({
       .optional(),
     amount: z.object({
       currency: z.string().optional(),
-      total: z.number({ required_error: 'amount is required' }),
+      total: z.string({ required_error: 'amount is required' }),
     }),
     description: z.string().optional(),
   }),

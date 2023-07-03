@@ -1,18 +1,11 @@
 import { Request, Response } from 'express';
 
-import catchAsync from '../../share/catchAsync';
+import paypal, { Payment } from 'paypal-rest-sdk';
 import Stripe from 'stripe';
 import ApiError from '../../errors/ApiError';
-import paypal, { Payment } from 'paypal-rest-sdk';
+import catchAsync from '../../share/catchAsync';
+// import { errorLogger, logger } from '../../share/logger';
 const stripe = new Stripe(process.env.STRIPE_SK as string, null as any);
-
-type IItem = {
-  name: string;
-  sku?: string;
-  price: number;
-  currency?: string;
-  quantity?: number;
-};
 
 // import { z } from 'zod'
 const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
@@ -47,6 +40,7 @@ const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
 // payple intergrate
 const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
   const { amount, item_list, description } = req.body;
+  console.log(item_list);
   paypal.configure({
     mode: 'sandbox',
     client_id: process.env.PAYPLE_CLIENT_ID as string,
@@ -63,12 +57,7 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
     },
     transactions: [
       {
-        item_list: {
-          items: item_list?.items?.map((item: IItem) => ({
-            ...item,
-            price: String(item.price),
-          })),
-        },
+        item_list,
         amount: {
           currency: 'USD',
           total: String(amount?.total),
@@ -80,7 +69,13 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
 
   paypal.payment.create(payment, (error: any, payment: any) => {
     if (error) {
-      throw new ApiError(404, 'Payment faild!!');
+      console.log(error);
+      // errorLogger.error(error)
+      return res.status(404).send({
+        success: false,
+        statusCode: 404,
+        message: 'Payple pryment faild !!!',
+      });
     } else {
       for (let i = 0; i < payment.links.length; i++) {
         if (payment.links[i].rel === 'approval_url') {

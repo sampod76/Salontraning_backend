@@ -120,30 +120,6 @@ const test = async () => {
     //   { $rename: { thimble: 'thumbnail' } }
     // );
     // console.log(result, result2);
-    const item_list = {
-      items: [
-        {
-          name: 'Item 1',
-          sku: 'SKU-001',
-          price: 50.0,
-          currency: 'USD',
-          quantity: 2,
-        },
-        {
-          name: 'Item 2',
-          sku: 'SKU-002',
-          price: 30.0,
-          currency: 'USD',
-          quantity: 1,
-        },
-      ],
-    };
-
-    const mappedData = item_list?.items?.map(item => ({
-      ...item,
-      price: String(item.price),
-    }));
-    console.log(mappedData);
   } catch (error) {
     console.log(error);
   }

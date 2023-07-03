@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPaymentController = void 0;
-const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
+const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const stripe_1 = __importDefault(require("stripe"));
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
-const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
+const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const stripe = new stripe_1.default(process.env.STRIPE_SK, null);
 // import { z } from 'zod'
 const createPaymentStripe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,8 +47,8 @@ const createPaymentStripe = (0, catchAsync_1.default)((req, res) => __awaiter(vo
 }));
 // payple intergrate
 const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { amount, item_list, description } = req.body;
+    console.log(item_list);
     paypal_rest_sdk_1.default.configure({
         mode: 'sandbox',
         client_id: process.env.PAYPLE_CLIENT_ID,
@@ -65,9 +65,7 @@ const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(vo
         },
         transactions: [
             {
-                item_list: {
-                    items: (_a = item_list === null || item_list === void 0 ? void 0 : item_list.items) === null || _a === void 0 ? void 0 : _a.map((item) => (Object.assign(Object.assign({}, item), { price: String(item.price) }))),
-                },
+                item_list,
                 amount: {
                     currency: 'USD',
                     total: String(amount === null || amount === void 0 ? void 0 : amount.total),
@@ -78,7 +76,13 @@ const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     };
     paypal_rest_sdk_1.default.payment.create(payment, (error, payment) => {
         if (error) {
-            throw new ApiError_1.default(404, 'Payment faild!!');
+            console.log(error);
+            return res.status(404).send({
+                success: false,
+                statusCode: 404,
+                message: 'Payple pryment faild !!!',
+                error,
+            });
         }
         else {
             for (let i = 0; i < payment.links.length; i++) {

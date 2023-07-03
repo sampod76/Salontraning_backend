@@ -16,7 +16,7 @@ const createPaypleZodSchema = zod_1.z.object({
             items: zod_1.z.array(zod_1.z.object({
                 name: zod_1.z.string(),
                 sku: zod_1.z.string().optional(),
-                price: zod_1.z.number(),
+                price: zod_1.z.string(),
                 currency: zod_1.z.string().optional(),
                 quantity: zod_1.z.number().optional(),
             })),
@@ -24,7 +24,7 @@ const createPaypleZodSchema = zod_1.z.object({
             .optional(),
         amount: zod_1.z.object({
             currency: zod_1.z.string().optional(),
-            total: zod_1.z.number({ required_error: 'amount is required' }),
+            total: zod_1.z.string({ required_error: 'amount is required' }),
         }),
         description: zod_1.z.string().optional(),
     }),

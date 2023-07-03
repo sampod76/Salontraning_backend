@@ -99,7 +99,6 @@ app.use((req, res, next) => {
     next();
 });
 const test = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
         // const result = await Course.updateMany(
         //   {},
@@ -110,26 +109,6 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         //   { $rename: { thimble: 'thumbnail' } }
         // );
         // console.log(result, result2);
-        const item_list = {
-            items: [
-                {
-                    name: 'Item 1',
-                    sku: 'SKU-001',
-                    price: 50.0,
-                    currency: 'USD',
-                    quantity: 2,
-                },
-                {
-                    name: 'Item 2',
-                    sku: 'SKU-002',
-                    price: 30.0,
-                    currency: 'USD',
-                    quantity: 1,
-                },
-            ],
-        };
-        const mappedData = (_a = item_list === null || item_list === void 0 ? void 0 : item_list.items) === null || _a === void 0 ? void 0 : _a.map(item => (Object.assign(Object.assign({}, item), { price: String(item.price) })));
-        console.log(mappedData);
     }
     catch (error) {
         console.log(error);
