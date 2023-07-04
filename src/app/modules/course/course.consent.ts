@@ -15,4 +15,4 @@ export const COURSE_FILTERABLE_FIELDS = [
   'date',
 ];
 
-export const COURSE_TYPES = ['free', 'paid', 'open', 'close'];
+export const COURSE_TYPES = ['free', 'paid', 'open', 'closed', 'recurrig'];

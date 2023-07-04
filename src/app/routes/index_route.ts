@@ -9,7 +9,7 @@ import { FileUploadeRoute } from '../modules/fileUploade/route.fileUploade';
 import { GeneralUserRoutes } from '../modules/generalUser/route.GeneralUser';
 import { LessionRoute } from '../modules/lession/lession.route';
 import { ModeratorRoutes } from '../modules/moderator/moderator.route';
-import { PaymentRoute } from '../modules/paymenet/payment.router';
+import { PaymentRoute } from '../modules/payment/payment.router';
 import { Purchased_coursesRoute } from '../modules/purchased_courses/purchased_courses.route';
 import { QuizRoute } from '../modules/quiz/quiz.route';
 // import { UserRoute } from '../modules/users/users.router';

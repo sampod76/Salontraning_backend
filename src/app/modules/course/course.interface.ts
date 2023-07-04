@@ -27,7 +27,7 @@ export type ICourse = {
   courseId: string;
   title: string;
   price?: number;
-  type: 'free' | 'paid' | 'open' | 'close';
+  type: 'free' | 'paid' | 'open' | 'closed' | 'recurrig';
   category: string;
   discount?: {
     value: number;
