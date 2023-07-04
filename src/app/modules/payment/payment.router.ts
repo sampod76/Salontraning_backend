@@ -14,7 +14,7 @@ const router = express.Router();
 //     validateRequestZod(PaymentValidation.createPaymentZodSchema),
 //     createPaymentController.createPaymentStripe
 //   );
-/// alll i thish k
+
 router
   .route('/create-payment-intent')
   .post(
