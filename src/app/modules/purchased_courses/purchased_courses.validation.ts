@@ -16,7 +16,7 @@ const cteateZodPurchasedCoursesSchema = z.object({
     phone: z.string().trim().optional(),
     payment: IPaymentSchema,
     transactionID: z.string().optional(),
-    course: z.string().nonempty({ message: 'Course is required' }),
+    course: z.string().nonempty({ message: 'Course _id is required' }),
     courseId: z.string().trim().optional(),
   }),
 });

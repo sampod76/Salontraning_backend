@@ -133,8 +133,29 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const myProfileFromDb = async (id: string, role: string) => {
+  // //chack this user exist database
+  // const isUserExist = await User.isUserExist(verifiedToken?.userId);
+  let isUserExist = null;
+  if (id && role === ENUM_USER_ROLE.ADMIN) {
+    isUserExist = await Admin.findById(id);
+  } else if (role === ENUM_USER_ROLE.MODERATOR) {
+    isUserExist = await Moderator.findById(id);
+  } else if (role === ENUM_USER_ROLE.GENERAL_USER) {
+    isUserExist = await GeneralUser.findById(id);
+  }
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+  }
+
+  // generate new token
+
+  return isUserExist;
+};
+
 export const AuthService = {
   loginUserFromDb,
   loginUserByUidFromDb,
+  myProfileFromDb,
   refreshToken,
 };

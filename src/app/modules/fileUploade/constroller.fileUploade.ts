@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { PAGINATION_FIELDS } from '../../../constant/pagination';
@@ -7,13 +8,59 @@ import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
 
+import { FILEUPLOADE_FILTERABLE_FIELDS } from './consent.fileUploade';
 import { IFileUploade } from './interface.fileUploade';
 import { FileUploadeService } from './service.fileUploade';
-import { FILEUPLOADE_FILTERABLE_FIELDS } from './consent.fileUploade';
 
 // import { z } from 'zod'
+const uploadeSingleFileByServer = catchAsync(
+  async (req: Request, res: Response) => {
+    const fileDetails = req.file;
+
+    const file = {
+      originalname: fileDetails?.originalname,
+      mimetype: fileDetails?.mimetype,
+      destination: fileDetails?.destination,
+      path:
+        fileDetails?.fieldname === 'image'
+          ? `uploadFile/images`
+          : `uploadFile/vedios`,
+      size: fileDetails?.size,
+    };
+    sendResponse<any>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'successfull uploade single file',
+      data: file,
+    });
+  }
+);
+
+const uploadeMultipalFileByServer = catchAsync(
+  async (req: Request, res: Response) => {
+    const files = req.files as Express.Multer.File[];
+    const filesDetailes = files?.map(value => ({
+      originalname: value?.originalname,
+      mimetype: value?.mimetype,
+      destination: value?.destination,
+      path:
+        value?.fieldname === 'images'
+          ? `uploadFile/images`
+          : `uploadFile/vedios`,
+      size: value?.size,
+    }));
+    sendResponse<any>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'successfull uploade single file',
+      data: filesDetailes,
+    });
+  }
+);
+
 const createFileUploade = catchAsync(async (req: Request, res: Response) => {
   const { ...FileUploadeData } = req.body;
+  req.body.userId = req?.user?._id;
   const result = await FileUploadeService.createFileUploadeByDb(
     FileUploadeData
   );
@@ -114,4 +161,6 @@ export const FileUploadeController = {
   getSingleFileUploade,
   updateFileUploade,
   deleteFileUploade,
+  uploadeSingleFileByServer,
+  uploadeMultipalFileByServer,
 };

@@ -51,12 +51,12 @@ const purchasedCoursesSchema = new Schema<
         },
 
         method: {
-          //card not provide
           type: String,
-          enum: ['card'],
         },
         paymentType: {
           type: String,
+          enum: ['card'],
+          default: 'card',
         },
 
         method_TransactionID: {
@@ -102,12 +102,14 @@ purchasedCoursesSchema.pre('save', async function (next) {
 
   const afterDiscount = price - (price / 100) * discount.value;
   this.payment.total = afterDiscount + (afterDiscount / 100) * vat;
-  // this.payment.total = afterDiscount;
+
   this.payment.discount = discount.value;
   this.payment.vat = vat;
   this.payment.price = price;
-  this.transactionID = courseId + '-' + Math.random().toString(16).slice(2);
+  this.transactionID =
+    courseId + '-' + this.transactionID || Math.random().toString(16).slice(2);
   next();
+  // Math.random().toString(16).slice(2);
 });
 
 export const Purchased_courses = model<

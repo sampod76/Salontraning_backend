@@ -105,8 +105,28 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         accessToken: newAccessToken,
     };
 });
+const myProfileFromDb = (id, role) => __awaiter(void 0, void 0, void 0, function* () {
+    // //chack this user exist database
+    // const isUserExist = await User.isUserExist(verifiedToken?.userId);
+    let isUserExist = null;
+    if (id && role === users_1.ENUM_USER_ROLE.ADMIN) {
+        isUserExist = yield admin_model_1.Admin.findById(id);
+    }
+    else if (role === users_1.ENUM_USER_ROLE.MODERATOR) {
+        isUserExist = yield moderator_model_1.Moderator.findById(id);
+    }
+    else if (role === users_1.ENUM_USER_ROLE.GENERAL_USER) {
+        isUserExist = yield model_GeneralUser_1.GeneralUser.findById(id);
+    }
+    if (!isUserExist) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'User does not exist');
+    }
+    // generate new token
+    return isUserExist;
+});
 exports.AuthService = {
     loginUserFromDb,
     loginUserByUidFromDb,
+    myProfileFromDb,
     refreshToken,
 };

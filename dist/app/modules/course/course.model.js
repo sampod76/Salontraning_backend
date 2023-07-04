@@ -73,7 +73,7 @@ const courseSchema = new mongoose_1.Schema({
     publisher: {
         // type: mongoose.Schema.Types.ObjectId,
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Moderator',
         required: true,
     },
     publisherName: {

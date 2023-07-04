@@ -5,12 +5,17 @@ import Stripe from 'stripe';
 import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
 // import { errorLogger, logger } from '../../share/logger';
-const stripe = new Stripe(process.env.STRIPE_SK as string, null as any);
 
 // import { z } from 'zod'
 const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
-  const { paymentAmount: price } = req.body;
+  const stripe = new Stripe(process.env.STRIPE_SK as string, {
+    apiVersion: '2022-11-15',
+    typescript: true,
+  });
+  const { paymentAmount: price, course_id } = req.body;
   const amount: number = parseFloat(price) * 100;
+
+  // const exaiteCourse = await
 
   const paymentIntent: Stripe.PaymentIntent =
     await stripe.paymentIntents.create({
@@ -40,7 +45,7 @@ const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
 // payple intergrate
 const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
   const { amount, item_list, description } = req.body;
-  console.log(item_list);
+
   paypal.configure({
     mode: 'sandbox',
     client_id: process.env.PAYPLE_CLIENT_ID as string,
@@ -52,8 +57,8 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
       payment_method: 'paypal',
     },
     redirect_urls: {
-      return_url: `${process.env.LOCALHOST_CLIENT_SIDE}/success`,
-      cancel_url: `${process.env.LOCALHOST_CLIENT_SIDE}/cancel`,
+      return_url: `${process.env.LOCALHOST_SERVER_SIDE}/success`,
+      cancel_url: `${process.env.LOCALHOST_SERVER_SIDE}/cancel`,
     },
     transactions: [
       {
@@ -90,6 +95,28 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
       }
     }
   });
+  // app.get('/success', (req, res) => {
+  //   const payerId = req.query.PayerID;
+  //   const paymentId = req.query.paymentId;
+  //   console.log("payerId",payerId,"paymentId",paymentId)
+  //   const execute_payment_json = {
+  //     "payer_id": payerId,
+  //     "transactions": [{
+  //         "amount": {
+  //             "currency": "USD",
+  //             "total": amt
+  //         }
+  //     }]
+  //   };
+
+  //   paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+  //     if (error) {
+  //         console.log("error",error.response);
+  //         throw error;
+  //     } else {
+  //         res.sendFile(__dirname + "/success.html")
+  //     }
+  // });
 });
 
 export const createPaymentController = {

@@ -1,4 +1,6 @@
 import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/users';
+import authMiddleware from '../../middlewares/authMiddleware';
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { AuthController } from './auth.controller';
 import { AuthValidation } from './auth.validation';
@@ -9,6 +11,13 @@ router.route('/login').post(
   validateRequestZod(AuthValidation.loginZodSchema),
   AuthController.loginUser
 );
+
+router
+  .route('/my-profile')
+  .get(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    AuthController.myProfile
+  );
 
 router
   .route('/refresh-token')

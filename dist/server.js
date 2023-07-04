@@ -20,7 +20,6 @@ mongoose_1.default.set('strictQuery', false);
 process.on('uncaughtException', error => {
     console.log('uncaugthException is detected ......', error);
     // errorLogger.error(error);
-    console.log(error);
     process.exit(1);
 });
 // database connection

@@ -102,14 +102,31 @@ const getAllCourseFromDb = async (
     //     as: 'All_lessions',
     //   },
     // },
-    // {
-    //   $lookup: {
-    //     from: 'quizzes',
-    //     localField: 'courseId',
-    //     foreignField: 'courseId',
-    //     as: 'quizzes',
-    //   },
-    // },
+
+    {
+      $lookup: {
+        from: 'moderators',
+        let: { id: '$publisher' },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ['$_id', '$$id'] },
+              // Additional filter conditions for collection2
+            },
+          },
+          // Additional stages for collection2
+          // প্রথম লুকাপ চালানোর পরে যে ডাটা আসছে তার উপরে যদি আমি যেই কোন কিছু করতে চাই তাহলে এখানে করতে হবে |যেমন আমি এখানে project করেছি
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+              profileImage: 1,
+            },
+          },
+        ],
+        as: 'publisherDetails',
+      },
+    },
     { $sort: sortConditions },
     { $skip: Number(skip) || 0 },
     { $limit: Number(limit) || 15 },

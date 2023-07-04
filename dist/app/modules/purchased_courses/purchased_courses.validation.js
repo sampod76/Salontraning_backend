@@ -20,7 +20,7 @@ const cteateZodPurchasedCoursesSchema = zod_1.default.object({
         phone: zod_1.default.string().trim().optional(),
         payment: IPaymentSchema,
         transactionID: zod_1.default.string().optional(),
-        course: zod_1.default.string().nonempty({ message: 'Course is required' }),
+        course: zod_1.default.string().nonempty({ message: 'Course _id is required' }),
         courseId: zod_1.default.string().trim().optional(),
     }),
 });

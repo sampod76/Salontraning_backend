@@ -26,11 +26,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../../config"));
+const users_1 = require("../../../enums/users");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const auth_service_1 = require("./auth.service");
-const ApiError_1 = __importDefault(require("../../errors/ApiError"));
-const users_1 = require("../../../enums/users");
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _a = req.body, { uid, role = users_1.ENUM_USER_ROLE.GENERAL_USER } = _a, payload = __rest(_a, ["uid", "role"]);
     let result = null;
@@ -82,7 +82,33 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: resultByAccessToken,
     });
 }));
+const myProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b, _c;
+    //set refre
+    const result = yield auth_service_1.AuthService.myProfileFromDb((_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b._id, (_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c.role);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'successfull get profile',
+        data: result,
+    });
+}));
+// const myProfileUpdate = catchAsync(async (req: Request, res: Response) => {
+//   //set refre
+//   const result = await AuthService.myProfileFromDb(
+//     req?.user?._id,
+//     req?.user?.role,
+//     req.body
+//   );
+//   sendResponse<IGeneralUser | IAdmin | IModerator>(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'successfull get profile',
+//     data: result,
+//   });
+// });
 exports.AuthController = {
     loginUser,
     refreshToken,
+    myProfile,
 };

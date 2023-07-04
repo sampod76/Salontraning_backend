@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileUploade = void 0;
 const mongoose_1 = require("mongoose");
 const FileUploadeSchema = new mongoose_1.Schema({
+    userId: {
+        type: mongoose_1.Types.ObjectId,
+    },
     title: {
         type: String,
         lowercase: true,
@@ -12,6 +15,16 @@ const FileUploadeSchema = new mongoose_1.Schema({
     path: {
         type: String,
         trim: true,
+    },
+    size: {
+        type: Number,
+    },
+    originalname: {
+        type: String,
+        required: true,
+    },
+    mimetype: {
+        type: String,
     },
     category: {
         type: String,

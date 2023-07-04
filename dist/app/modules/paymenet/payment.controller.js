@@ -17,11 +17,16 @@ const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const stripe_1 = __importDefault(require("stripe"));
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
-const stripe = new stripe_1.default(process.env.STRIPE_SK, null);
+// import { errorLogger, logger } from '../../share/logger';
 // import { z } from 'zod'
 const createPaymentStripe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { paymentAmount: price } = req.body;
+    const stripe = new stripe_1.default(process.env.STRIPE_SK, {
+        apiVersion: '2022-11-15',
+        typescript: true,
+    });
+    const { paymentAmount: price, course_id } = req.body;
     const amount = parseFloat(price) * 100;
+    // const exaiteCourse = await
     const paymentIntent = yield stripe.paymentIntents.create({
         amount,
         currency: 'USD',
@@ -48,7 +53,6 @@ const createPaymentStripe = (0, catchAsync_1.default)((req, res) => __awaiter(vo
 // payple intergrate
 const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { amount, item_list, description } = req.body;
-    console.log(item_list);
     paypal_rest_sdk_1.default.configure({
         mode: 'sandbox',
         client_id: process.env.PAYPLE_CLIENT_ID,
@@ -60,8 +64,8 @@ const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(vo
             payment_method: 'paypal',
         },
         redirect_urls: {
-            return_url: `${process.env.LOCALHOST_CLIENT_SIDE}/success`,
-            cancel_url: `${process.env.LOCALHOST_CLIENT_SIDE}/cancel`,
+            return_url: `${process.env.LOCALHOST_SERVER_SIDE}/success`,
+            cancel_url: `${process.env.LOCALHOST_SERVER_SIDE}/cancel`,
         },
         transactions: [
             {
@@ -77,11 +81,11 @@ const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     paypal_rest_sdk_1.default.payment.create(payment, (error, payment) => {
         if (error) {
             console.log(error);
+            // errorLogger.error(error)
             return res.status(404).send({
                 success: false,
                 statusCode: 404,
                 message: 'Payple pryment faild !!!',
-                error,
             });
         }
         else {
@@ -98,6 +102,27 @@ const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(vo
             }
         }
     });
+    // app.get('/success', (req, res) => {
+    //   const payerId = req.query.PayerID;
+    //   const paymentId = req.query.paymentId;
+    //   console.log("payerId",payerId,"paymentId",paymentId)
+    //   const execute_payment_json = {
+    //     "payer_id": payerId,
+    //     "transactions": [{
+    //         "amount": {
+    //             "currency": "USD",
+    //             "total": amt
+    //         }
+    //     }]
+    //   };
+    //   paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+    //     if (error) {
+    //         console.log("error",error.response);
+    //         throw error;
+    //     } else {
+    //         res.sendFile(__dirname + "/success.html")
+    //     }
+    // });
 }));
 exports.createPaymentController = {
     createPaymentStripe,

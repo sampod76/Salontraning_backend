@@ -31,11 +31,49 @@ const pagination_1 = require("../../../constant/pagination");
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const pick_1 = __importDefault(require("../../share/pick"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
-const service_fileUploade_1 = require("./service.fileUploade");
 const consent_fileUploade_1 = require("./consent.fileUploade");
+const service_fileUploade_1 = require("./service.fileUploade");
 // import { z } from 'zod'
+const uploadeSingleFileByServer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const fileDetails = req.file;
+    const file = {
+        originalname: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.originalname,
+        mimetype: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.mimetype,
+        destination: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.destination,
+        path: (fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.fieldname) === 'image'
+            ? `uploadFile/images`
+            : `uploadFile/vedios`,
+        size: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.size,
+    };
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'successfull uploade single file',
+        data: file,
+    });
+}));
+const uploadeMultipalFileByServer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const files = req.files;
+    const filesDetailes = files === null || files === void 0 ? void 0 : files.map(value => ({
+        originalname: value === null || value === void 0 ? void 0 : value.originalname,
+        mimetype: value === null || value === void 0 ? void 0 : value.mimetype,
+        destination: value === null || value === void 0 ? void 0 : value.destination,
+        path: (value === null || value === void 0 ? void 0 : value.fieldname) === 'images'
+            ? `uploadFile/images`
+            : `uploadFile/vedios`,
+        size: value === null || value === void 0 ? void 0 : value.size,
+    }));
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'successfull uploade single file',
+        data: filesDetailes,
+    });
+}));
 const createFileUploade = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const FileUploadeData = __rest(req.body, []);
+    req.body.userId = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id;
     const result = yield service_fileUploade_1.FileUploadeService.createFileUploadeByDb(FileUploadeData);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -114,4 +152,6 @@ exports.FileUploadeController = {
     getSingleFileUploade,
     updateFileUploade,
     deleteFileUploade,
+    uploadeSingleFileByServer,
+    uploadeMultipalFileByServer,
 };

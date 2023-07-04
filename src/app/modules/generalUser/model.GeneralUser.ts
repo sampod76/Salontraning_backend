@@ -59,7 +59,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     purchase_courses: [
       {
         course: { type: Types.ObjectId, ref: 'Course' },
-        quiz: [{ quizId: String, provided_answer: String }],
+        quiz: [],
         total_completed_lessions: [Types.ObjectId],
       },
     ],
@@ -71,6 +71,17 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     },
   }
 );
+
+GeneralUserSchema.statics.isUserExist = async function (
+  id: string,
+  courseId: string
+): Promise<string | null> {
+  const result = await GeneralUser.findById(id);
+  const CourseIdExaite = result?.purchase_courses?.find(
+    value => value.course === courseId
+  );
+  return CourseIdExaite?.course || null;
+};
 
 export const GeneralUser = model<IGeneralUser, GeneralUserModel>(
   'General_user',

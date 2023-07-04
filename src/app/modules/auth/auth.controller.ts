@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import config from '../../../config';
+import { ENUM_USER_ROLE } from '../../../enums/users';
+import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
 import sendResponse from '../../share/sendResponse';
+import { IAdmin } from '../admin/admin.interface';
+import { IGeneralUser } from '../generalUser/interface.GeneralUser';
+import { IModerator } from '../moderator/moderator.interface';
 import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
-import ApiError from '../../errors/ApiError';
-import { ENUM_USER_ROLE } from '../../../enums/users';
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { uid, role = ENUM_USER_ROLE.GENERAL_USER, ...payload } = req.body;
@@ -64,7 +67,37 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const myProfile = catchAsync(async (req: Request, res: Response) => {
+  //set refre
+  const result = await AuthService.myProfileFromDb(
+    req?.user?._id,
+    req?.user?.role
+  );
+  sendResponse<IGeneralUser | IAdmin | IModerator>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'successfull get profile',
+    data: result,
+  });
+});
+
+// const myProfileUpdate = catchAsync(async (req: Request, res: Response) => {
+//   //set refre
+//   const result = await AuthService.myProfileFromDb(
+//     req?.user?._id,
+//     req?.user?.role,
+//     req.body
+//   );
+//   sendResponse<IGeneralUser | IAdmin | IModerator>(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'successfull get profile',
+//     data: result,
+//   });
+// });
+
 export const AuthController = {
   loginUser,
   refreshToken,
+  myProfile,
 };

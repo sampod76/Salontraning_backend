@@ -4,7 +4,7 @@ type IOtherInfo = { uid: string; photoURL: string };
 
 type IPurchaseCourses = {
   course: string;
-  quiz: Array<{ quizId: string; provided_answer: string }>;
+  quiz: [];
   total_completed_lessions: string[];
 };
 

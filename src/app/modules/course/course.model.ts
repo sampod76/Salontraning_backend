@@ -73,7 +73,7 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     publisher: {
       // type: mongoose.Schema.Types.ObjectId,
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Moderator',
       required: true,
     },
     publisherName: {

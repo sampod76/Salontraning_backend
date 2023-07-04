@@ -8,12 +8,13 @@ const auth_route_1 = require("../modules/auth/auth.route");
 const admin_route_1 = require("../modules/admin/admin.route");
 const route_category_1 = require("../modules/category/route.category");
 const course_route_1 = require("../modules/course/course.route");
+const route_fileUploade_1 = require("../modules/fileUploade/route.fileUploade");
 const route_GeneralUser_1 = require("../modules/generalUser/route.GeneralUser");
 const lession_route_1 = require("../modules/lession/lession.route");
 const moderator_route_1 = require("../modules/moderator/moderator.route");
+const payment_router_1 = require("../modules/paymenet/payment.router");
 const purchased_courses_route_1 = require("../modules/purchased_courses/purchased_courses.route");
 const quiz_route_1 = require("../modules/quiz/quiz.route");
-const payment_router_1 = require("../modules/paymenet/payment.router");
 // import { UserRoute } from '../modules/users/users.router';
 //https://docs.google.com/document/d/1gTsTpFvhfZB-2y0_BbZQVzmbG3YwsZwPrwAbsYqpOzM/edit
 const router = express_1.default.Router();
@@ -62,6 +63,10 @@ const moduleRoutes = [
     {
         path: '/payment',
         route: payment_router_1.PaymentRoute,
+    },
+    {
+        path: '/upload',
+        route: route_fileUploade_1.FileUploadeRoute,
     },
 ];
 moduleRoutes.forEach(route => router.use(route.path, route.route));

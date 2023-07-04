@@ -1,8 +1,11 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { FileUploadeModel, IFileUploade } from './interface.fileUploade';
 
 const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
   {
+    userId: {
+      type: Types.ObjectId,
+    },
     title: {
       type: String,
       lowercase: true,
@@ -12,6 +15,16 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
     path: {
       type: String,
       trim: true,
+    },
+    size: {
+      type: Number,
+    },
+    originalname: {
+      type: String,
+      required: true,
+    },
+    mimetype: {
+      type: String,
     },
     category: {
       type: String,
