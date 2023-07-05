@@ -71,6 +71,7 @@ const createGeneralUserByFirebase = catchAsync(
         uid: result?.uid,
         status: result?.status,
         email: result?.email,
+        phone: result.phone,
         // ...result,
         accessToken,
       },
@@ -120,7 +121,8 @@ const updateGeneralUser = catchAsync(async (req: Request, res: Response) => {
 
   const result = await GeneralUserService.updateGeneralUserFromDb(
     id,
-    updatedData
+    updatedData,
+    req
   );
 
   sendResponse<IGeneralUser>(res, {

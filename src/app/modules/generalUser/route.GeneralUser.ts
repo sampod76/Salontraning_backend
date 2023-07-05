@@ -2,6 +2,8 @@ import express from 'express';
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { GeneralUserController } from './controller.GeneralUser';
 import { GeneralUserValidation } from './validation.GeneralUser';
+import authMiddleware from '../../middlewares/authMiddleware';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 
 const router = express.Router();
 router
@@ -17,17 +19,30 @@ router
 
 router
   .route('/get-course/:id')
-  .get(GeneralUserController.getSingleGeneralUserToCourse);
+  .get(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    GeneralUserController.getSingleGeneralUserToCourse
+  );
 
 router
   .route('/update-course-quiz/:id')
-  .patch(GeneralUserController.updateCourseVedioOrQuiz);
+  .patch(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    GeneralUserController.updateCourseVedioOrQuiz
+  );
 
 router
   .route('/:id')
-  .get(GeneralUserController.getSingleGeneralUser)
-  .delete(GeneralUserController.deleteGeneralUser)
+  .get(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    GeneralUserController.getSingleGeneralUser
+  )
+  .delete(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    GeneralUserController.deleteGeneralUser
+  )
   .patch(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     validateRequestZod(GeneralUserValidation.updateGeneralUserZodSchema),
     GeneralUserController.updateGeneralUser
   );

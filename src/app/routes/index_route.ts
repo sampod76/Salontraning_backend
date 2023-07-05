@@ -12,6 +12,8 @@ import { ModeratorRoutes } from '../modules/moderator/moderator.route';
 import { PaymentRoute } from '../modules/payment/payment.router';
 import { Purchased_coursesRoute } from '../modules/purchased_courses/purchased_courses.route';
 import { QuizRoute } from '../modules/quiz/quiz.route';
+import { PhotoContestUserRoute } from '../modules/photoContest/photoContest.route';
+import { RunContestRoute } from '../modules/run_contest/run_contest.route';
 // import { UserRoute } from '../modules/users/users.router';
 
 //https://docs.google.com/document/d/1gTsTpFvhfZB-2y0_BbZQVzmbG3YwsZwPrwAbsYqpOzM/edit
@@ -63,6 +65,14 @@ const moduleRoutes = [
   {
     path: '/payment',
     route: PaymentRoute,
+  },
+  {
+    path: '/photo-contest-join',
+    route: PhotoContestUserRoute,
+  },
+  {
+    path: '/run-contest',
+    route: RunContestRoute,
   },
   {
     path: '/upload',

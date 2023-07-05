@@ -9,6 +9,7 @@ import { IPaginationOption } from '../../interface/pagination';
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
 import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 
@@ -204,18 +205,26 @@ const updateCourseVedioOrQuizFromDb = async (
 // module 15 --> 14,15 vedio
 const updateGeneralUserFromDb = async (
   id: string,
-  payload: Partial<IGeneralUser>
+  payload: Partial<IGeneralUser>,
+  req: any
 ): Promise<IGeneralUser | null> => {
-  const isExist = await GeneralUser.findOne({ id });
+  const { _id } = (await GeneralUser.findOne({ id })) as IGeneralUser & {
+    _id: Types.ObjectId;
+  };
 
-  if (!isExist) {
+  if (!_id) {
     throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found !');
   }
+
+  if (_id !== req?.user?._id || req.user.role !== ENUM_USER_ROLE.ADMIN) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Unauthorise person!');
+  }
+
   const { ...GeneralUserData } = payload;
   const updatedGeneralUserData: Partial<IGeneralUser> = { ...GeneralUserData };
 
   const result = await GeneralUser.findOneAndUpdate(
-    { id },
+    { _id: id },
     updatedGeneralUserData,
     {
       new: true,

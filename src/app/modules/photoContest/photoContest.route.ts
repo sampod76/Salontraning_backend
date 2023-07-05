@@ -33,4 +33,13 @@ router
     PhotoContestUserController.deletePhotoContestUser
   );
 
+router
+  .route('winner/:id')
+  .get(PhotoContestUserController.getSinglePhotoContestUser)
+  .patch(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    validateRequestZod(PhotoContestUserValidation.updatePhotoContestUserWinner),
+    PhotoContestUserController.updatePhotoContestUser
+  );
+
 export const PhotoContestUserRoute = router;

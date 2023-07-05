@@ -3,6 +3,8 @@ import { z } from 'zod';
 const createPhotoContestUserZodSchema = z.object({
   body: z.object({
     name: z.string().optional(),
+    email: z.string().optional(),
+    phone: z.string().optional(),
     header_1: z.string().optional(),
     description: z.string().optional(),
     thumbnail: z.string({ required_error: 'thumbnail is required' }),
@@ -12,6 +14,8 @@ const createPhotoContestUserZodSchema = z.object({
 const updatePhotoContestUserZodSchema = z.object({
   body: z.object({
     name: z.string().optional(),
+    email: z.string().optional(),
+    phone: z.string().optional(),
     header_1: z.string().optional(),
     description: z.string().optional(),
     thumbnail: z.string().optional(),
@@ -31,9 +35,10 @@ const updatePhotoContestUserZodSchema = z.object({
 
 const updatePhotoContestUserWinner = z.object({
   body: z.object({
-    contest_id: z.string(),
     winnerData: z
       .object({
+        contest_id: z.string(),
+        contest_number: z.string().optional(),
         date: z.string(),
         winner: z.number(),
       })

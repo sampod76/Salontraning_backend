@@ -15,6 +15,9 @@ const PhotoContestSchemaUser = new Schema<
       ref: 'General_user',
     },
     name: String,
+    email: String,
+    phone: String,
+
     header_1: String,
     description: String,
     thumbnail: {
@@ -36,12 +39,11 @@ const PhotoContestSchemaUser = new Schema<
       {
         userId: {
           type: Types.ObjectId,
-          required: true,
+
           ref: 'General_user',
         },
         message: {
           type: String,
-          required: true,
         },
       },
     ],
@@ -50,13 +52,15 @@ const PhotoContestSchemaUser = new Schema<
       default: 0,
     },
     winnerData: {
-      date: {
-        type: String,
-        required: true,
-      },
-      winner: {
-        type: Number,
-        required: true,
+      type: {
+        contest_id: { type: Types.ObjectId },
+        contest_number: { type: String },
+        date: {
+          type: String,
+        },
+        winner: {
+          type: Number,
+        },
       },
     },
   },
