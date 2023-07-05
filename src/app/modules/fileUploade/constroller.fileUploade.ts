@@ -16,9 +16,8 @@ import { FileUploadeService } from './service.fileUploade';
 const uploadeSingleFileByServer = catchAsync(
   async (req: Request, res: Response) => {
     const fileDetails = req.file;
-
     const file = {
-      originalname: fileDetails?.originalname,
+      filename: fileDetails?.filename,
       mimetype: fileDetails?.mimetype,
       destination: fileDetails?.destination,
       path:
