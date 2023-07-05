@@ -67,7 +67,7 @@ const createFileUploade = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IFileUploade>(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'successfull create FileUploade FileUploade',
+    message: 'successfull create FileUploade',
     data: result,
   });
   // next();

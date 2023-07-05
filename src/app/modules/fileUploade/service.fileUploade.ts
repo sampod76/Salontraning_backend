@@ -12,6 +12,7 @@ const createFileUploadeByDb = async (
   payload: IFileUploade
 ): Promise<IFileUploade> => {
   const result = await FileUploade.create(payload);
+
   return result;
 };
 
