@@ -1,4 +1,5 @@
 import { Model } from 'mongoose';
+import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 export type ICategoryFilters = {
   searchTerm?: string;
@@ -7,7 +8,7 @@ export type ICategoryFilters = {
 
 export type ICategory = {
   title: string;
-  thumbnail?: string;
+  thumbnail?: string | IFileUploade;
 };
 
 export type CategoryModel = Model<ICategory, Record<string, unknown>>;

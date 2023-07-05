@@ -51,7 +51,10 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     header_1: String,
     header_2: String,
     description: String,
-    thumbnail: String,
+    thumbnail: {
+      type: Types.ObjectId,
+      ref: 'FileUploade',
+    },
     publish: {
       type: {
         date: {

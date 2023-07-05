@@ -1,5 +1,6 @@
 import { Model, Types } from 'mongoose';
 import { ICourse } from '../course/course.interface';
+import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 export type ILessionFilters = {
   searchTerm?: string;
@@ -21,7 +22,7 @@ export type ILession = {
   header_1?: string;
   header_2?: string;
   description?: string;
-  thumbnail?: string;
+  thumbnail?: string | IFileUploade;
   status?: 'active' | 'deactive' | 'save';
   tag?: string[];
   duration?: string;

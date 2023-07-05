@@ -1,6 +1,7 @@
 import { Model } from 'mongoose';
 import { IGeneralUser } from '../generalUser/interface.GeneralUser';
 import { IRunContest } from '../run_contest/run_contest.interface';
+import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 // import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
@@ -24,8 +25,8 @@ export type IPhotoContestUser = {
   phone: string;
   header_1?: string;
   description?: string;
-  // thumbnail?: string | IFileUploade;
-  thumbnail: string;
+  thumbnail?: string | IFileUploade;
+  // thumbnail: string;
   status?: 'active' | 'deactive';
   loveReact?: Array<string | IGeneralUser>;
   messages?: Array<{

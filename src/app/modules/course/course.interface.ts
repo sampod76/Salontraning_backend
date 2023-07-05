@@ -1,5 +1,6 @@
 import { Model, Types } from 'mongoose';
 import { IUser } from '../users/users.interface';
+import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 export type ICourseFilters = {
   searchTerm?: string;
@@ -40,7 +41,8 @@ export type ICourse = {
   header_1?: string;
   header_2?: string;
   description?: string;
-  thumbnail?: string;
+  thumbnail?: string | IFileUploade;
+  images_album: Array<string | IFileUploade>;
   publish?: IPublish;
   publisher: Types.ObjectId | IUser;
   publisherName: string;

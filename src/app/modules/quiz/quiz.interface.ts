@@ -1,5 +1,6 @@
 import { Model, Types } from 'mongoose';
 import { ICourse } from '../course/course.interface';
+import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 export type IQuizFilters = {
   searchTerm?: string;
@@ -24,7 +25,7 @@ export type IQuizList = {
   header_1?: string;
   header_2?: string;
   description?: string;
-  thumbnail?: string;
+  thumbnail?: string | IFileUploade;
   tag?: string[];
 };
 

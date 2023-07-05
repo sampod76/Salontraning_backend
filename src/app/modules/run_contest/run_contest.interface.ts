@@ -1,5 +1,6 @@
 import { Model } from 'mongoose';
 import { IPhotoContestUser } from '../photoContest/photoContest.interface';
+import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 // import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
@@ -19,7 +20,9 @@ export type IRunContest = {
   title?: string;
   header_1?: string;
   description?: string;
-  // thumbnail?: string | IFileUploade;
+  thumbnail?: string | IFileUploade;
+  // images_album: (string | IFileUploade)[];
+  images_album: Array<string | IFileUploade>;
   status?: 'active' | 'deactive' | 'save';
   winnerList?: IPhotoContestUser[];
   winnerPrice?: [];

@@ -9,7 +9,7 @@ import { ICategory, ICategoryFilters } from './interface.category';
 import { Category } from './model.category';
 
 const createCategoryByDb = async (payload: ICategory): Promise<ICategory> => {
-  const result = await Category.create(payload);
+  const result = (await Category.create(payload)).populate('thumbnail');
   return result;
 };
 

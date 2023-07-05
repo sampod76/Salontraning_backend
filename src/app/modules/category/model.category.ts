@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { CategoryModel, ICategory } from './interface.category';
 
 const CategorySchema = new Schema<ICategory, CategoryModel>(
@@ -11,7 +11,8 @@ const CategorySchema = new Schema<ICategory, CategoryModel>(
       trim: true,
     },
     thumbnail: {
-      type: String,
+      type: Types.ObjectId,
+      ref: 'FileUploade',
     },
   },
   {
