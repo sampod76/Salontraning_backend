@@ -3,24 +3,26 @@ import { IUser } from '../users/users.interface';
 
 export type ICourseFilters = {
   searchTerm?: string;
-  title?: string;
   price?: number;
-  'publish.status'?: string;
-  publisherName?: string;
+  date?: string;
+  type?: string;
+  status?: string;
+  category?: string;
+  'reviews.star'?: number;
 };
 
-export type ICourseSearchableField = {
-  title: string;
-  publisherName: string;
-  header_1: string;
-  header_2: string;
-  description: string;
-  courseId: string;
-};
+// export type ICourseSearchableField = {
+//   title: string;
+//   publisherName: string;
+//   header_1: string;
+//   header_2: string;
+//   description: string;
+//   courseId: string;
+// };
 
 export type IPublish = {
   status: 'active' | 'deactive' | 'save';
-  time: string;
+  date: string;
 };
 
 export type ICourse = {
@@ -42,8 +44,13 @@ export type ICourse = {
   publish?: IPublish;
   publisher: Types.ObjectId | IUser;
   publisherName: string;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
   tag?: string[];
+  reviews?: {
+    userId: Types.ObjectId;
+    star: number;
+    message?: string;
+  }[];
 };
 
 export type CourseModel = Model<ICourse, Record<string, unknown>>;

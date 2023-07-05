@@ -6,7 +6,7 @@ import { IPhotoContestUser } from '../photoContest/photoContest.interface';
 export type IRunContestFilters = {
   searchTerm?: string;
   title?: string;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
 };
 
 export type IRunContestSearchableField = {
@@ -20,7 +20,7 @@ export type IRunContest = {
   header_1?: string;
   description?: string;
   // thumbnail?: string | IFileUploade;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
   winnerList?: IPhotoContestUser[];
   winnerPrice?: [];
   duration_time: {

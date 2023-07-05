@@ -27,4 +27,14 @@ router
   )
   .delete(authMiddleware(ENUM_USER_ROLE.ADMIN), CourseController.deleteCourse);
 
+router
+  .route('/review')
+
+  .patch(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    validateRequestZod(CourseValidation.courseReviewZodSchema),
+    CourseController.courseReviewsByUser
+  )
+  .delete(authMiddleware(ENUM_USER_ROLE.ADMIN), CourseController.deleteCourse);
+
 export const CourseRoute = router;

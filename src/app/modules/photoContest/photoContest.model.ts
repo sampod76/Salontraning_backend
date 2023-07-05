@@ -35,7 +35,7 @@ const PhotoContestSchemaUser = new Schema<
         ref: 'General_user',
       },
     ],
-    message: [
+    messages: [
       {
         userId: {
           type: Types.ObjectId,

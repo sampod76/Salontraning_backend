@@ -20,15 +20,23 @@ const createCourseZodSchema = z.object({
     header_2: z.string().optional(),
     description: z.string().optional(),
     thumbnail: z.string().optional(),
-    status: z.enum(['active', 'deactive']).optional(),
-    publish: z
-      .object({ status: z.string().optional(), time: z.string().optional() })
-      .optional(), // Assuming publish is a string representing the ID of a related document
+    status: z.enum(['active', 'deactive', 'save']).optional(),
+    publish: z.object({ date: z.string().optional() }).optional(), // Assuming publish is a string representing the ID of a related document
     publisher: z.string({ required_error: 'publisher field is required' }), // Assuming publisher is a string representing the ID of a related document
     publisherName: z.string({
       required_error: 'publisher Name field is required',
     }),
     tag: z.array(z.string().optional()).optional(),
+    reviews: z
+      .array(
+        z.object({
+          userId: z.string(), // Assuming user ID is a string of length 24
+          star: z.number(),
+          message: z.string().optional().nullable(),
+        })
+      )
+      .optional()
+      .nullable(),
   }),
 });
 
@@ -42,7 +50,7 @@ const updateCourseZodSchema = z.object({
     header_2: z.string().optional(),
     description: z.string().optional(),
     thumbnail: z.string().optional(),
-    status: z.enum(['active', 'deactive']).optional(),
+    status: z.enum(['active', 'deactive', 'save']).optional(),
     publish: z
       .object({ status: z.boolean().optional(), time: z.string().optional() })
       .optional(), // Assuming publish is a string representing the ID of a related document
@@ -51,7 +59,23 @@ const updateCourseZodSchema = z.object({
     tag: z.array(z.string().optional()).optional(),
   }),
 });
+
+const courseReviewZodSchema = z.object({
+  body: z.object({
+    reviews: z
+      .array(
+        z.object({
+          userId: z.string(), // Assuming user ID is a string of length 24
+          star: z.number(),
+          message: z.string().optional().nullable(),
+        })
+      )
+      .optional()
+      .nullable(),
+  }),
+});
 export const CourseValidation = {
   createCourseZodSchema,
+  courseReviewZodSchema,
   updateCourseZodSchema,
 };

@@ -28,7 +28,7 @@ export type IPhotoContestUser = {
   thumbnail: string;
   status?: 'active' | 'deactive';
   loveReact?: Array<string | IGeneralUser>;
-  message?: Array<{
+  messages?: Array<{
     userId: string | IGeneralUser;
     message: string;
   }>;

@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { COURSE_TYPES } from './course.consent';
 import { CourseModel, ICourse } from './course.interface';
 // import { format } from 'date-fns';
@@ -23,7 +23,7 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     },
     type: {
       type: String,
-      enum: COURSE_TYPES, // ['free', 'paid', 'open', 'close']
+      enum: COURSE_TYPES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
     },
     category: {
       type: String,
@@ -54,12 +54,7 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     thumbnail: String,
     publish: {
       type: {
-        status: {
-          type: String,
-          enum: ['active', 'deactive', 'save'],
-          default: 'active',
-        },
-        time: {
+        date: {
           type: Date,
           // default: () => {
           //   // Get the current date
@@ -82,13 +77,27 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     },
     status: {
       type: String,
-      enum: ['active', 'deactive'],
+      enum: ['active', 'deactive', 'save'],
       default: 'active',
     },
     tag: [
       {
         type: String,
         trim: true,
+      },
+    ],
+
+    // after user
+    reviews: [
+      {
+        userId: {
+          type: Types.ObjectId,
+          ref: 'General_user',
+        },
+        star: Number,
+        message: {
+          type: String,
+        },
       },
     ],
   },

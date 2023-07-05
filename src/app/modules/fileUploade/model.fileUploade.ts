@@ -20,7 +20,7 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       type: Number,
       default: 0,
     },
-    originalname: {
+    filename: {
       type: String,
       required: true,
     },

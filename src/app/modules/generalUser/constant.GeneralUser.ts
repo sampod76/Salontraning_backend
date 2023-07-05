@@ -9,10 +9,4 @@ export const GeneralUserSearchableFields = [
   'address',
 ];
 
-export const GeneralUserFilterableFields = [
-  'searchTerm',
-  'id',
-  'bloodGroup',
-  'email',
-  'phone',
-];
+export const GeneralUserFilterableFields = ['searchTerm', 'id', 'status'];

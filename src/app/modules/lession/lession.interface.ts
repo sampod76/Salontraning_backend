@@ -4,7 +4,7 @@ import { ICourse } from '../course/course.interface';
 export type ILessionFilters = {
   searchTerm?: string;
   title?: string;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
 };
 
 export type ILessionSearchableField = {
@@ -22,7 +22,7 @@ export type ILession = {
   header_2?: string;
   description?: string;
   thumbnail?: string;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
   tag?: string[];
   duration?: string;
   vedio_link: string;

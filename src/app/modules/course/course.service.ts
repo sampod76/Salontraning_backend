@@ -66,13 +66,7 @@ const getAllCourseFromDb = async (
   //****************search and filters end**********/
 
   //****************pagination start **************/
-  // const { page, limit, skip, sortBy, sortOrder } =
-  //   paginationHelper.calculatePagination(paginationOptions);
 
-  // const sortConditions: { [key: string]: SortOrder } = {};
-  // if (sortBy && sortOrder) {
-  //   sortConditions[sortBy] = sortOrder;
-  // }
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOptions);
 
@@ -190,6 +184,28 @@ const updateCourseFromDb = async (
   return result;
 };
 
+// set user reviews e form db
+const courseReviewsByUserFromDb = async (
+  id: string,
+  payload: Partial<ICourse>
+): Promise<ICourse | null> => {
+  const { reviews } = payload;
+
+  const result = await Course.findOneAndUpdate(
+    { _id: id },
+    {
+      $push: {
+        reviews: reviews,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  return result;
+};
+
 // delete e form db
 const deleteCourseByIdFromDb = async (id: string): Promise<ICourse | null> => {
   const result = await Course.findByIdAndDelete(id);
@@ -202,4 +218,5 @@ export const CourseService = {
   getSingleCourseFromDb,
   updateCourseFromDb,
   deleteCourseByIdFromDb,
+  courseReviewsByUserFromDb,
 };

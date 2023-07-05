@@ -21,7 +21,7 @@ const updatePhotoContestUserZodSchema = z.object({
     thumbnail: z.string().optional(),
     status: z.enum(['active', 'deactive']).optional(),
     loveReact: z.array(z.string()).optional(),
-    message: z
+    messages: z
       .array(
         z.object({
           userId: z.string(),

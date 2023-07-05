@@ -4,7 +4,7 @@ const createFileUploadezodSchema = z.object({
   body: z.object({
     title: z.string().optional(),
     userId: z.string().optional(),
-    originalname: z.string(),
+    filename: z.string(),
     path: z.string(),
     size: z.number().optional(),
     mimetype: z.string().optional(),
@@ -17,7 +17,7 @@ const updateFileUploadezodSchema = z.object({
   body: z.object({
     title: z.string().optional(),
     userId: z.string().optional(),
-    originalname: z.string().optional(),
+    filename: z.string().optional(),
     path: z.string().optional(),
     size: z.number().optional(),
     mimetype: z.string().optional(),

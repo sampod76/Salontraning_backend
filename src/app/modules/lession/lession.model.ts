@@ -38,7 +38,7 @@ const LessionSchema = new Schema<ILession, LessionModel>(
     },
     status: {
       type: String,
-      enum: ['active', 'deactive'],
+      enum: ['active', 'deactive', 'save'],
       default: 'active',
     },
     tag: [

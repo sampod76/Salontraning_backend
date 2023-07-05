@@ -4,7 +4,7 @@ import { ICourse } from '../course/course.interface';
 export type IQuizFilters = {
   searchTerm?: string;
   title?: string;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
 };
 
 export type IQuizSearchableField = {
@@ -34,7 +34,7 @@ export type IQuiz = {
   quizList: IQuizList[];
   course: Types.ObjectId | ICourse;
   courseId: string;
-  status?: 'active' | 'deactive';
+  status?: 'active' | 'deactive' | 'save';
 };
 
 export type QuizModel = Model<IQuiz, Record<string, unknown>>;

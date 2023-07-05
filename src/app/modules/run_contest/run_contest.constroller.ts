@@ -33,11 +33,16 @@ const createRunContest = catchAsync(async (req: Request, res: Response) => {
 
 const getAllRunContest = catchAsync(async (req: Request, res: Response) => {
   //****************search and filter start******* */
-  const filters = pick(req.query, RUNCONTEST_FILTERABLE_FIELDS);
+  let queryObject = req.query;
+  queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value))
+  );
+  const filters = pick(queryObject, RUNCONTEST_FILTERABLE_FIELDS);
 
   //****************pagination start************ */
 
-  const paginationOptions = pick(req.query, PAGINATION_FIELDS);
+  const paginationOptions = pick(queryObject, PAGINATION_FIELDS);
 
   const result = await RunContestService.getAllRunContestFromDb(
     filters,

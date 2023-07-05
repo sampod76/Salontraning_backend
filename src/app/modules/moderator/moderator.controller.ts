@@ -10,8 +10,13 @@ import { IModerator } from './moderator.interface';
 import { ModeratorService } from './moderator.service';
 
 const getAllModerators = catchAsync(async (req: Request, res: Response) => {
-  const filters = pick(req.query, moderatorFilterableFields);
-  const paginationOptions = pick(req.query, PAGINATION_FIELDS);
+  let queryObject = req.query;
+  queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value))
+  );
+  const filters = pick(queryObject, moderatorFilterableFields);
+  const paginationOptions = pick(queryObject, PAGINATION_FIELDS);
 
   const result = await ModeratorService.getAllModeratorsFromDb(
     filters,

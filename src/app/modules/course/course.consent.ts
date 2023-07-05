@@ -9,10 +9,11 @@ export const COURSE_SEARCHABLE_FIELDS = [
 ];
 export const COURSE_FILTERABLE_FIELDS = [
   'searchTerm',
-  'title',
   'price',
-  'publish.status',
+  'status',
   'date',
+  'category',
+  'reviews.star',
 ];
 
 export const COURSE_TYPES = ['free', 'paid', 'open', 'closed', 'recurrig'];

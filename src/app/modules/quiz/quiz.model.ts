@@ -48,7 +48,7 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
     ],
     status: {
       type: String,
-      enum: ['active', 'deactive'],
+      enum: ['active', 'deactive', 'save'],
       default: 'active',
     },
     course: {

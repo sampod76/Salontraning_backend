@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
@@ -14,8 +15,13 @@ import { IGeneralUser } from './interface.GeneralUser';
 import { GeneralUserService } from './service.GeneralUser';
 
 const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
-  const filter = pick(req.query, GeneralUserFilterableFields);
-  const paginationOptions = pick(req.query, PAGINATION_FIELDS);
+  let queryObject = req.query;
+  queryObject = Object.fromEntries(
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value))
+  );
+  const filter = pick(queryObject, GeneralUserFilterableFields);
+
+  const paginationOptions = pick(queryObject, PAGINATION_FIELDS);
 
   const result = await GeneralUserService.getAllGeneralUsersFromDb(
     filter,

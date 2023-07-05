@@ -12,4 +12,5 @@ export const LESSION_FILTERABLE_FIELDS = [
   'lessonId',
   'courseId',
   'date',
+  'status',
 ];

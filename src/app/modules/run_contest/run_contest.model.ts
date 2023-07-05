@@ -9,8 +9,26 @@ const RunContestSchema = new Schema<IRunContest, RunContestModel>(
     // thumbnail: String or IFileUploadeMongooseSchema (depending on the type),
     status: {
       type: String,
-      enum: ['active', 'deactive'],
+      enum: ['active', 'deactive', 'save'],
     },
+    winnerPrice: [
+      {
+        title: String,
+        thumbnail: String,
+        price_serial: { type: Number, unique: true },
+        price_value: Number,
+      },
+    ],
+    duration_time: {
+      startDate: {
+        type: Date,
+      },
+      endDate: {
+        type: Date,
+      },
+    },
+
+    //after contest end then update
     winnerList: [
       {
         photo_contest_id: {
@@ -23,15 +41,6 @@ const RunContestSchema = new Schema<IRunContest, RunContestModel>(
         phone: String,
       },
     ],
-    winnerPrice: [],
-    duration_time: {
-      startDate: {
-        type: Date,
-      },
-      endDate: {
-        type: Date,
-      },
-    },
   },
   {
     timestamps: true,

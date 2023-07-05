@@ -10,7 +10,7 @@ export type IFileUploadeFilters = {
 export type IFileUploade = {
   userId: string | IAdmin | IGeneralUser;
   title: string;
-  originalname: string;
+  filename: string;
   path: string;
   size?: number;
   mimetype?: string;
