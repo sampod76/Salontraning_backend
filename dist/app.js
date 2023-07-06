@@ -20,12 +20,14 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const xss_clean_1 = __importDefault(require("xss-clean"));
 const app = (0, express_1.default)();
-// app.use(cors());
-app.use((0, cors_1.default)({
-    origin: process.env.LOCALHOST_CLIENT_SIDE,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-}));
+app.use((0, cors_1.default)());
+// app.use(
+//   cors({
+//     origin: process.env.LOCALHOST_CLIENT_SIDE,
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   })
+// );
 /* app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.DEV_URL)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept")

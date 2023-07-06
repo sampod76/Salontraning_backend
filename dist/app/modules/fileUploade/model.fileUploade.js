@@ -23,7 +23,7 @@ const FileUploadeSchema = new mongoose_1.Schema({
     },
     filename: {
         type: String,
-        required: true,
+        default: `image-${Math.floor(Math.random() * 1000000 + 1)}`,
     },
     mimetype: {
         type: String,

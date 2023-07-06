@@ -55,7 +55,7 @@ const uploadeSingleFileByServer = (0, catchAsync_1.default)((req, res) => __awai
 const uploadeMultipalFileByServer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const files = req.files;
     const filesDetailes = files === null || files === void 0 ? void 0 : files.map(value => ({
-        originalname: value === null || value === void 0 ? void 0 : value.originalname,
+        filename: value === null || value === void 0 ? void 0 : value.filename,
         mimetype: value === null || value === void 0 ? void 0 : value.mimetype,
         destination: value === null || value === void 0 ? void 0 : value.destination,
         path: (value === null || value === void 0 ? void 0 : value.fieldname) === 'images'
