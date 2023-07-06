@@ -4,7 +4,7 @@ exports.FileUploadeValidation = void 0;
 const zod_1 = require("zod");
 const createFileUploadezodSchema = zod_1.z.object({
     body: zod_1.z.object({
-        // title: z.string().optional().default('images-default'),
+        title: zod_1.z.string().optional(),
         userId: zod_1.z.string().optional(),
         filename: zod_1.z.string(),
         path: zod_1.z.string(),
@@ -16,7 +16,7 @@ const createFileUploadezodSchema = zod_1.z.object({
 });
 const updateFileUploadezodSchema = zod_1.z.object({
     body: zod_1.z.object({
-        // title: z.string().optional(),
+        title: zod_1.z.string().optional(),
         userId: zod_1.z.string().optional(),
         filename: zod_1.z.string().optional(),
         path: zod_1.z.string().optional(),

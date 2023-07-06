@@ -7,10 +7,10 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       //get request
       type: Types.ObjectId,
     },
-    // title: {
-    //   type: String,
-    //   trim: true,
-    // },
+    title: {
+      type: String,
+      trim: true,
+    },
     path: {
       type: String,
       trim: true,

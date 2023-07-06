@@ -7,10 +7,10 @@ const FileUploadeSchema = new mongoose_1.Schema({
         //get request
         type: mongoose_1.Types.ObjectId,
     },
-    // title: {
-    //   type: String,
-    //   trim: true,
-    // },
+    title: {
+        type: String,
+        trim: true,
+    },
     path: {
         type: String,
         trim: true,
