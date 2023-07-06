@@ -16,16 +16,16 @@ const createCourseByDb = async (payload: ICourse): Promise<ICourse> => {
   const result = (await Course.create(payload)).populate({
     path: 'publisher',
     select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
-    populate: [
-      {
-        path: 'moderator',
-        select: { createdAt: 0, updatedAt: 0, __v: 0 },
-      },
-      {
-        path: 'admin',
-        select: { createdAt: 0, updatedAt: 0, __v: 0 },
-      },
-    ],
+    // populate: [
+    //   {
+    //     path: 'moderator',
+    //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+    //   },
+    //   {
+    //     path: 'admin',
+    //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+    //   },
+    // ],
   });
   return result;
 };

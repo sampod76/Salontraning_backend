@@ -161,7 +161,6 @@ const getSinglePhotoContestUserFromDb = async (
   id: string
 ): Promise<IPhotoContestUser | null> => {
   const result = await PhotoContestUser.findById(id)
-
     .populate({
       path: 'thumbnail',
       select: 'title size filename category',
@@ -205,7 +204,6 @@ const voteMassageSharePhotoContestUserFromDb = async (
   req: Request,
   payload: Partial<{ loveReact: string; message: string; share: string }>
 ): Promise<IPhotoContestUser | null> => {
-  console.log(payload);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { loveReact, message, share } = payload;
   let quary: any = {

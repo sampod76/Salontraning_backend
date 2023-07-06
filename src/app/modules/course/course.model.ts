@@ -124,5 +124,16 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     },
   }
 );
+// courseSchema.pre('save', async function (next) {
+//   try {
+//     if (!this.publish?.date || this.status === 'active') {
+//       const today = new Date();
+//       const date = format(today, 'yyyy-MM-dd');
+//       this.publish?.date = date
+//     }
+//   } catch (error) {
+//     throw new ApiError(404, 'Internal error');
+//   }
+// });
 
 export const Course = model<ICourse, CourseModel>('Course', courseSchema);

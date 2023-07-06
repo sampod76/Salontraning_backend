@@ -19,8 +19,8 @@ const logger_1 = require("./app/share/logger");
 const index_1 = __importDefault(require("./config/index"));
 mongoose_1.default.set('strictQuery', false);
 process.on('uncaughtException', error => {
-    console.log('uncaugthException is detected ......', error);
-    // errorLogger.error(error);
+    // console.log('uncaugthException is detected ......', error);
+    logger_1.errorLogger.error(error);
     process.exit(1);
 });
 // database connection

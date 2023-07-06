@@ -8,8 +8,8 @@ import config from './config/index';
 mongoose.set('strictQuery', false);
 
 process.on('uncaughtException', error => {
-  console.log('uncaugthException is detected ......', error);
-  // errorLogger.error(error);
+  // console.log('uncaugthException is detected ......', error);
+  errorLogger.error(error);
   process.exit(1);
 });
 // database connection

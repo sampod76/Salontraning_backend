@@ -186,7 +186,6 @@ const updatePhotoContestUserFromDb = (id, req, payload) => __awaiter(void 0, voi
 const voteMassageSharePhotoContestUserFromDb = (id, //docoment id --> photocontest id
 req, payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-    console.log(payload);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { loveReact, message, share } = payload;
     let quary = {
