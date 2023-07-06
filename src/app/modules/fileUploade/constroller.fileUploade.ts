@@ -39,7 +39,7 @@ const uploadeMultipalFileByServer = catchAsync(
   async (req: Request, res: Response) => {
     const files = req.files as Express.Multer.File[];
     const filesDetailes = files?.map(value => ({
-      originalname: value?.originalname,
+      filename: value?.filename,
       mimetype: value?.mimetype,
       destination: value?.destination,
       path:
