@@ -12,6 +12,7 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       lowercase: true,
       // unique: true,
       trim: true,
+      default: `image-${Math.floor(Math.random() * 1000000 + 1)}`,
     },
     path: {
       type: String,
@@ -23,7 +24,7 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
     },
     filename: {
       type: String,
-      default: `image-${Math.floor(Math.random() * 1000000 + 1)}`,
+      required: true,
     },
     mimetype: {
       type: String,
