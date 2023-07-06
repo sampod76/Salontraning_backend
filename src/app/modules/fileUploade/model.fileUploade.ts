@@ -7,13 +7,10 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       //get request
       type: Types.ObjectId,
     },
-    title: {
-      type: String,
-      lowercase: true,
-      // unique: true,
-      trim: true,
-      default: `image-${Math.floor(Math.random() * 1000000 + 1)}`,
-    },
+    // title: {
+    //   type: String,
+    //   trim: true,
+    // },
     path: {
       type: String,
       trim: true,

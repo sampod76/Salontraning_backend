@@ -9,6 +9,7 @@ export type IPhotoContestUserFilters = {
   searchTerm?: string;
   title?: string;
   status?: 'active' | 'deactive';
+  contest?: string;
 };
 
 export type IPhotoContestUserSearchableField = {

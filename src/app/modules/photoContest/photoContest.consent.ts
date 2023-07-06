@@ -5,4 +5,5 @@ export const PHOTOCONTEST_USER_FILTERABLE_FIELDS = [
   'winnerData',
   'date',
   'status',
+  'contest',
 ];
