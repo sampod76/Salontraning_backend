@@ -25,10 +25,18 @@ const courseSchema = new Schema<ICourse, CourseModel>(
       type: String,
       enum: COURSE_TYPES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
     },
-    category: {
-      type: String,
-      lowercase: true,
-      trim: true,
+    categoryDetails: {
+      type: {
+        category: {
+          type: Types.ObjectId,
+          ref: 'Category',
+        },
+        title: {
+          type: String,
+          lowercase: true,
+          trim: true,
+        },
+      },
     },
     discount: {
       type: {

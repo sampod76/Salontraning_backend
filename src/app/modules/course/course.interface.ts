@@ -8,7 +8,6 @@ export type ICourseFilters = {
   date?: string;
   type?: string;
   status?: string;
-  category?: string;
   'reviews.star'?: number;
 };
 
@@ -43,6 +42,10 @@ export type ICourse = {
   description?: string;
   thumbnail?: string | IFileUploade;
   images_album: Array<string | IFileUploade>;
+  categoryDetails?: {
+    category?: string; //_id
+    title?: string; //category name
+  };
   publish?: IPublish;
   publisher: Types.ObjectId | IUser;
   publisherName: string;

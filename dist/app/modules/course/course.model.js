@@ -25,10 +25,18 @@ const courseSchema = new mongoose_1.Schema({
         type: String,
         enum: course_consent_1.COURSE_TYPES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
     },
-    category: {
-        type: String,
-        lowercase: true,
-        trim: true,
+    categoryDetails: {
+        type: {
+            category: {
+                type: mongoose_1.Types.ObjectId,
+                ref: 'Category',
+            },
+            title: {
+                type: String,
+                lowercase: true,
+                trim: true,
+            },
+        },
     },
     discount: {
         type: {

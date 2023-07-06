@@ -18,6 +18,10 @@ const createCourseZodSchema = zod_1.z.object({
         })
             .optional(),
         vat: zod_1.z.number().nonnegative().optional(),
+        categoryDetails: zod_1.z.object({
+            category: zod_1.z.string(),
+            title: zod_1.z.string().optional(),
+        }),
         header_1: zod_1.z.string().optional(),
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),
@@ -44,7 +48,12 @@ const updateCourseZodSchema = zod_1.z.object({
         title: zod_1.z.string().optional(),
         price: zod_1.z.number().optional(),
         type: zod_1.z.enum([...course_consent_1.COURSE_TYPES]).optional(),
-        category: zod_1.z.string().optional(),
+        categoryDetails: zod_1.z
+            .object({
+            category: zod_1.z.string().optional(),
+            title: zod_1.z.string().optional(),
+        })
+            .optional(),
         header_1: zod_1.z.string().optional(),
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),

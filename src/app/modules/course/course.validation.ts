@@ -16,6 +16,11 @@ const createCourseZodSchema = z.object({
       })
       .optional(),
     vat: z.number().nonnegative().optional(),
+
+    categoryDetails: z.object({
+      category: z.string(),
+      title: z.string().optional(),
+    }),
     header_1: z.string().optional(),
     header_2: z.string().optional(),
     description: z.string().optional(),
@@ -45,7 +50,12 @@ const updateCourseZodSchema = z.object({
     title: z.string().optional(),
     price: z.number().optional(),
     type: z.enum([...COURSE_TYPES] as [string, ...string[]]).optional(),
-    category: z.string().optional(),
+    categoryDetails: z
+      .object({
+        category: z.string().optional(),
+        title: z.string().optional(),
+      })
+      .optional(),
     header_1: z.string().optional(),
     header_2: z.string().optional(),
     description: z.string().optional(),
