@@ -19,7 +19,7 @@ const createCourseZodSchema = zod_1.z.object({
             .optional(),
         vat: zod_1.z.number().nonnegative().optional(),
         categoryDetails: zod_1.z.object({
-            category: zod_1.z.string(),
+            category: zod_1.z.string().optional(),
             title: zod_1.z.string().optional(),
         }),
         header_1: zod_1.z.string().optional(),

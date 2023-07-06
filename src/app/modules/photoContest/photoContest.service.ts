@@ -75,9 +75,51 @@ const getAllPhotoContestUserFromDb = async (
   //   .sort(sortConditions)
   //   .skip(Number(skip))
   //   .limit(Number(limit));
-  console.log(whereConditions);
+
   const pipeline: PipelineStage[] = [
     { $match: whereConditions },
+
+    // thumbnail to same thumbnail images
+    {
+      $lookup: {
+        from: 'fileuploades',
+        let: { id: '$thumbnail' },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ['$_id', '$$id'] },
+              // Additional filter conditions for collection2
+            },
+          },
+          // Additional stages for collection2
+          // প্রথম লুকাপ চালানোর পরে যে ডাটা আসছে তার উপরে যদি আমি যেই কোন কিছু করতে চাই তাহলে এখানে করতে হবে |যেমন আমি এখানে project করেছি
+          {
+            $project: {
+              mimetype: 0,
+              updatedAt: 0,
+              path: 0,
+              userId: 0,
+            },
+          },
+        ],
+        as: 'thumbnailInfo',
+      },
+    },
+    {
+      $project: { thumbnail: 0 },
+    },
+    {
+      $addFields: {
+        thumbnail: '$thumbnailInfo',
+      },
+    },
+    {
+      $project: { thumbnailInfo: 0 },
+    },
+    {
+      $unwind: '$thumbnail',
+    },
+
     {
       $addFields: {
         loveReacts_count: { $size: { $ifNull: ['$loveReacts', []] } },
@@ -92,6 +134,9 @@ const getAllPhotoContestUserFromDb = async (
       $addFields: {
         share_count: { $size: { $ifNull: ['$share', []] } },
       },
+    },
+    {
+      $project: { share: 0, loveReacts: 0, messages: 0 },
     },
     { $sort: sortConditions },
     { $skip: Number(skip) || 0 },

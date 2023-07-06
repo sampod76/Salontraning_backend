@@ -60,6 +60,7 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield model_category_1.Category.find(whereConditions)
+        .populate('thumbnail')
         .sort(sortConditions)
         .skip(Number(skip))
         .limit(Number(limit));

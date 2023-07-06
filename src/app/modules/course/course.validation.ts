@@ -18,7 +18,7 @@ const createCourseZodSchema = z.object({
     vat: z.number().nonnegative().optional(),
 
     categoryDetails: z.object({
-      category: z.string(),
+      category: z.string().optional(),
       title: z.string().optional(),
     }),
     header_1: z.string().optional(),
