@@ -24,8 +24,10 @@ const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const service_GeneralUser_1 = require("./service.GeneralUser");
 const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const filter = (0, pick_1.default)(req.query, constant_GeneralUser_1.GeneralUserFilterableFields);
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filter = (0, pick_1.default)(queryObject, constant_GeneralUser_1.GeneralUserFilterableFields);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield service_GeneralUser_1.GeneralUserService.getAllGeneralUsersFromDb(filter, paginationOptions);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -63,6 +65,7 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
             uid: result === null || result === void 0 ? void 0 : result.uid,
             status: result === null || result === void 0 ? void 0 : result.status,
             email: result === null || result === void 0 ? void 0 : result.email,
+            phone: result.phone,
             // ...result,
             accessToken,
         },
@@ -101,7 +104,7 @@ const getSingleGeneralUserToCourse = (0, catchAsync_1.default)((req, res) => __a
 const updateGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const updatedData = req.body;
-    const result = yield service_GeneralUser_1.GeneralUserService.updateGeneralUserFromDb(id, updatedData);
+    const result = yield service_GeneralUser_1.GeneralUserService.updateGeneralUserFromDb(id, updatedData, req);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

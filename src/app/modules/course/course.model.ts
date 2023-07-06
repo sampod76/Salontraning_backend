@@ -97,7 +97,11 @@ const courseSchema = new Schema<ICourse, CourseModel>(
           type: Types.ObjectId,
           ref: 'General_user',
         },
-        star: Number,
+        star: {
+          type: Number,
+          min: 0,
+          max: 5,
+        },
         message: {
           type: String,
         },

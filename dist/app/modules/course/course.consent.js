@@ -12,9 +12,10 @@ exports.COURSE_SEARCHABLE_FIELDS = [
 ];
 exports.COURSE_FILTERABLE_FIELDS = [
     'searchTerm',
-    'title',
     'price',
-    'publish.status',
+    'status',
     'date',
+    'category',
+    'reviews.star',
 ];
 exports.COURSE_TYPES = ['free', 'paid', 'open', 'closed', 'recurrig'];

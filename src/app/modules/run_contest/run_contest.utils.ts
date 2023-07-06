@@ -1,22 +1,17 @@
-// // import { Lession } from './photoContest.model';
+// import { Contest } from './photoContest.model';
 
-// export const findLastLessionId = async (courseId: string) => {
-//   const lastLessionId = await Lession.findOne(
-//     { courseId },
-//     { lessionId: 1, _id: 0 }
-//   )
-//     .sort({ createdAt: -1 })
-//     .lean();
-//   return lastLessionId?.lessionId
-//     ? lastLessionId.lessionId.substring(5)
-//     : undefined;
-// };
+import { RunContest } from './run_contest.model';
 
-// export const generateLessionId = async (courseId: string): Promise<string> => {
-//   const currentId =
-//     (await findLastLessionId(courseId)) || (0).toString().padStart(3, '0');
-//   // increment by 1
-//   const incrementId = (Number(currentId) + 1).toString().padStart(3, '0');
-//   const modifiId = `C-${Number(courseId)}-${incrementId}`;
-//   return modifiId;
-// };
+export const findLastContestId = async () => {
+  const lastContestId = await RunContest.findOne({}, { contestId: 1, _id: 0 })
+    .sort({ createdAt: -1 })
+    .lean();
+  return lastContestId?.contestId ? lastContestId.contestId : undefined;
+};
+
+export const generateContestId = async (): Promise<number> => {
+  const currentId = (await findLastContestId()) || 0;
+  // increment by 1
+  const incrementId = Number(currentId) + 1;
+  return incrementId;
+};

@@ -19,23 +19,19 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PhotoContestUserService = void 0;
+const mongoose_1 = require("mongoose");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
-const photoContest_model_1 = require("./photoContest.model");
-const photoContest_consent_1 = require("./photoContest.consent");
 const users_1 = require("../../../enums/users");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const photoContest_consent_1 = require("./photoContest.consent");
+const photoContest_model_1 = require("./photoContest.model");
 const createPhotoContestUserByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = (yield photoContest_model_1.PhotoContestUser.create(payload)).populate({
-        path: 'course',
-        // select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
-        // populate: [
-        //   {
-        //     path: 'moderator',
-        //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-        //   }
-        // ],
-    });
+    const result = (yield photoContest_model_1.PhotoContestUser.create(payload)).populate('thumbnail');
     return result;
 });
 //getAllPhotoContestUserFromDb
@@ -64,16 +60,39 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
     //****************search and filters end**********/
     //****************pagination start **************/
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
+    // must be alltime add ---> loveReact_count: -1
     const sortConditions = {};
     if (sortBy && sortOrder) {
-        sortConditions[sortBy] = sortOrder;
+        sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
     }
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield photoContest_model_1.PhotoContestUser.find(whereConditions)
-        .sort(sortConditions)
-        .skip(Number(skip))
-        .limit(Number(limit));
+    // const result = await PhotoContestUser.find(whereConditions)
+    //   .sort(sortConditions)
+    //   .skip(Number(skip))
+    //   .limit(Number(limit));
+    const pipeline = [
+        { $match: whereConditions },
+        {
+            $addFields: {
+                loveReacts_count: { $size: { $ifNull: ['$loveReacts', []] } },
+            },
+        },
+        {
+            $addFields: {
+                messages_count: { $size: { $ifNull: ['$messages', []] } },
+            },
+        },
+        {
+            $addFields: {
+                share_count: { $size: { $ifNull: ['$share', []] } },
+            },
+        },
+        { $sort: sortConditions },
+        { $skip: Number(skip) || 0 },
+        { $limit: Number(limit) || 15 },
+    ];
+    const result = yield photoContest_model_1.PhotoContestUser.aggregate(pipeline);
     const total = yield photoContest_model_1.PhotoContestUser.countDocuments(whereConditions);
     return {
         meta: {
@@ -86,7 +105,19 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
 });
 // get single e form db
 const getSinglePhotoContestUserFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield photoContest_model_1.PhotoContestUser.findById(id);
+    const result = yield photoContest_model_1.PhotoContestUser.findById(id)
+        .populate({
+        path: 'thumbnail',
+        select: 'title size filename category',
+    })
+        .populate({
+        path: 'contest',
+        select: { title: 1, status: 1, duration_time: 1, contestId: 1 },
+    })
+        .populate({
+        path: 'userId',
+        select: { name: 1, email: 1, phone: 1 },
+    });
     return result;
 });
 // update e form db
@@ -100,19 +131,87 @@ const updatePhotoContestUserFromDb = (id, req, payload) => __awaiter(void 0, voi
     }
     const result = yield photoContest_model_1.PhotoContestUser.findOneAndUpdate(quary, payload, {
         new: true,
+        runValidators: true,
     });
+    if (!result) {
+        throw new ApiError_1.default(505, 'The operation failed');
+    }
+    return result;
+});
+const voteMassageSharePhotoContestUserFromDb = (id, //docoment id --> photocontest id
+req, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    console.log(payload);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { loveReact, message, share } = payload;
+    let quary = {
+        _id: id,
+    };
+    const updateData = {};
+    if (loveReact === 'yes') {
+        quary = Object.assign(Object.assign({}, quary), { loveReacts: { $nin: new mongoose_1.Types.ObjectId((_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c._id) } });
+        updateData['$push'] = {
+            loveReacts: (_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id,
+        };
+    }
+    else if (loveReact === 'no') {
+        quary = Object.assign(Object.assign({}, quary), { loveReacts: { $in: new mongoose_1.Types.ObjectId((_e = req === null || req === void 0 ? void 0 : req.user) === null || _e === void 0 ? void 0 : _e._id) } });
+        updateData['$pull'] = {
+            loveReacts: (_f = req === null || req === void 0 ? void 0 : req.user) === null || _f === void 0 ? void 0 : _f._id,
+        };
+    }
+    // if (loveReact) {
+    //   quary = {
+    //     ...quary,
+    //     loveReacts: { $nin: new Types.ObjectId(req?.user?._id) },
+    //   };
+    //   (updateData as any)['$push'] = {
+    //     loveReacts: loveReact,
+    //   };
+    // }
+    if (message) {
+        quary = Object.assign(Object.assign({}, quary), { 'messages.userId': { $ne: new mongoose_1.Types.ObjectId((_g = req === null || req === void 0 ? void 0 : req.user) === null || _g === void 0 ? void 0 : _g._id) } });
+        updateData['$push'] = {
+            messages: {
+                userId: (_h = req === null || req === void 0 ? void 0 : req.user) === null || _h === void 0 ? void 0 : _h._id,
+                message,
+            },
+        };
+    }
+    if (share === 'yes') {
+        quary = Object.assign(Object.assign({}, quary), { share: { $nin: new mongoose_1.Types.ObjectId((_j = req === null || req === void 0 ? void 0 : req.user) === null || _j === void 0 ? void 0 : _j._id) } });
+        updateData['$push'] = {
+            share: (_k = req === null || req === void 0 ? void 0 : req.user) === null || _k === void 0 ? void 0 : _k._id,
+        };
+    }
+    else if (share === 'no') {
+        quary = Object.assign(Object.assign({}, quary), { share: { $in: new mongoose_1.Types.ObjectId((_l = req === null || req === void 0 ? void 0 : req.user) === null || _l === void 0 ? void 0 : _l._id) } });
+        updateData['$pull'] = {
+            share: (_m = req === null || req === void 0 ? void 0 : req.user) === null || _m === void 0 ? void 0 : _m._id,
+        };
+    }
+    const result = yield photoContest_model_1.PhotoContestUser.findOneAndUpdate(quary, updateData, {
+        new: true,
+        runValidators: true,
+    });
+    if (!result) {
+        throw new ApiError_1.default(505, 'Your are allrady done that !!!');
+    }
     return result;
 });
 // delete e form db
 const deletePhotoContestUserByIdFromDb = (id, req) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _o, _p;
     const quary = {
         _id: id,
     };
-    if (((_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c.role) !== users_1.ENUM_USER_ROLE.ADMIN) {
-        quary.userId = (_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id;
+    if (((_o = req === null || req === void 0 ? void 0 : req.user) === null || _o === void 0 ? void 0 : _o.role) !== users_1.ENUM_USER_ROLE.ADMIN) {
+        quary.userId = (_p = req === null || req === void 0 ? void 0 : req.user) === null || _p === void 0 ? void 0 : _p._id;
     }
     const result = yield photoContest_model_1.PhotoContestUser.findOneAndDelete(quary);
+    if (!result) {
+        throw new ApiError_1.default(505, 'The operation failed');
+    }
     return result;
 });
 exports.PhotoContestUserService = {
@@ -121,4 +220,5 @@ exports.PhotoContestUserService = {
     getSinglePhotoContestUserFromDb,
     updatePhotoContestUserFromDb,
     deletePhotoContestUserByIdFromDb,
+    voteMassageSharePhotoContestUserFromDb,
 };

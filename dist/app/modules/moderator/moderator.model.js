@@ -45,8 +45,9 @@ const ModeratorSchema = new mongoose_1.Schema({
         type: String,
     },
     profileImage: {
-        type: String,
-        // required: true,
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FileUploade',
+        required: true,
     },
     status: {
         type: String,

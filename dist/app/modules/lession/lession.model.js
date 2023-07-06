@@ -33,12 +33,13 @@ const LessionSchema = new mongoose_1.Schema({
         trim: true,
     },
     thumbnail: {
-        type: String,
-        trim: true,
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FileUploade',
+        required: true,
     },
     status: {
         type: String,
-        enum: ['active', 'deactive'],
+        enum: ['active', 'deactive', 'save'],
         default: 'active',
     },
     tag: [

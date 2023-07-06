@@ -11,7 +11,8 @@ const CategorySchema = new mongoose_1.Schema({
         trim: true,
     },
     thumbnail: {
-        type: String,
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FileUploade',
     },
 }, {
     timestamps: true,

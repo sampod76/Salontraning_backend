@@ -2,6 +2,7 @@
 
 import httpStatus from 'http-status';
 import { SortOrder, Types } from 'mongoose';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
@@ -9,7 +10,6 @@ import { IPaginationOption } from '../../interface/pagination';
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
 import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
-import { ENUM_USER_ROLE } from '../../../enums/users';
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 
@@ -85,6 +85,7 @@ const getSingleGeneralUserFromDb = async (
     'purchase_courses.course',
     'courseId title thumbnail createdAt'
   );
+
   return result;
 };
 
@@ -92,13 +93,6 @@ const getSingleGeneralUserFromDb = async (
 const getUserToCourseFromDb = async (
   id: string
 ): Promise<IGeneralUser[] | null> => {
-  // const result = await GeneralUser.findById(id).populate({
-  //   path: 'purchase_courses.course',
-  //   populate: {
-  //     path: 'Lession',
-  //     model: 'Comment',
-  //   },
-  // });
   const result = await GeneralUser.aggregate([
     { $match: { _id: new Types.ObjectId(id) } },
     {

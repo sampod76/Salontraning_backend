@@ -34,8 +34,9 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       // required: true,
     },
     profileImage: {
-      type: String,
-      // required: true,
+      type: Types.ObjectId,
+      ref: 'FileUploade',
+      required: true,
     },
     uid: {
       type: String,
@@ -60,7 +61,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       {
         course: { type: Types.ObjectId, ref: 'Course' },
         quiz: [],
-        total_completed_lessions: [Types.ObjectId],
+        total_completed_lessions: [{ type: Types.ObjectId, ref: 'Lession' }],
       },
     ],
   },

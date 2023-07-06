@@ -52,9 +52,13 @@ const createQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 const getAllQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
-    const filters = (0, pick_1.default)(req.query, quiz_consent_1.QUIZ_FILTERABLE_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, quiz_consent_1.QUIZ_FILTERABLE_FIELDS);
     //****************pagination start************ */
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield quiz_service_1.QuizService.getAllQuizFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         success: true,

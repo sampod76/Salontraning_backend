@@ -1,4 +1,4 @@
-import { SortOrder } from 'mongoose';
+import { SortOrder, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { Request } from 'express';
@@ -9,11 +9,15 @@ import { RunContest } from './run_contest.model';
 
 import { IRunContest, IRunContestFilters } from './run_contest.interface';
 import { RUNCONTEST_SEARCHABLE_FIELDS } from './run_contest.consent';
+import { generateContestId } from './run_contest.utils';
 
 const createRunContestByDb = async (
   payload: IRunContest
 ): Promise<IRunContest | null> => {
-  const result = await RunContest.create(payload);
+  const contestId = await generateContestId();
+  const result = (await RunContest.create({ ...payload, contestId })).populate(
+    'winnerPrize.thumbnail winnerList.photo_contest_id'
+  );
   return result;
 };
 
@@ -63,6 +67,7 @@ const getAllRunContestFromDb = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await RunContest.find(whereConditions)
+    .populate('winnerPrize.thumbnail winnerList.photo_contest_id')
     .sort(sortConditions)
     .skip(Number(skip))
     .limit(Number(limit));
@@ -82,7 +87,9 @@ const getAllRunContestFromDb = async (
 const getSingleRunContestFromDb = async (
   id: string
 ): Promise<IRunContest | null> => {
-  const result = await RunContest.findById(id).polygon('winnerListUsers');
+  const result = await RunContest.findById(id).populate(
+    'winnerPrize.thumbnail winnerList.photo_contest_id'
+  );
   return result;
 };
 
@@ -92,15 +99,13 @@ const updateRunContestFromDb = async (
   req: Request,
   payload: Partial<IRunContest>
 ): Promise<IRunContest | null> => {
-  const quary: { userId?: string; _id: string } = {
-    _id: id,
-  };
-  if (req?.user?.role !== ENUM_USER_ROLE.ADMIN) {
-    quary.userId = req?.user?._id;
-  }
-  const result = await RunContest.findOneAndUpdate(quary, payload, {
-    new: true,
-  });
+  const result = await RunContest.findOneAndUpdate(
+    { _id: new Types.ObjectId(id) },
+    payload,
+    {
+      new: true,
+    }
+  );
   return result;
 };
 

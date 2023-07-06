@@ -89,7 +89,12 @@ const deleteCourse = catchAsync(async (req: Request, res: Response) => {
 
 const courseReviewsByUser = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await CourseService.courseReviewsByUserFromDb(id, req.body);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const result = await CourseService.courseReviewsByUserFromDb(
+    id,
+    req.body,
+    req
+  );
 
   sendResponse<ICourse>(res, {
     success: true,

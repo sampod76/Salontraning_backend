@@ -18,22 +18,21 @@ router
   );
 
 router
+  .route('/review/:id')
+  .post(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    validateRequestZod(CourseValidation.courseReviewZodSchema),
+    CourseController.courseReviewsByUser
+  )
+  .delete(authMiddleware(ENUM_USER_ROLE.ADMIN), CourseController.deleteCourse);
+
+router
   .route('/:id')
   .get(CourseController.getSingleCourse)
   .patch(
     authMiddleware(ENUM_USER_ROLE.ADMIN),
     validateRequestZod(CourseValidation.updateCourseZodSchema),
     CourseController.updateCourse
-  )
-  .delete(authMiddleware(ENUM_USER_ROLE.ADMIN), CourseController.deleteCourse);
-
-router
-  .route('/review')
-
-  .patch(
-    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
-    validateRequestZod(CourseValidation.courseReviewZodSchema),
-    CourseController.courseReviewsByUser
   )
   .delete(authMiddleware(ENUM_USER_ROLE.ADMIN), CourseController.deleteCourse);
 

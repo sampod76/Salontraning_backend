@@ -27,6 +27,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GeneralUserService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const mongoose_1 = require("mongoose");
+const users_1 = require("../../../enums/users");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
@@ -87,13 +88,6 @@ const getSingleGeneralUserFromDb = (id) => __awaiter(void 0, void 0, void 0, fun
 });
 // user to course
 const getUserToCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    // const result = await GeneralUser.findById(id).populate({
-    //   path: 'purchase_courses.course',
-    //   populate: {
-    //     path: 'Lession',
-    //     model: 'Comment',
-    //   },
-    // });
     const result = yield model_GeneralUser_1.GeneralUser.aggregate([
         { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
         {
@@ -183,14 +177,18 @@ const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0,
     return result;
 });
 // module 15 --> 14,15 vedio
-const updateGeneralUserFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const isExist = yield model_GeneralUser_1.GeneralUser.findOne({ id });
-    if (!isExist) {
+const updateGeneralUserFromDb = (id, payload, req) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { _id } = (yield model_GeneralUser_1.GeneralUser.findOne({ id }));
+    if (!_id) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'GeneralUser not found !');
+    }
+    if (_id !== ((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id) || req.user.role !== users_1.ENUM_USER_ROLE.ADMIN) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Unauthorise person!');
     }
     const GeneralUserData = __rest(payload, []);
     const updatedGeneralUserData = Object.assign({}, GeneralUserData);
-    const result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ id }, updatedGeneralUserData, {
+    const result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ _id: id }, updatedGeneralUserData, {
         new: true,
     });
     return result;

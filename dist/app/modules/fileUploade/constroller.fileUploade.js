@@ -78,7 +78,7 @@ const createFileUploade = (0, catchAsync_1.default)((req, res) => __awaiter(void
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: 'successfull create FileUploade FileUploade',
+        message: 'successfull create FileUploade',
         data: result,
     });
     // next();
@@ -90,9 +90,13 @@ const createFileUploade = (0, catchAsync_1.default)((req, res) => __awaiter(void
 }));
 const getAllFileUploade = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
-    const filters = (0, pick_1.default)(req.query, consent_fileUploade_1.FILEUPLOADE_FILTERABLE_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, consent_fileUploade_1.FILEUPLOADE_FILTERABLE_FIELDS);
     //****************pagination start************ */
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield service_fileUploade_1.FileUploadeService.getAllFileUploadeFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         success: true,

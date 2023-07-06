@@ -17,6 +17,7 @@ export type IRunContestSearchableField = {
 };
 
 export type IRunContest = {
+  contestId: number;
   title?: string;
   header_1?: string;
   description?: string;
@@ -25,7 +26,7 @@ export type IRunContest = {
   images_album: Array<string | IFileUploade>;
   status?: 'active' | 'deactive' | 'save';
   winnerList?: IPhotoContestUser[];
-  winnerPrice?: [];
+  winnerPrize?: [];
   duration_time: {
     startDate: string;
     endDate: string;

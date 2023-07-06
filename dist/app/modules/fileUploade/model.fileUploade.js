@@ -4,12 +4,13 @@ exports.FileUploade = void 0;
 const mongoose_1 = require("mongoose");
 const FileUploadeSchema = new mongoose_1.Schema({
     userId: {
+        //get request
         type: mongoose_1.Types.ObjectId,
     },
     title: {
         type: String,
         lowercase: true,
-        unique: true,
+        // unique: true,
         trim: true,
     },
     path: {
@@ -20,7 +21,7 @@ const FileUploadeSchema = new mongoose_1.Schema({
         type: Number,
         default: 0,
     },
-    originalname: {
+    filename: {
         type: String,
         required: true,
     },

@@ -8,7 +8,7 @@ const createRunContestZodSchema = z.object({
     // thumbnail: z.string().or(IFileUploadeSchema).optional(),
     status: z.enum(['active', 'deactive', 'save']).optional(),
     winnerList: z.array(z.unknown()).optional(),
-    winnerPrice: z.array(z.unknown()).optional(),
+    winnerPrize: z.array(z.unknown()).optional(),
     duration_time: z.object({
       startDate: z.string(),
       endDate: z.string(),
@@ -24,7 +24,7 @@ const updateRunContestZodSchema = z.object({
     // thumbnail: z.string().or(IFileUploadeSchema).optional(),
     status: z.enum(['active', 'deactive', 'save']).optional(),
     winnerList: z.array(z.unknown()).optional(),
-    winnerPrice: z.array(z.unknown()).optional(),
+    winnerPrize: z.array(z.unknown()).optional(),
     duration_time: z
       .object({
         startDate: z.string().optional(),

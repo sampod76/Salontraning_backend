@@ -23,7 +23,7 @@ const courseSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: course_consent_1.COURSE_TYPES, // ['free', 'paid', 'open', 'close']
+        enum: course_consent_1.COURSE_TYPES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
     },
     category: {
         type: String,
@@ -51,15 +51,13 @@ const courseSchema = new mongoose_1.Schema({
     header_1: String,
     header_2: String,
     description: String,
-    thumbnail: String,
+    thumbnail: {
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FileUploade',
+    },
     publish: {
         type: {
-            status: {
-                type: String,
-                enum: ['active', 'deactive', 'save'],
-                default: 'active',
-            },
-            time: {
+            date: {
                 type: Date,
                 // default: () => {
                 //   // Get the current date
@@ -82,13 +80,30 @@ const courseSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'deactive'],
+        enum: ['active', 'deactive', 'save'],
         default: 'active',
     },
     tag: [
         {
             type: String,
             trim: true,
+        },
+    ],
+    // after user
+    reviews: [
+        {
+            userId: {
+                type: mongoose_1.Types.ObjectId,
+                ref: 'General_user',
+            },
+            star: {
+                type: Number,
+                min: 0,
+                max: 5,
+            },
+            message: {
+                type: String,
+            },
         },
     ],
 }, {

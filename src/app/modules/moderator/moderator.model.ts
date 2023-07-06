@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { IModerator, ModeratorModel } from './moderator.interface';
 import { ENUM_USER_ROLE } from '../../../enums/users';
 
@@ -48,8 +48,9 @@ const ModeratorSchema = new Schema<IModerator, ModeratorModel>(
       type: String,
     },
     profileImage: {
-      type: String,
-      // required: true,
+      type: Types.ObjectId,
+      ref: 'FileUploade',
+      required: true,
     },
     status: {
       type: String,

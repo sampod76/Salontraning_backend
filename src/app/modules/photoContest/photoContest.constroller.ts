@@ -15,7 +15,7 @@ const createPhotoContestUser = catchAsync(
   async (req: Request, res: Response) => {
     const result = await PhotoContestUserService.createPhotoContestUserByDb({
       ...req.body,
-      userId: req?.user?._id,
+      // userId: req?.user?._id,
     });
 
     sendResponse<IPhotoContestUser>(res, {
@@ -95,6 +95,27 @@ const updatePhotoContestUser = catchAsync(
     });
   }
 );
+const voteMassageSharePhotoContestUser = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const result =
+      await PhotoContestUserService.voteMassageSharePhotoContestUserFromDb(
+        id,
+        req,
+        updateData
+      );
+
+    sendResponse<IPhotoContestUser>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'successfull submit',
+      // data: result,
+    });
+  }
+);
 
 const deletePhotoContestUser = catchAsync(
   async (req: Request, res: Response) => {
@@ -115,4 +136,5 @@ export const PhotoContestUserController = {
   getSinglePhotoContestUser,
   updatePhotoContestUser,
   deletePhotoContestUser,
+  voteMassageSharePhotoContestUser,
 };

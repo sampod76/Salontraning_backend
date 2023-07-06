@@ -21,8 +21,12 @@ const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const moderator_constant_1 = require("./moderator.constant");
 const moderator_service_1 = require("./moderator.service");
 const getAllModerators = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const filters = (0, pick_1.default)(req.query, moderator_constant_1.moderatorFilterableFields);
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, moderator_constant_1.moderatorFilterableFields);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield moderator_service_1.ModeratorService.getAllModeratorsFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

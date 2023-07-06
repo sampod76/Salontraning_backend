@@ -52,9 +52,13 @@ const createCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 const getAllCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
-    const filters = (0, pick_1.default)(req.query, consent_category_1.CATEGORY_FILTERABLE_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, consent_category_1.CATEGORY_FILTERABLE_FIELDS);
     //****************pagination start************ */
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield service_category_1.CategoryService.getAllCategoryFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         success: true,

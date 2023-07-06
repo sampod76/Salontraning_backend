@@ -1,10 +1,11 @@
-import mongoose, { PipelineStage } from 'mongoose';
+import mongoose, { PipelineStage, Types } from 'mongoose';
 
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
 
+import ApiError from '../../errors/ApiError';
 import { COURSE_SEARCHABLE_FIELDS } from './course.consent';
 import { ICourse, ICourseFilters } from './course.interface';
 import { Course } from './course.model';
@@ -184,18 +185,25 @@ const updateCourseFromDb = async (
   return result;
 };
 
+// delete e form db
+const deleteCourseByIdFromDb = async (id: string): Promise<ICourse | null> => {
+  const result = await Course.findByIdAndDelete(id);
+  return result;
+};
+
 // set user reviews e form db
 const courseReviewsByUserFromDb = async (
   id: string,
-  payload: Partial<ICourse>
+  payload: Partial<ICourse>,
+  req: any
 ): Promise<ICourse | null> => {
   const { reviews } = payload;
 
   const result = await Course.findOneAndUpdate(
-    { _id: id },
+    { _id: id, 'reviews.userId': { $ne: new Types.ObjectId(req?.user?._id) } },
     {
       $push: {
-        reviews: reviews,
+        reviews: { ...reviews, userId: req?.user?._id },
       },
     },
     {
@@ -203,12 +211,10 @@ const courseReviewsByUserFromDb = async (
       runValidators: true,
     }
   );
-  return result;
-};
 
-// delete e form db
-const deleteCourseByIdFromDb = async (id: string): Promise<ICourse | null> => {
-  const result = await Course.findByIdAndDelete(id);
+  if (!result) {
+    throw new ApiError(404, 'You cannot send review');
+  }
   return result;
 };
 

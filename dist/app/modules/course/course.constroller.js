@@ -43,18 +43,16 @@ const createCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         message: 'successfull create academic Course',
         data: result,
     });
-    // next();
-    /* res.status(200).send({
-        success: true,
-        data: result,
-        message: 'successfull create academic Course',
-      }); */
 }));
 const getAllCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
-    const filters = (0, pick_1.default)(req.query, course_consent_1.COURSE_FILTERABLE_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, course_consent_1.COURSE_FILTERABLE_FIELDS);
     //****************pagination start************ */
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield course_service_1.CourseService.getAllCourseFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -96,10 +94,22 @@ const deleteCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
+const courseReviewsByUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const result = yield course_service_1.CourseService.courseReviewsByUserFromDb(id, req.body, req);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'successfull update reviews',
+        data: result,
+    });
+}));
 exports.CourseController = {
     createCourse,
     getAllCourse,
     getSingleCourse,
     updateCourse,
     deleteCourse,
+    courseReviewsByUser,
 };

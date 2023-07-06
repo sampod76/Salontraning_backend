@@ -10,7 +10,7 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
     title: {
       type: String,
       lowercase: true,
-      unique: true,
+      // unique: true,
       trim: true,
     },
     path: {

@@ -15,6 +15,8 @@ const moderator_route_1 = require("../modules/moderator/moderator.route");
 const payment_router_1 = require("../modules/payment/payment.router");
 const purchased_courses_route_1 = require("../modules/purchased_courses/purchased_courses.route");
 const quiz_route_1 = require("../modules/quiz/quiz.route");
+const photoContest_route_1 = require("../modules/photoContest/photoContest.route");
+const run_contest_route_1 = require("../modules/run_contest/run_contest.route");
 // import { UserRoute } from '../modules/users/users.router';
 //https://docs.google.com/document/d/1gTsTpFvhfZB-2y0_BbZQVzmbG3YwsZwPrwAbsYqpOzM/edit
 const router = express_1.default.Router();
@@ -63,6 +65,14 @@ const moduleRoutes = [
     {
         path: '/payment',
         route: payment_router_1.PaymentRoute,
+    },
+    {
+        path: '/photo-contest-join',
+        route: photoContest_route_1.PhotoContestUserRoute,
+    },
+    {
+        path: '/run-contest',
+        route: run_contest_route_1.RunContestRoute,
     },
     {
         path: '/upload',

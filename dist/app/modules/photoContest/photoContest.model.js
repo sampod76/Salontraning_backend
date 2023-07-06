@@ -8,11 +8,15 @@ const PhotoContestSchemaUser = new mongoose_1.Schema({
         required: true,
         ref: 'General_user',
     },
+    contest: { type: mongoose_1.Types.ObjectId, ref: 'RunContest' },
     name: String,
+    email: String,
+    phone: String,
     header_1: String,
     description: String,
     thumbnail: {
-        type: String,
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FileUploade',
         required: true,
     },
     status: {
@@ -20,37 +24,41 @@ const PhotoContestSchemaUser = new mongoose_1.Schema({
         enum: ['active', 'deactive'],
         default: 'active',
     },
-    loveReact: [
+    // after contest then other person this field
+    loveReacts: [
         {
             type: mongoose_1.Types.ObjectId,
             ref: 'General_user',
         },
     ],
-    message: [
+    messages: [
         {
             userId: {
                 type: mongoose_1.Types.ObjectId,
-                required: true,
                 ref: 'General_user',
             },
             message: {
                 type: String,
-                required: true,
             },
         },
     ],
-    share: {
-        type: Number,
-        default: 0,
-    },
-    winnerData: {
-        date: {
-            type: String,
-            required: true,
+    share: [
+        {
+            type: mongoose_1.Types.ObjectId,
+            ref: 'General_user',
         },
-        winner: {
-            type: Number,
-            required: true,
+    ],
+    // after winer then this field auto file up
+    winnerData: {
+        type: {
+            contest_id: { type: mongoose_1.Types.ObjectId },
+            contest_number: { type: String },
+            date: {
+                type: String,
+            },
+            winner: {
+                type: Number,
+            },
         },
     },
 }, {

@@ -22,15 +22,21 @@ const createCourseZodSchema = zod_1.z.object({
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),
         thumbnail: zod_1.z.string().optional(),
-        status: zod_1.z.enum(['active', 'deactive']).optional(),
-        publish: zod_1.z
-            .object({ status: zod_1.z.string().optional(), time: zod_1.z.string().optional() })
-            .optional(),
+        status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
+        publish: zod_1.z.object({ date: zod_1.z.string().optional() }).optional(),
         publisher: zod_1.z.string({ required_error: 'publisher field is required' }),
         publisherName: zod_1.z.string({
             required_error: 'publisher Name field is required',
         }),
         tag: zod_1.z.array(zod_1.z.string().optional()).optional(),
+        reviews: zod_1.z
+            .array(zod_1.z.object({
+            userId: zod_1.z.string(),
+            star: zod_1.z.number(),
+            message: zod_1.z.string().optional().nullable(),
+        }))
+            .optional()
+            .nullable(),
     }),
 });
 const updateCourseZodSchema = zod_1.z.object({
@@ -43,7 +49,7 @@ const updateCourseZodSchema = zod_1.z.object({
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),
         thumbnail: zod_1.z.string().optional(),
-        status: zod_1.z.enum(['active', 'deactive']).optional(),
+        status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
         publish: zod_1.z
             .object({ status: zod_1.z.boolean().optional(), time: zod_1.z.string().optional() })
             .optional(),
@@ -52,7 +58,19 @@ const updateCourseZodSchema = zod_1.z.object({
         tag: zod_1.z.array(zod_1.z.string().optional()).optional(),
     }),
 });
+const courseReviewZodSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        reviews: zod_1.z
+            .object({
+            star: zod_1.z.number(),
+            message: zod_1.z.string().optional().nullable(),
+        })
+            .optional()
+            .nullable(),
+    }),
+});
 exports.CourseValidation = {
     createCourseZodSchema,
+    courseReviewZodSchema,
     updateCourseZodSchema,
 };

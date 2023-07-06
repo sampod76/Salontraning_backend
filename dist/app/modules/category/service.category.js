@@ -25,7 +25,7 @@ const paginationHelper_1 = require("../../../helper/paginationHelper");
 const consent_category_1 = require("./consent.category");
 const model_category_1 = require("./model.category");
 const createCategoryByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield model_category_1.Category.create(payload);
+    const result = (yield model_category_1.Category.create(payload)).populate('thumbnail');
     return result;
 });
 //getAllCategoryFromDb

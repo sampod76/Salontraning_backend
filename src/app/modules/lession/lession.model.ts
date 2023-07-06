@@ -33,8 +33,9 @@ const LessionSchema = new Schema<ILession, LessionModel>(
       trim: true,
     },
     thumbnail: {
-      type: String,
-      trim: true,
+      type: Types.ObjectId,
+      ref: 'FileUploade',
+      required: true,
     },
     status: {
       type: String,

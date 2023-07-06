@@ -63,13 +63,10 @@ const updateCourseZodSchema = z.object({
 const courseReviewZodSchema = z.object({
   body: z.object({
     reviews: z
-      .array(
-        z.object({
-          userId: z.string(), // Assuming user ID is a string of length 24
-          star: z.number(),
-          message: z.string().optional().nullable(),
-        })
-      )
+      .object({
+        star: z.number(),
+        message: z.string().optional().nullable(),
+      })
       .optional()
       .nullable(),
   }),

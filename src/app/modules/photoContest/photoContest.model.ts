@@ -14,6 +14,7 @@ const PhotoContestSchemaUser = new Schema<
       required: true,
       ref: 'General_user',
     },
+    contest: { type: Types.ObjectId, ref: 'RunContest' },
     name: String,
     email: String,
     phone: String,
@@ -21,7 +22,8 @@ const PhotoContestSchemaUser = new Schema<
     header_1: String,
     description: String,
     thumbnail: {
-      type: String,
+      type: Types.ObjectId,
+      ref: 'FileUploade',
       required: true,
     },
     status: {
@@ -29,7 +31,9 @@ const PhotoContestSchemaUser = new Schema<
       enum: ['active', 'deactive'],
       default: 'active',
     },
-    loveReact: [
+
+    // after contest then other person this field
+    loveReacts: [
       {
         type: Types.ObjectId,
         ref: 'General_user',
@@ -39,7 +43,6 @@ const PhotoContestSchemaUser = new Schema<
       {
         userId: {
           type: Types.ObjectId,
-
           ref: 'General_user',
         },
         message: {
@@ -47,10 +50,15 @@ const PhotoContestSchemaUser = new Schema<
         },
       },
     ],
-    share: {
-      type: Number,
-      default: 0,
-    },
+
+    share: [
+      {
+        type: Types.ObjectId,
+        ref: 'General_user',
+      },
+    ],
+
+    // after winer then this field auto file up
     winnerData: {
       type: {
         contest_id: { type: Types.ObjectId },

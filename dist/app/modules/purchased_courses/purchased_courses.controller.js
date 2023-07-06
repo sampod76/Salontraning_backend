@@ -53,9 +53,13 @@ const createPurchased_courses = (0, catchAsync_1.default)((req, res) => __awaite
 }));
 const getAllPurchased_courses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
-    const filters = (0, pick_1.default)(req.query, purchased_courses_consent_1.PURCHASED_COURSES_FILTERABLE_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, purchased_courses_consent_1.PURCHASED_COURSES_FILTERABLE_FIELDS);
     //****************pagination start************ */
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield purchased_courses_service_1.Purchased_coursesService.getAllPurchased_coursesFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         success: true,

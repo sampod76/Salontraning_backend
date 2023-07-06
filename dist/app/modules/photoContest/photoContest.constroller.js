@@ -8,17 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -35,8 +24,7 @@ const photoContest_consent_1 = require("./photoContest.consent");
 const photoContest_service_1 = require("./photoContest.service");
 // import { z } from 'zod'
 const createPhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const PhotoContestUserData = __rest(req.body, []);
-    const result = yield photoContest_service_1.PhotoContestUserService.createPhotoContestUserByDb(PhotoContestUserData);
+    const result = yield photoContest_service_1.PhotoContestUserService.createPhotoContestUserByDb(Object.assign({}, req.body));
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -52,9 +40,13 @@ const createPhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter
 }));
 const getAllPhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
-    const filters = (0, pick_1.default)(req.query, photoContest_consent_1.PHOTOCONTEST_USER_FILTERABLE_FIELDS);
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    const filters = (0, pick_1.default)(queryObject, photoContest_consent_1.PHOTOCONTEST_USER_FILTERABLE_FIELDS);
     //****************pagination start************ */
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
+    const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield photoContest_service_1.PhotoContestUserService.getAllPhotoContestUserFromDb(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -86,6 +78,18 @@ const updatePhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter
         data: result,
     });
 }));
+const voteMassageSharePhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const updateData = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const result = yield photoContest_service_1.PhotoContestUserService.voteMassageSharePhotoContestUserFromDb(id, req, updateData);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'successfull submit',
+        // data: result,
+    });
+}));
 const deletePhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const result = yield photoContest_service_1.PhotoContestUserService.deletePhotoContestUserByIdFromDb(id, req);
@@ -102,4 +106,5 @@ exports.PhotoContestUserController = {
     getSinglePhotoContestUser,
     updatePhotoContestUser,
     deletePhotoContestUser,
+    voteMassageSharePhotoContestUser,
 };

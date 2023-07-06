@@ -44,8 +44,9 @@ const GeneralUserSchema = new mongoose_1.Schema({
         // required: true,
     },
     profileImage: {
-        type: String,
-        // required: true,
+        type: mongoose_1.Types.ObjectId,
+        ref: 'FileUploade',
+        required: true,
     },
     uid: {
         type: String,
@@ -70,7 +71,7 @@ const GeneralUserSchema = new mongoose_1.Schema({
         {
             course: { type: mongoose_1.Types.ObjectId, ref: 'Course' },
             quiz: [],
-            total_completed_lessions: [mongoose_1.Types.ObjectId],
+            total_completed_lessions: [{ type: mongoose_1.Types.ObjectId, ref: 'Lession' }],
         },
     ],
 }, {

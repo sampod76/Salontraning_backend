@@ -19,7 +19,7 @@ export type IPhotoContestUserSearchableField = {
 
 export type IPhotoContestUser = {
   userId: string | IGeneralUser;
-  contest_id: string | IRunContest;
+  contest: string | IRunContest;
   name?: string;
   email: string;
   phone: string;
@@ -28,14 +28,14 @@ export type IPhotoContestUser = {
   thumbnail?: string | IFileUploade;
   // thumbnail: string;
   status?: 'active' | 'deactive';
-  loveReact?: Array<string | IGeneralUser>;
+  loveReacts?: Array<string | IGeneralUser>;
   messages?: Array<{
     userId: string | IGeneralUser;
     message: string;
   }>;
-  share?: number;
+  share?: Array<string | IGeneralUser>;
   winnerData?: {
-    contest_id: string;
+    contest: string;
     contest_number?: string;
     date?: string;
     winner: number;

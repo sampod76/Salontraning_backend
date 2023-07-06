@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -24,8 +47,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
-const mongoose_1 = __importDefault(require("mongoose"));
+const mongoose_1 = __importStar(require("mongoose"));
 const paginationHelper_1 = require("../../../helper/paginationHelper");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const course_consent_1 = require("./course.consent");
 const course_model_1 = require("./course.model");
 const course_utils_1 = require("./course.utils");
@@ -75,12 +99,6 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     }
     //****************search and filters end**********/
     //****************pagination start **************/
-    // const { page, limit, skip, sortBy, sortOrder } =
-    //   paginationHelper.calculatePagination(paginationOptions);
-    // const sortConditions: { [key: string]: SortOrder } = {};
-    // if (sortBy && sortOrder) {
-    //   sortConditions[sortBy] = sortOrder;
-    // }
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
     const sortConditions = {};
     if (sortBy && sortOrder) {
@@ -186,10 +204,28 @@ const deleteCourseByIdFromDb = (id) => __awaiter(void 0, void 0, void 0, functio
     const result = yield course_model_1.Course.findByIdAndDelete(id);
     return result;
 });
+// set user reviews e form db
+const courseReviewsByUserFromDb = (id, payload, req) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const { reviews } = payload;
+    const result = yield course_model_1.Course.findOneAndUpdate({ _id: id, 'reviews.userId': { $ne: new mongoose_1.Types.ObjectId((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id) } }, {
+        $push: {
+            reviews: Object.assign(Object.assign({}, reviews), { userId: (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b._id }),
+        },
+    }, {
+        new: true,
+        runValidators: true,
+    });
+    if (!result) {
+        throw new ApiError_1.default(404, 'You cannot send review');
+    }
+    return result;
+});
 exports.CourseService = {
     createCourseByDb,
     getAllCourseFromDb,
     getSingleCourseFromDb,
     updateCourseFromDb,
     deleteCourseByIdFromDb,
+    courseReviewsByUserFromDb,
 };
