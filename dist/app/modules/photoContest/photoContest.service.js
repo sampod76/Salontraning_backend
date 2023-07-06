@@ -52,9 +52,11 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
     }
     if (Object.keys(filtersData).length) {
         andConditions.push({
-            $and: Object.entries(filtersData).map(([field, value]) => ({
-                [field]: value,
-            })),
+            $and: Object.entries(filtersData).map(([field, value]) => field === 'contest'
+                ? { [field]: new mongoose_1.Types.ObjectId(value) }
+                : {
+                    [field]: value,
+                }),
         });
     }
     //****************search and filters end**********/
@@ -71,6 +73,7 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
     //   .sort(sortConditions)
     //   .skip(Number(skip))
     //   .limit(Number(limit));
+    console.log(whereConditions);
     const pipeline = [
         { $match: whereConditions },
         {

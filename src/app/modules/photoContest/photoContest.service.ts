@@ -44,9 +44,13 @@ const getAllPhotoContestUserFromDb = async (
 
   if (Object.keys(filtersData).length) {
     andConditions.push({
-      $and: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      $and: Object.entries(filtersData).map(([field, value]) =>
+        field === 'contest'
+          ? { [field]: new Types.ObjectId(value) }
+          : {
+              [field]: value,
+            }
+      ),
     });
   }
 
@@ -71,7 +75,7 @@ const getAllPhotoContestUserFromDb = async (
   //   .sort(sortConditions)
   //   .skip(Number(skip))
   //   .limit(Number(limit));
-
+  console.log(whereConditions);
   const pipeline: PipelineStage[] = [
     { $match: whereConditions },
     {
