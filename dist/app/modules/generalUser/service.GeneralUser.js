@@ -140,7 +140,7 @@ const getUserToCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 name: 1,
                 purchase_courses: 1,
                 course: { _id: 1, title: 1, thumbnail: 1 },
-                lessions: { _id: 1, title: 1 },
+                lessions: { _id: 1, title: 1, vedio: 1, course: 1 },
             },
         },
     ]);
