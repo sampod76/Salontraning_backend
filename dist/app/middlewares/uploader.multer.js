@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadVideoFile = exports.uploadMultipleImage = exports.uploadSingleImage = void 0;
+exports.uploadVideoFile = exports.uploadMultipleImage = exports.uploadSingleImageByProfile = exports.uploadSingleImage = void 0;
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 // import express from 'express';
@@ -43,6 +43,41 @@ exports.uploadSingleImage = (0, multer_1.default)({
         fileSize: 30 * 1024 * 1024, // 30 MB
     },
     fileFilter: fileFilter,
+}).single('image');
+//-------------single file upload----end------------
+//-------------single file upload----start------------
+const storageByProfile = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path_1.default.join(__dirname, '../../uploadFile/profile/'));
+    },
+    filename: (req, file, cb) => {
+        const fileExt = path_1.default.extname(file.originalname);
+        const fileName = file.originalname
+            .replace(fileExt, '')
+            .toLowerCase()
+            .split(' ')
+            .join('-') +
+            '-' +
+            Date.now();
+        cb(null, fileName + fileExt);
+    },
+});
+const fileFilterByProfile = (req, file, cb) => {
+    if (file.mimetype === 'image/png' ||
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/jpeg') {
+        cb(null, true);
+    }
+    else {
+        cb(new Error('Only jpg, jpeg, png formats are allowed!'));
+    }
+};
+exports.uploadSingleImageByProfile = (0, multer_1.default)({
+    storage: storageByProfile,
+    limits: {
+        fileSize: 30 * 1024 * 1024, // 30 MB
+    },
+    fileFilter: fileFilterByProfile,
 }).single('image');
 //-------------single file upload----end------------
 //------------upload multiple images-----------------

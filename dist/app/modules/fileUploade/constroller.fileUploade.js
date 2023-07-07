@@ -52,6 +52,24 @@ const uploadeSingleFileByServer = (0, catchAsync_1.default)((req, res) => __awai
         data: file,
     });
 }));
+const uploadeProfileFileByServer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const fileDetails = req.file;
+    const file = {
+        filename: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.filename,
+        mimetype: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.mimetype,
+        destination: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.destination,
+        path: (fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.fieldname) === 'image'
+            ? `uploadFile/profile`
+            : `uploadFile/vedios`,
+        size: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.size,
+    };
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'successfull uploade single file',
+        data: file,
+    });
+}));
 const uploadeMultipalFileByServer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const files = req.files;
     const filesDetailes = files === null || files === void 0 ? void 0 : files.map(value => ({
@@ -157,5 +175,6 @@ exports.FileUploadeController = {
     updateFileUploade,
     deleteFileUploade,
     uploadeSingleFileByServer,
+    uploadeProfileFileByServer,
     uploadeMultipalFileByServer,
 };

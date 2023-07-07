@@ -16,6 +16,9 @@ router
     .route('/uploade-single-image')
     .post((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), uploader_multer_1.uploadSingleImage, constroller_fileUploade_1.FileUploadeController.uploadeSingleFileByServer);
 router
+    .route('/uploade-profile-image')
+    .post((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), uploader_multer_1.uploadSingleImageByProfile, constroller_fileUploade_1.FileUploadeController.uploadeProfileFileByServer);
+router
     .route('/uploade-multipal-images')
     .post((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), uploader_multer_1.uploadMultipleImage, constroller_fileUploade_1.FileUploadeController.uploadeMultipalFileByServer);
 router

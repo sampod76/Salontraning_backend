@@ -48,6 +48,7 @@ const run = (req, res, next) => {
     }
 };
 app.use('/images', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/images/')));
+app.use('/profile', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/profile/')));
 app.use('/vedios', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/vedios/')));
 const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));

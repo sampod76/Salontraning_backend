@@ -59,6 +59,54 @@ export const uploadSingleImage: RequestHandler = multer({
 }).single('image');
 //-------------single file upload----end------------
 
+//-------------single file upload----start------------
+const storageByProfile: StorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../../uploadFile/profile/'));
+  },
+  filename: (
+    req,
+    file: { originalname: string },
+    cb: (arg0: null, arg1: string) => any
+  ) => {
+    const fileExt = path.extname(file.originalname);
+    const fileName =
+      file.originalname
+        .replace(fileExt, '')
+        .toLowerCase()
+        .split(' ')
+        .join('-') +
+      '-' +
+      Date.now();
+    cb(null, fileName + fileExt);
+  },
+});
+
+const fileFilterByProfile = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only jpg, jpeg, png formats are allowed!'));
+  }
+};
+
+export const uploadSingleImageByProfile: RequestHandler = multer({
+  storage: storageByProfile,
+  limits: {
+    fileSize: 30 * 1024 * 1024, // 30 MB
+  },
+  fileFilter: fileFilterByProfile,
+}).single('image');
+//-------------single file upload----end------------
+
 //------------upload multiple images-----------------
 const storageMultiple: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {

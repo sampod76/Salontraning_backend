@@ -49,6 +49,12 @@ app.use(
 );
 
 app.use(
+  '/profile',
+  run,
+  express.static(path.join(__dirname, './uploadFile/profile/'))
+);
+
+app.use(
   '/vedios',
   run,
   express.static(path.join(__dirname, './uploadFile/vedios/'))

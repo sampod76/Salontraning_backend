@@ -35,6 +35,28 @@ const uploadeSingleFileByServer = catchAsync(
   }
 );
 
+const uploadeProfileFileByServer = catchAsync(
+  async (req: Request, res: Response) => {
+    const fileDetails = req.file;
+    const file = {
+      filename: fileDetails?.filename,
+      mimetype: fileDetails?.mimetype,
+      destination: fileDetails?.destination,
+      path:
+        fileDetails?.fieldname === 'image'
+          ? `uploadFile/profile`
+          : `uploadFile/vedios`,
+      size: fileDetails?.size,
+    };
+    sendResponse<any>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'successfull uploade single file',
+      data: file,
+    });
+  }
+);
+
 const uploadeMultipalFileByServer = catchAsync(
   async (req: Request, res: Response) => {
     const files = req.files as Express.Multer.File[];
@@ -165,5 +187,6 @@ export const FileUploadeController = {
   updateFileUploade,
   deleteFileUploade,
   uploadeSingleFileByServer,
+  uploadeProfileFileByServer,
   uploadeMultipalFileByServer,
 };

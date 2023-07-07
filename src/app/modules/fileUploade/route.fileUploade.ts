@@ -4,6 +4,7 @@ import authMiddleware from '../../middlewares/authMiddleware';
 import {
   uploadMultipleImage,
   uploadSingleImage,
+  uploadSingleImageByProfile,
   uploadVideoFile,
 } from '../../middlewares/uploader.multer';
 import validateRequestZod from '../../middlewares/validateRequestZod';
@@ -19,6 +20,14 @@ router
     uploadSingleImage,
     FileUploadeController.uploadeSingleFileByServer
   );
+router
+  .route('/uploade-profile-image')
+  .post(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    uploadSingleImageByProfile,
+    FileUploadeController.uploadeProfileFileByServer
+  );
+
 router
   .route('/uploade-multipal-images')
   .post(
