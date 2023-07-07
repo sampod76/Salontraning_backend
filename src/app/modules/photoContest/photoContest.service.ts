@@ -34,7 +34,7 @@ const getAllPhotoContestUserFromDb = async (
       $or: PHOTOCONTEST_USER_SEARCHABLE_FIELDS.map(field =>
         //search array value
         field === 'tag'
-          ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
+          ? { [field]: { $in: [new RegExp(searchTerm, 'i')] } }
           : {
               [field]: new RegExp(searchTerm, 'i'),
             }

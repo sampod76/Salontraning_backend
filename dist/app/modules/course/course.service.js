@@ -89,7 +89,7 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
             $or: course_consent_1.COURSE_SEARCHABLE_FIELDS.map(field => 
             //search array value
             field === 'tag'
-                ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
+                ? { [field]: { $in: [new RegExp(searchTerm, 'i')] } }
                 : {
                     [field]: new RegExp(searchTerm, 'i'),
                 }),
@@ -244,14 +244,14 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 as: 'All_lessions', // The field to store the matched results from the second collection
             },
         },
-        {
-            $lookup: {
-                from: 'quizzes',
-                localField: 'courseId',
-                foreignField: 'courseId',
-                as: 'quizzes',
-            },
-        },
+        // {
+        //   $lookup: {
+        //     from: 'quizzes',
+        //     localField: 'courseId',
+        //     foreignField: 'courseId',
+        //     as: 'quizzes',
+        //   },
+        // },
         {
             $lookup: {
                 from: 'fileuploades',

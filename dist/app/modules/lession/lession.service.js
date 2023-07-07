@@ -49,7 +49,7 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
             $or: lession_consent_1.LESSION_SEARCHABLE_FIELDS.map(field => 
             //search array value
             field === 'tag'
-                ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
+                ? { [field]: { $in: [new RegExp(searchTerm, 'i')] } }
                 : {
                     [field]: new RegExp(searchTerm, 'i'),
                 }),

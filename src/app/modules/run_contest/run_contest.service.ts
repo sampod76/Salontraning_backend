@@ -7,8 +7,8 @@ import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
 import { RunContest } from './run_contest.model';
 
-import { IRunContest, IRunContestFilters } from './run_contest.interface';
 import { RUNCONTEST_SEARCHABLE_FIELDS } from './run_contest.consent';
+import { IRunContest, IRunContestFilters } from './run_contest.interface';
 import { generateContestId } from './run_contest.utils';
 
 const createRunContestByDb = async (
@@ -35,7 +35,7 @@ const getAllRunContestFromDb = async (
       $or: RUNCONTEST_SEARCHABLE_FIELDS.map(field =>
         //search array value
         field === 'tag'
-          ? { [field]: { $in: new RegExp(searchTerm, 'i') } }
+          ? { [field]: { $in: [new RegExp(searchTerm, 'i')] } }
           : {
               [field]: new RegExp(searchTerm, 'i'),
             }

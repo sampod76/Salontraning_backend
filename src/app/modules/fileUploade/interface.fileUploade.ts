@@ -5,6 +5,8 @@ import { IGeneralUser } from '../generalUser/interface.GeneralUser';
 export type IFileUploadeFilters = {
   searchTerm?: string;
   title?: string;
+  category?: string;
+  tag?: string;
 };
 
 export type IFileUploade = {
