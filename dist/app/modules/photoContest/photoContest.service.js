@@ -167,20 +167,97 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
 });
 // get single e form db
 const getSinglePhotoContestUserFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield photoContest_model_1.PhotoContestUser.findById(id)
-        .populate({
-        path: 'thumbnail',
-        select: 'title size filename category',
-    })
-        .populate({
-        path: 'contest',
-        select: { title: 1, status: 1, duration_time: 1, contestId: 1 },
-    })
-        .populate({
-        path: 'userId',
-        select: { name: 1, email: 1, phone: 1 },
-    });
-    return result;
+    const pipeline = [
+        { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
+        {
+            $lookup: {
+                from: 'fileuploades',
+                let: { conditionField: '$thumbnail' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+                            },
+                        },
+                    },
+                    // Additional pipeline stages for the second collection (optional)
+                    {
+                        $project: {
+                            createdAt: 0,
+                            updatedAt: 0,
+                            userId: 0,
+                        },
+                    },
+                    {
+                        $addFields: {
+                            link: {
+                                $concat: [
+                                    process.env.REAL_HOST_SERVER_SIDE,
+                                    '/',
+                                    'images',
+                                    '/',
+                                    '$filename',
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: 'thumbnailInfo', // The field to store the matched results from the second collection
+            },
+        },
+        {
+            $project: { thumbnail: 0 },
+        },
+        {
+            $addFields: {
+                thumbnail: '$thumbnailInfo',
+            },
+        },
+        {
+            $project: {
+                thumbnailInfo: 0,
+            },
+        },
+        {
+            $unwind: '$thumbnail',
+        },
+        ////
+        ////
+        ///
+        {
+            $addFields: {
+                loveReacts_count: { $size: { $ifNull: ['$loveReacts', []] } },
+            },
+        },
+        {
+            $addFields: {
+                messages_count: { $size: { $ifNull: ['$messages', []] } },
+            },
+        },
+        {
+            $addFields: {
+                share_count: { $size: { $ifNull: ['$share', []] } },
+            },
+        },
+        {
+            $project: { share: 0, loveReacts: 0, messages: 0 },
+        },
+    ];
+    const result = yield photoContest_model_1.PhotoContestUser.aggregate(pipeline);
+    // .populate({
+    //   path: 'thumbnail',
+    //   select: 'title size filename category',
+    // })
+    // .populate({
+    //   path: 'contest',
+    //   select: { title: 1, status: 1, duration_time: 1, contestId: 1 },
+    // })
+    // .populate({
+    //   path: 'userId',
+    //   select: { name: 1, email: 1, phone: 1 },
+    // });
+    return result[0];
 });
 // update e form db
 const updatePhotoContestUserFromDb = (id, req, payload) => __awaiter(void 0, void 0, void 0, function* () {

@@ -13,7 +13,7 @@ exports.LESSION_SEARCHABLE_FIELDS = [
 exports.LESSION_FILTERABLE_FIELDS = [
     'searchTerm',
     'lessonId',
-    'courseId',
+    'course',
     'date',
     'status',
 ];
