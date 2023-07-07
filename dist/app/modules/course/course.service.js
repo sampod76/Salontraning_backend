@@ -244,14 +244,14 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 as: 'All_lessions', // The field to store the matched results from the second collection
             },
         },
-        // {
-        //   $lookup: {
-        //     from: 'quizzes',
-        //     localField: 'courseId',
-        //     foreignField: 'courseId',
-        //     as: 'quizzes',
-        //   },
-        // },
+        {
+            $lookup: {
+                from: 'quizzes',
+                localField: 'courseId',
+                foreignField: 'courseId',
+                as: 'quizzes',
+            },
+        },
         {
             $lookup: {
                 from: 'fileuploades',
