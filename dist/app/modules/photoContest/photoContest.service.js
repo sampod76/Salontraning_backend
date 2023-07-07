@@ -166,7 +166,9 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
     };
 });
 // get single e form db
-const getSinglePhotoContestUserFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const getSinglePhotoContestUserFromDb = (id, 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+req) => __awaiter(void 0, void 0, void 0, function* () {
     const pipeline = [
         { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
         {

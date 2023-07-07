@@ -67,7 +67,7 @@ const getSinglePhotoContestUser = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     const result =
-      await PhotoContestUserService.getSinglePhotoContestUserFromDb(id);
+      await PhotoContestUserService.getSinglePhotoContestUserFromDb(id, req);
     sendResponse<IPhotoContestUser>(res, {
       success: true,
       statusCode: httpStatus.OK,

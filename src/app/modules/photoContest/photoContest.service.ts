@@ -178,7 +178,9 @@ const getAllPhotoContestUserFromDb = async (
 
 // get single e form db
 const getSinglePhotoContestUserFromDb = async (
-  id: string
+  id: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  req: Request
 ): Promise<IPhotoContestUser | null> => {
   const pipeline: PipelineStage[] = [
     { $match: { _id: new Types.ObjectId(id) } },

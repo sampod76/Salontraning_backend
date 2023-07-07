@@ -59,7 +59,7 @@ const getAllPhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter
 }));
 const getSinglePhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const result = yield photoContest_service_1.PhotoContestUserService.getSinglePhotoContestUserFromDb(id);
+    const result = yield photoContest_service_1.PhotoContestUserService.getSinglePhotoContestUserFromDb(id, req);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
