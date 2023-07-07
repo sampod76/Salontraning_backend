@@ -1,6 +1,6 @@
 import { Model, Types } from 'mongoose';
-import { IUser } from '../users/users.interface';
 import { IFileUploade } from '../fileUploade/interface.fileUploade';
+import { IUser } from '../users/users.interface';
 
 export type ICourseFilters = {
   searchTerm?: string;
@@ -8,6 +8,7 @@ export type ICourseFilters = {
   date?: string;
   type?: string;
   status?: string;
+  'categoryDetails.category'?: string;
   'reviews.star'?: number;
 };
 

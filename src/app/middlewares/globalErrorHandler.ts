@@ -51,7 +51,20 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
           },
         ]
       : [];
-  } else if (error instanceof Error) {
+  }
+  //  else if (error instanceof Roleback) {
+  //   statusCode = error.statusCode;
+  //   message = error.message;
+  //   errorMessage = error?.message
+  //     ? [
+  //         {
+  //           path: '',
+  //           message: error?.message,
+  //         },
+  //       ]
+  //     : [];
+  // }
+  else if (error instanceof Error) {
     message = error.message;
     errorMessage = error?.message
       ? [

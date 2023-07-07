@@ -12,7 +12,7 @@ export const COURSE_FILTERABLE_FIELDS = [
   'price',
   'status',
   'date',
-  'category',
+  'categoryDetails.category',
   'reviews.star',
 ];
 

@@ -15,10 +15,16 @@ const LessionSchema = new mongoose_1.Schema({
         trim: true,
     },
     vedio_link: {
-        type: String,
-        trim: true,
-        required: true,
+        type: {
+            link: {
+                type: String,
+                trim: true,
+                required: true,
+            },
+            player_no: Number,
+        },
     },
+    serial_no: Number,
     duration: Number,
     header_1: {
         type: String,

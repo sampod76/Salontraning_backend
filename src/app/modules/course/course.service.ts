@@ -13,20 +13,27 @@ import { generateCourseId } from './course.utils';
 const { ObjectId } = mongoose.Types;
 const createCourseByDb = async (payload: ICourse): Promise<ICourse> => {
   payload.courseId = await generateCourseId();
-  const result = (await Course.create(payload)).populate({
-    path: 'publisher',
-    select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
-    // populate: [
-    //   {
-    //     path: 'moderator',
-    //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-    //   },
-    //   {
-    //     path: 'admin',
-    //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-    //   },
-    // ],
-  });
+  const result = (await Course.create(payload)).populate([
+    {
+      path: 'publisher',
+      select: {
+        needsPasswordChange: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      },
+      // populate: [
+      //   {
+      //     path: 'moderator',
+      //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+      //   },
+      //   {
+      //     path: 'admin',
+      //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+      //   },
+      // ],
+    },
+  ]);
   return result;
 };
 
@@ -147,9 +154,28 @@ const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
     {
       $lookup: {
         from: 'lessions',
-        localField: 'courseId',
-        foreignField: 'courseId',
-        as: 'All_lessions',
+        let: { conditionField: '$course' }, // The field to match from the current collection
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$course', '$$conditionField'], // The condition to match the fields
+              },
+            },
+          },
+          { $sort: { serial_no: 1 } },
+          // Additional pipeline stages for the second collection (optional)
+          {
+            $project: {
+              vedio_link: 0,
+              createdAt: 0,
+              updatedAt: 0,
+              tag: 0,
+              description: 0,
+            },
+          },
+        ],
+        as: 'All_lessions', // The field to store the matched results from the second collection
       },
     },
     {
@@ -159,6 +185,69 @@ const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
         foreignField: 'courseId',
         as: 'quizzes',
       },
+    },
+    // {
+    //   $lookup: {
+    //     from: 'fileuploades',
+    //     localField: 'thumbnail',
+    //     foreignField: '_id',
+    //     as: 'thumbnailInfo',
+    //   },
+    // },
+    {
+      $lookup: {
+        from: 'fileuploades',
+        let: { conditionField: '$thumbnail' }, // The field to match from the current collection
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+              },
+            },
+          },
+
+          // Additional pipeline stages for the second collection (optional)
+          {
+            $project: {
+              createdAt: 0,
+              updatedAt: 0,
+              userId: 0,
+            },
+          },
+          {
+            $addFields: {
+              link: {
+                $concat: [
+                  process.env.REAL_HOST_SERVER_SIDE,
+                  '/',
+                  'images',
+                  '/',
+                  '$filename',
+                ],
+              },
+            },
+          },
+        ],
+        as: 'thumbnailInfo', // The field to store the matched results from the second collection
+      },
+    },
+
+    {
+      $project: { thumbnail: 0 },
+    },
+    {
+      $addFields: {
+        thumbnail: '$thumbnailInfo',
+      },
+    },
+    {
+      $project: {
+        thumbnailInfo: 0,
+      },
+    },
+    {
+      $unwind: '$thumbnail',
     },
   ]);
 

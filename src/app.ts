@@ -13,6 +13,7 @@ import path from 'path';
 import xss from 'xss-clean';
 const app: Application = express();
 app.use(cors());
+
 // app.use(
 //   cors({
 //     origin: process.env.LOCALHOST_CLIENT_SIDE,
@@ -20,6 +21,7 @@ app.use(cors());
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //   })
 // );
+
 /* app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.DEV_URL)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept")

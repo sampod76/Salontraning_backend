@@ -56,20 +56,27 @@ const course_utils_1 = require("./course.utils");
 const { ObjectId } = mongoose_1.default.Types;
 const createCourseByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     payload.courseId = yield (0, course_utils_1.generateCourseId)();
-    const result = (yield course_model_1.Course.create(payload)).populate({
-        path: 'publisher',
-        select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
-        // populate: [
-        //   {
-        //     path: 'moderator',
-        //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-        //   },
-        //   {
-        //     path: 'admin',
-        //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-        //   },
-        // ],
-    });
+    const result = (yield course_model_1.Course.create(payload)).populate([
+        {
+            path: 'publisher',
+            select: {
+                needsPasswordChange: 0,
+                createdAt: 0,
+                updatedAt: 0,
+                __v: 0,
+            },
+            // populate: [
+            //   {
+            //     path: 'moderator',
+            //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+            //   },
+            //   {
+            //     path: 'admin',
+            //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+            //   },
+            // ],
+        },
+    ]);
     return result;
 });
 //getAllCourseFromDb
@@ -168,9 +175,28 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
         {
             $lookup: {
                 from: 'lessions',
-                localField: 'courseId',
-                foreignField: 'courseId',
-                as: 'All_lessions',
+                let: { conditionField: '$course' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ['$course', '$$conditionField'], // The condition to match the fields
+                            },
+                        },
+                    },
+                    { $sort: { serial_no: 1 } },
+                    // Additional pipeline stages for the second collection (optional)
+                    {
+                        $project: {
+                            vedio_link: 0,
+                            createdAt: 0,
+                            updatedAt: 0,
+                            tag: 0,
+                            description: 0,
+                        },
+                    },
+                ],
+                as: 'All_lessions', // The field to store the matched results from the second collection
             },
         },
         {
@@ -180,6 +206,67 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 foreignField: 'courseId',
                 as: 'quizzes',
             },
+        },
+        // {
+        //   $lookup: {
+        //     from: 'fileuploades',
+        //     localField: 'thumbnail',
+        //     foreignField: '_id',
+        //     as: 'thumbnailInfo',
+        //   },
+        // },
+        {
+            $lookup: {
+                from: 'fileuploades',
+                let: { conditionField: '$thumbnail' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+                            },
+                        },
+                    },
+                    // Additional pipeline stages for the second collection (optional)
+                    {
+                        $project: {
+                            createdAt: 0,
+                            updatedAt: 0,
+                            userId: 0,
+                        },
+                    },
+                    {
+                        $addFields: {
+                            link: {
+                                $concat: [
+                                    process.env.REAL_HOST_SERVER_SIDE,
+                                    '/',
+                                    'images',
+                                    '/',
+                                    '$filename',
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: 'thumbnailInfo', // The field to store the matched results from the second collection
+            },
+        },
+        {
+            $project: { thumbnail: 0 },
+        },
+        {
+            $addFields: {
+                thumbnail: '$thumbnailInfo',
+            },
+        },
+        {
+            $project: {
+                thumbnailInfo: 0,
+            },
+        },
+        {
+            $unwind: '$thumbnail',
         },
     ]);
     return result[0];

@@ -79,32 +79,47 @@ const getAllPhotoContestUserFromDb = async (
   const pipeline: PipelineStage[] = [
     { $match: whereConditions },
 
-    // thumbnail to same thumbnail images
+    //*********** */ thumbnail to same thumbnail images****
     {
       $lookup: {
         from: 'fileuploades',
-        let: { id: '$thumbnail' },
+        let: { conditionField: '$thumbnail' }, // The field to match from the current collection
         pipeline: [
           {
             $match: {
-              $expr: { $eq: ['$_id', '$$id'] },
-              // Additional filter conditions for collection2
+              $expr: {
+                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+              },
             },
           },
-          // Additional stages for collection2
-          // প্রথম লুকাপ চালানোর পরে যে ডাটা আসছে তার উপরে যদি আমি যেই কোন কিছু করতে চাই তাহলে এখানে করতে হবে |যেমন আমি এখানে project করেছি
+
+          // Additional pipeline stages for the second collection (optional)
           {
             $project: {
-              mimetype: 0,
+              createdAt: 0,
               updatedAt: 0,
-              path: 0,
               userId: 0,
+              // tag: 0,
+            },
+          },
+          {
+            $addFields: {
+              link: {
+                $concat: [
+                  process.env.REAL_HOST_SERVER_SIDE,
+                  '/',
+                  'images',
+                  '/',
+                  '$filename',
+                ],
+              },
             },
           },
         ],
-        as: 'thumbnailInfo',
+        as: 'thumbnailInfo', // The field to store the matched results from the second collection
       },
     },
+
     {
       $project: { thumbnail: 0 },
     },
@@ -114,11 +129,16 @@ const getAllPhotoContestUserFromDb = async (
       },
     },
     {
-      $project: { thumbnailInfo: 0 },
+      $project: {
+        thumbnailInfo: 0,
+      },
     },
     {
       $unwind: '$thumbnail',
     },
+
+    // *********  ******thumbnali end**************
+    //
 
     {
       $addFields: {
