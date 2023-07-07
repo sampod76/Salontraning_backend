@@ -20,6 +20,7 @@ router
     uploadSingleImage,
     FileUploadeController.uploadeSingleFileByServer
   );
+
 router
   .route('/uploade-profile-image')
   .post(
