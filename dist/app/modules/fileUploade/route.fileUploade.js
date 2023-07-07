@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileUploadeRoute = void 0;
 const express_1 = __importDefault(require("express"));
+const users_1 = require("../../../enums/users");
+const authMiddleware_1 = __importDefault(require("../../middlewares/authMiddleware"));
 const uploader_multer_1 = require("../../middlewares/uploader.multer");
 const validateRequestZod_1 = __importDefault(require("../../middlewares/validateRequestZod"));
 const constroller_fileUploade_1 = require("./constroller.fileUploade");
 const validation_fileUploade_1 = require("./validation.fileUploade");
-const authMiddleware_1 = __importDefault(require("../../middlewares/authMiddleware"));
-const users_1 = require("../../../enums/users");
 const router = express_1.default.Router();
 router
     .route('/uploade-single-image')

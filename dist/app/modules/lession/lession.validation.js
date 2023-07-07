@@ -5,7 +5,7 @@ const zod_1 = require("zod");
 const createLessionZodSchema = zod_1.z.object({
     body: zod_1.z.object({
         title: zod_1.z.string().min(1, { message: 'Title is required' }).trim(),
-        vedio_link: zod_1.z.object({ link: zod_1.z.string(), player_no: zod_1.z.number() }),
+        vedio: zod_1.z.object({ link: zod_1.z.string(), player_no: zod_1.z.number() }),
         serial_no: zod_1.z.number().optional(),
         duration: zod_1.z.string().optional(),
         course: zod_1.z.string({ required_error: 'course id is required' }),
@@ -31,7 +31,7 @@ const updateLessionZodSchema = zod_1.z.object({
         course: zod_1.z.string().optional(),
         courseId: zod_1.z.string(),
         tag: zod_1.z.array(zod_1.z.string().optional()).optional(),
-        vedio_link: zod_1.z
+        vedio: zod_1.z
             .object({ link: zod_1.z.string().optional(), player_no: zod_1.z.number().optional() })
             .optional(),
         serial_no: zod_1.z.number().optional(),

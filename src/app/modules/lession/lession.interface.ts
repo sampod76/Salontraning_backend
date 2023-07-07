@@ -26,7 +26,7 @@ export type ILession = {
   status?: 'active' | 'deactive' | 'save';
   tag?: string[];
   duration?: string;
-  vedio_link: { link: string; player_no: number };
+  vedio: { link: string; player_no: number };
   serial_no: number;
   course: Types.ObjectId | ICourse;
   courseId: string;

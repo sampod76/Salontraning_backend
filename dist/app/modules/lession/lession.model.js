@@ -14,7 +14,7 @@ const LessionSchema = new mongoose_1.Schema({
         required: true,
         trim: true,
     },
-    vedio_link: {
+    vedio: {
         type: {
             link: {
                 type: String,

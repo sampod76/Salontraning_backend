@@ -133,7 +133,7 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         //   {},
         //   {
         //     $set: {
-        //       vedio_link:
+        //       vedio:
         //         'https://player.vimeo.com/video/829783962?h=47a19669a0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
         //     },
         //   }

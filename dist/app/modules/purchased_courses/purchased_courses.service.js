@@ -31,31 +31,42 @@ const purchased_courses_model_1 = require("./purchased_courses.model");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
 const { ObjectId } = mongoose_1.default.Types;
-// const createPurchased_coursesByDb = async (
-//   payload: IPurchased_courses,
-//   userId: string
-// ): Promise<IPurchased_courses | null> => {
-//   const createPurchase = await Purchased_courses.create(payload);
-//   if (!createPurchase) {
-//     throw new ApiError(404, 'Failed to by course');
-//   }
-//   const addCourseByUser = await GeneralUser.updateOne(
-//     {
-//       _id: new ObjectId(userId),
-//       'purchase_courses.course': { $ne: payload.course },
-//     },
-//     {
-//       $push: {
-//         purchase_courses: { course: payload.course } /* course --> _id */,
-//       },
-//     }
-//     // { session }
-//   );
-//   if (!addCourseByUser.modifiedCount) {
-//     throw new ApiError(404, 'Failed to by course');
-//   }
-//   return createPurchase;
-// };
+const createPurchased_coursesByDb = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    let newCoursePurchase = null;
+    const session = yield mongoose_1.default.startSession();
+    try {
+        session.startTransaction();
+        const addCourseByUser = yield model_GeneralUser_1.GeneralUser.updateOne({
+            _id: new ObjectId(userId),
+            'purchase_courses.course': { $ne: payload.course },
+        }, {
+            $push: {
+                purchase_courses: { course: payload.course } /* course --> _id */,
+            },
+        }, { session, new: true, runValidators: true });
+        if (!addCourseByUser.modifiedCount) {
+            throw new ApiError_1.default(404, 'Failed to by course');
+        }
+        const createPurchase = yield purchased_courses_model_1.Purchased_courses.create([payload], {
+            session,
+        });
+        if (createPurchase.length === 0) {
+            throw new ApiError_1.default(404, 'Failed to by course');
+        }
+        newCoursePurchase = createPurchase[0]._id ? createPurchase[0] : null;
+        session.commitTransaction();
+        session.endSession();
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        yield session.endSession();
+        throw error;
+    }
+    if (newCoursePurchase === null || newCoursePurchase === void 0 ? void 0 : newCoursePurchase._id) {
+        newCoursePurchase = yield purchased_courses_model_1.Purchased_courses.findById(newCoursePurchase === null || newCoursePurchase === void 0 ? void 0 : newCoursePurchase._id).populate('course');
+    }
+    return newCoursePurchase;
+});
 //getAllPurchased_coursesFromDb
 const getAllPurchased_coursesFromDb = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filters start************/
@@ -115,42 +126,6 @@ const updatePurchased_coursesFromDb = (id, payload) => __awaiter(void 0, void 0,
 const deletePurchased_coursesByIdFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield purchased_courses_model_1.Purchased_courses.findByIdAndDelete(id);
     return result;
-});
-const createPurchased_coursesByDb = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    let newCoursePurchase = null;
-    const session = yield mongoose_1.default.startSession();
-    try {
-        session.startTransaction();
-        const addCourseByUser = yield model_GeneralUser_1.GeneralUser.updateOne({
-            _id: new ObjectId(userId),
-            'purchase_courses.course': { $ne: payload.course },
-        }, {
-            $push: {
-                purchase_courses: { course: payload.course } /* course --> _id */,
-            },
-        }, { session });
-        if (!addCourseByUser.modifiedCount) {
-            throw new ApiError_1.default(404, 'Failed to by course');
-        }
-        const createPurchase = yield purchased_courses_model_1.Purchased_courses.create([payload], {
-            session,
-        });
-        if (!createPurchase) {
-            throw new ApiError_1.default(404, 'Failed to by course');
-        }
-        newCoursePurchase = createPurchase[0]._id ? createPurchase[0] : null;
-        session.commitTransaction();
-        session.endSession();
-    }
-    catch (error) {
-        yield session.abortTransaction();
-        yield session.endSession();
-        throw error;
-    }
-    if (newCoursePurchase === null || newCoursePurchase === void 0 ? void 0 : newCoursePurchase._id) {
-        newCoursePurchase = yield purchased_courses_model_1.Purchased_courses.findById(newCoursePurchase === null || newCoursePurchase === void 0 ? void 0 : newCoursePurchase._id).populate('course');
-    }
-    return newCoursePurchase;
 });
 exports.Purchased_coursesService = {
     createPurchased_coursesByDb,

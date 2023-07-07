@@ -1,4 +1,6 @@
 import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/users';
+import authMiddleware from '../../middlewares/authMiddleware';
 import {
   uploadMultipleImage,
   uploadSingleImage,
@@ -7,8 +9,6 @@ import {
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { FileUploadeController } from './constroller.fileUploade';
 import { FileUploadeValidation } from './validation.fileUploade';
-import authMiddleware from '../../middlewares/authMiddleware';
-import { ENUM_USER_ROLE } from '../../../enums/users';
 
 const router = express.Router();
 

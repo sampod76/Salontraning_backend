@@ -13,6 +13,7 @@ export type IFileUploade = {
   filename: string;
   path: string;
   size?: number;
+  url?: number;
   mimetype?: string;
   category?: string;
   tag?: string[];

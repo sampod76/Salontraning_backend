@@ -1,4 +1,4 @@
-import { SortOrder } from 'mongoose';
+import { PipelineStage, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
@@ -46,21 +46,83 @@ const getAllCategoryFromDb = async (
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOptions);
 
-  const sortConditions: { [key: string]: SortOrder } = {};
+  const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder;
+    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
   }
   //****************pagination end ***************/
 
   const whereConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await Category.find(whereConditions)
-    .populate('thumbnail')
-    .sort(sortConditions)
-    .skip(Number(skip))
-    .limit(Number(limit));
+  // const result = await Category.find(whereConditions)
+  //   .populate('thumbnail')
+  //   .sort(sortConditions)
+  //   .skip(Number(skip))
+  //   .limit(Number(limit));
+  const pipeline: PipelineStage[] = [
+    { $match: whereConditions },
+    {
+      $lookup: {
+        from: 'fileuploades',
+        let: { conditionField: '$thumbnail' }, // The field to match from the current collection
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+              },
+            },
+          },
 
+          // Additional pipeline stages for the second collection (optional)
+          {
+            $project: {
+              createdAt: 0,
+              updatedAt: 0,
+              userId: 0,
+            },
+          },
+          {
+            $addFields: {
+              link: {
+                $concat: [
+                  process.env.REAL_HOST_SERVER_SIDE,
+                  '/',
+                  'images',
+                  '/',
+                  '$filename',
+                ],
+              },
+            },
+          },
+        ],
+        as: 'thumbnailInfo', // The field to store the matched results from the second collection
+      },
+    },
+
+    {
+      $project: { thumbnail: 0 },
+    },
+    {
+      $addFields: {
+        thumbnail: '$thumbnailInfo',
+      },
+    },
+    {
+      $project: {
+        thumbnailInfo: 0,
+      },
+    },
+    {
+      $unwind: '$thumbnail',
+    },
+    { $sort: sortConditions },
+    { $skip: Number(skip) || 0 },
+    { $limit: Number(limit) || 15 },
+  ];
+
+  const result = await Category.aggregate(pipeline);
   const total = await Category.countDocuments(whereConditions);
   return {
     meta: {
@@ -76,9 +138,68 @@ const getAllCategoryFromDb = async (
 const getSingleCategoryFromDb = async (
   id: string
 ): Promise<ICategory | null> => {
-  const result = await Category.findById(id);
+  const pipeline: PipelineStage[] = [
+    { $match: { _id: new Types.ObjectId(id) } },
+    {
+      $lookup: {
+        from: 'fileuploades',
+        let: { conditionField: '$thumbnail' }, // The field to match from the current collection
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+              },
+            },
+          },
 
-  return result;
+          // Additional pipeline stages for the second collection (optional)
+          {
+            $project: {
+              createdAt: 0,
+              updatedAt: 0,
+              userId: 0,
+            },
+          },
+          {
+            $addFields: {
+              link: {
+                $concat: [
+                  process.env.REAL_HOST_SERVER_SIDE,
+                  '/',
+                  'images',
+                  '/',
+                  '$filename',
+                ],
+              },
+            },
+          },
+        ],
+        as: 'thumbnailInfo', // The field to store the matched results from the second collection
+      },
+    },
+
+    {
+      $project: { thumbnail: 0 },
+    },
+    {
+      $addFields: {
+        thumbnail: '$thumbnailInfo',
+      },
+    },
+    {
+      $project: {
+        thumbnailInfo: 0,
+      },
+    },
+    {
+      $unwind: '$thumbnail',
+    },
+  ];
+
+  const result = await Category.aggregate(pipeline);
+
+  return result[0];
 };
 
 // update Categorye form db
@@ -96,7 +217,7 @@ const updateCategoryFromDb = async (
 const deleteCategoryByIdFromDb = async (
   id: string
 ): Promise<ICategory | null> => {
-  const result = await Category.findByIdAndDelete(id);
+  const result = await Category.findByIdAndDelete(id).populate('thumbnail');
   return result;
 };
 

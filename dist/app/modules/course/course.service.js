@@ -121,14 +121,6 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     */
     const pipeline = [
         { $match: whereConditions },
-        // {
-        //   $lookup: {
-        //     from: 'lessions',
-        //     localField: 'courseId',
-        //     foreignField: 'courseId',
-        //     as: 'All_lessions',
-        //   },
-        // },
         {
             $lookup: {
                 from: 'moderators',
@@ -152,6 +144,59 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
                 ],
                 as: 'publisherDetails',
             },
+        },
+        {
+            $lookup: {
+                from: 'fileuploades',
+                let: { conditionField: '$thumbnail' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+                            },
+                        },
+                    },
+                    // Additional pipeline stages for the second collection (optional)
+                    {
+                        $project: {
+                            createdAt: 0,
+                            updatedAt: 0,
+                            userId: 0,
+                        },
+                    },
+                    {
+                        $addFields: {
+                            link: {
+                                $concat: [
+                                    process.env.REAL_HOST_SERVER_SIDE,
+                                    '/',
+                                    'images',
+                                    '/',
+                                    '$filename',
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: 'thumbnailInfo', // The field to store the matched results from the second collection
+            },
+        },
+        {
+            $project: { thumbnail: 0 },
+        },
+        {
+            $addFields: {
+                thumbnail: '$thumbnailInfo',
+            },
+        },
+        {
+            $project: {
+                thumbnailInfo: 0,
+            },
+        },
+        {
+            $unwind: '$thumbnail',
         },
         { $sort: sortConditions },
         { $skip: Number(skip) || 0 },
@@ -188,7 +233,7 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                     // Additional pipeline stages for the second collection (optional)
                     {
                         $project: {
-                            vedio_link: 0,
+                            vedio: 0,
                             createdAt: 0,
                             updatedAt: 0,
                             tag: 0,

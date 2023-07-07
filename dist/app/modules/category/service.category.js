@@ -21,6 +21,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryService = void 0;
+const mongoose_1 = require("mongoose");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const consent_category_1 = require("./consent.category");
 const model_category_1 = require("./model.category");
@@ -55,15 +56,75 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
     const sortConditions = {};
     if (sortBy && sortOrder) {
-        sortConditions[sortBy] = sortOrder;
+        sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
     }
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield model_category_1.Category.find(whereConditions)
-        .populate('thumbnail')
-        .sort(sortConditions)
-        .skip(Number(skip))
-        .limit(Number(limit));
+    // const result = await Category.find(whereConditions)
+    //   .populate('thumbnail')
+    //   .sort(sortConditions)
+    //   .skip(Number(skip))
+    //   .limit(Number(limit));
+    const pipeline = [
+        { $match: whereConditions },
+        {
+            $lookup: {
+                from: 'fileuploades',
+                let: { conditionField: '$thumbnail' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+                            },
+                        },
+                    },
+                    // Additional pipeline stages for the second collection (optional)
+                    {
+                        $project: {
+                            createdAt: 0,
+                            updatedAt: 0,
+                            userId: 0,
+                        },
+                    },
+                    {
+                        $addFields: {
+                            link: {
+                                $concat: [
+                                    process.env.REAL_HOST_SERVER_SIDE,
+                                    '/',
+                                    'images',
+                                    '/',
+                                    '$filename',
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: 'thumbnailInfo', // The field to store the matched results from the second collection
+            },
+        },
+        {
+            $project: { thumbnail: 0 },
+        },
+        {
+            $addFields: {
+                thumbnail: '$thumbnailInfo',
+            },
+        },
+        {
+            $project: {
+                thumbnailInfo: 0,
+            },
+        },
+        {
+            $unwind: '$thumbnail',
+        },
+        { $sort: sortConditions },
+        { $skip: Number(skip) || 0 },
+        { $limit: Number(limit) || 15 },
+    ];
+    const result = yield model_category_1.Category.aggregate(pipeline);
     const total = yield model_category_1.Category.countDocuments(whereConditions);
     return {
         meta: {
@@ -76,8 +137,64 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
 });
 // get single Categorye form db
 const getSingleCategoryFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield model_category_1.Category.findById(id);
-    return result;
+    const pipeline = [
+        { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
+        {
+            $lookup: {
+                from: 'fileuploades',
+                let: { conditionField: '$thumbnail' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ['$_id', '$$conditionField'], // The condition to match the fields
+                            },
+                        },
+                    },
+                    // Additional pipeline stages for the second collection (optional)
+                    {
+                        $project: {
+                            createdAt: 0,
+                            updatedAt: 0,
+                            userId: 0,
+                        },
+                    },
+                    {
+                        $addFields: {
+                            link: {
+                                $concat: [
+                                    process.env.REAL_HOST_SERVER_SIDE,
+                                    '/',
+                                    'images',
+                                    '/',
+                                    '$filename',
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: 'thumbnailInfo', // The field to store the matched results from the second collection
+            },
+        },
+        {
+            $project: { thumbnail: 0 },
+        },
+        {
+            $addFields: {
+                thumbnail: '$thumbnailInfo',
+            },
+        },
+        {
+            $project: {
+                thumbnailInfo: 0,
+            },
+        },
+        {
+            $unwind: '$thumbnail',
+        },
+    ];
+    const result = yield model_category_1.Category.aggregate(pipeline);
+    return result[0];
 });
 // update Categorye form db
 const updateCategoryFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -88,7 +205,7 @@ const updateCategoryFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, 
 });
 // delete Categorye form db
 const deleteCategoryByIdFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield model_category_1.Category.findByIdAndDelete(id);
+    const result = yield model_category_1.Category.findByIdAndDelete(id).populate('thumbnail');
     return result;
 });
 exports.CategoryService = {

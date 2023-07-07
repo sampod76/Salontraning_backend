@@ -23,6 +23,7 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       type: String,
       required: true,
     },
+    url: String,
     mimetype: {
       type: String,
     },
@@ -30,6 +31,7 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       type: String,
       trim: true,
     },
+
     tag: [
       {
         type: String,

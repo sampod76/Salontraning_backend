@@ -14,7 +14,7 @@ const LessionSchema = new Schema<ILession, LessionModel>(
       required: true,
       trim: true,
     },
-    vedio_link: {
+    vedio: {
       type: {
         link: {
           type: String,
