@@ -201,12 +201,12 @@ const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
     {
       $lookup: {
         from: 'lessions',
-        let: { conditionField: '$course' }, // The field to match from the current collection
+        let: { id: '$_id' }, // The field to match from the current collection
         pipeline: [
           {
             $match: {
               $expr: {
-                $eq: ['$course', '$$conditionField'], // The condition to match the fields
+                $eq: ['$course', '$$id'], // The condition to match the fields
               },
             },
           },
@@ -233,14 +233,7 @@ const getSingleCourseFromDb = async (id: string): Promise<ICourse | null> => {
         as: 'quizzes',
       },
     },
-    // {
-    //   $lookup: {
-    //     from: 'fileuploades',
-    //     localField: 'thumbnail',
-    //     foreignField: '_id',
-    //     as: 'thumbnailInfo',
-    //   },
-    // },
+
     {
       $lookup: {
         from: 'fileuploades',

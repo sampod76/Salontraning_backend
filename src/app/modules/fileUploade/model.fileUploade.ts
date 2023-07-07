@@ -48,6 +48,8 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
   }
 );
 
+// s
+
 export const FileUploade = model<IFileUploade, FileUploadeModel>(
   'FileUploade',
   FileUploadeSchema

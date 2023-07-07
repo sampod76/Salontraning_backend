@@ -195,6 +195,8 @@ const getSingleCategoryFromDb = async (
     {
       $unwind: '$thumbnail',
     },
+
+    ///
   ];
 
   const result = await Category.aggregate(pipeline);

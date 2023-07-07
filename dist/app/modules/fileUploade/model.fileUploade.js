@@ -44,4 +44,5 @@ const FileUploadeSchema = new mongoose_1.Schema({
         virtuals: true,
     },
 });
+// s
 exports.FileUploade = (0, mongoose_1.model)('FileUploade', FileUploadeSchema);

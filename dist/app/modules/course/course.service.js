@@ -220,12 +220,12 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
         {
             $lookup: {
                 from: 'lessions',
-                let: { conditionField: '$course' },
+                let: { id: '$_id' },
                 pipeline: [
                     {
                         $match: {
                             $expr: {
-                                $eq: ['$course', '$$conditionField'], // The condition to match the fields
+                                $eq: ['$course', '$$id'], // The condition to match the fields
                             },
                         },
                     },
@@ -252,14 +252,6 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 as: 'quizzes',
             },
         },
-        // {
-        //   $lookup: {
-        //     from: 'fileuploades',
-        //     localField: 'thumbnail',
-        //     foreignField: '_id',
-        //     as: 'thumbnailInfo',
-        //   },
-        // },
         {
             $lookup: {
                 from: 'fileuploades',

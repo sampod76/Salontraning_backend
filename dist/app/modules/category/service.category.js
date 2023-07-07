@@ -192,6 +192,7 @@ const getSingleCategoryFromDb = (id) => __awaiter(void 0, void 0, void 0, functi
         {
             $unwind: '$thumbnail',
         },
+        ///
     ];
     const result = yield model_category_1.Category.aggregate(pipeline);
     return result[0];
