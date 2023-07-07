@@ -31,6 +31,7 @@ const getAllLessionFromDb = async (
   paginationOptions: IPaginationOption
 ): Promise<IGenericResponse<ILession[]>> => {
   //****************search and filters start************/
+
   const { searchTerm, ...filtersData } = filters;
 
   const andConditions = [];

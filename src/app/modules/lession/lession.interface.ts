@@ -6,6 +6,9 @@ export type ILessionFilters = {
   searchTerm?: string;
   title?: string;
   status?: 'active' | 'deactive' | 'save';
+  course?: string;
+  lessonId?: string;
+  date?: string;
 };
 
 export type ILessionSearchableField = {

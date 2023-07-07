@@ -10,7 +10,7 @@ export const LESSION_SEARCHABLE_FIELDS = [
 export const LESSION_FILTERABLE_FIELDS = [
   'searchTerm',
   'lessonId',
-  'courseId',
+  'course',
   'date',
   'status',
 ];
