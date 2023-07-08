@@ -20,20 +20,24 @@ const ApiError_1 = __importDefault(require("../errors/ApiError"));
 const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //get authorization token
-        // const token = req.headers.authorization;
+        const token = req.headers.authorization;
         const tokenCookie = req.cookies.refreshToken;
-        if ( /* !token  */!tokenCookie) {
+        console.log(token, tokenCookie);
+        // if (!tokenCookie) {
+        //   throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
+        // }
+        if (!token) {
             throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized ');
         }
         // verify token
         let verifiedUser = null;
-        // verifiedUser = jwtHelpers.verifyToken(
-        //   tokenCookie,
-        //   config.jwt.secret as Secret
-        // );
+        verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(tokenCookie, config_1.default.jwt.secret);
         // // console.log(verifiedUser);
         // if (tokenCookie) {
-        verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(tokenCookie, config_1.default.jwt.refresh_secret);
+        // verifiedUser = jwtHelpers.verifyToken(
+        //   tokenCookie,
+        //   config.jwt.refresh_secret as Secret
+        // );
         // }
         //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু টাইপি স্ক্রিপ্ট এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
         // {role,email}

@@ -11,26 +11,30 @@ const authMiddleware =
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       //get authorization token
-      // const token = req.headers.authorization;
+      const token = req.headers.authorization;
       const tokenCookie = req.cookies.refreshToken;
+      console.log(token, tokenCookie);
+      // if (!tokenCookie) {
+      //   throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
+      // }
 
-      if (/* !token  */ !tokenCookie) {
+      if (!token) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
       }
 
       // verify token
       let verifiedUser = null;
 
-      // verifiedUser = jwtHelpers.verifyToken(
-      //   tokenCookie,
-      //   config.jwt.secret as Secret
-      // );
-      // // console.log(verifiedUser);
-      // if (tokenCookie) {
       verifiedUser = jwtHelpers.verifyToken(
         tokenCookie,
-        config.jwt.refresh_secret as Secret
+        config.jwt.secret as Secret
       );
+      // // console.log(verifiedUser);
+      // if (tokenCookie) {
+      // verifiedUser = jwtHelpers.verifyToken(
+      //   tokenCookie,
+      //   config.jwt.refresh_secret as Secret
+      // );
       // }
 
       //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু টাইপি স্ক্রিপ্ট এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
