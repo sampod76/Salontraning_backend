@@ -276,6 +276,7 @@ const getSinglePhotoContestUserFromDb = async (
   //   path: 'userId',
   //   select: { name: 1, email: 1, phone: 1 },
   // });
+  console.log(result, id);
   return result[0];
 };
 
@@ -372,11 +373,13 @@ const voteMassageSharePhotoContestUserFromDb = async (
       share: req?.user?._id,
     };
   }
+  console.log(quary, 376);
 
   const result = await PhotoContestUser.findOneAndUpdate(quary, updateData, {
     new: true,
     runValidators: true,
   });
+  console.log(result, 382);
   if (!result) {
     throw new ApiError(505, 'Your are allrady done that !!!');
   }
