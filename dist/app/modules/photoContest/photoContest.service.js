@@ -331,13 +331,10 @@ req, payload) => __awaiter(void 0, void 0, void 0, function* () {
             share: (_m = req === null || req === void 0 ? void 0 : req.user) === null || _m === void 0 ? void 0 : _m._id,
         };
     }
-    console.log(quary, 376);
-    console.log(updateData);
     const result = yield photoContest_model_1.PhotoContestUser.findOneAndUpdate(quary, updateData, {
         new: true,
         runValidators: true,
     });
-    console.log(result, 382);
     if (!result) {
         throw new ApiError_1.default(505, 'Your are allrady done that !!!');
     }

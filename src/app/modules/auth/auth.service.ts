@@ -1,14 +1,14 @@
 import httpStatus from 'http-status';
-import ApiError from '../../errors/ApiError';
-import { User } from '../users/users.model';
-import { ILoginUser, ILoginUserResponse } from './auth.interface';
 import { Secret } from 'jsonwebtoken';
 import config from '../../../config';
-import { jwtHelpers } from '../../../helper/jwtHelpers';
-import { GeneralUser } from '../generalUser/model.GeneralUser';
 import { ENUM_USER_ROLE } from '../../../enums/users';
+import { jwtHelpers } from '../../../helper/jwtHelpers';
+import ApiError from '../../errors/ApiError';
 import { Admin } from '../admin/admin.model';
+import { GeneralUser } from '../generalUser/model.GeneralUser';
 import { Moderator } from '../moderator/moderator.model';
+import { User } from '../users/users.model';
+import { ILoginUser, ILoginUserResponse } from './auth.interface';
 
 const loginUserFromDb = async (
   payload: ILoginUser

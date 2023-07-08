@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const ApiError_1 = __importDefault(require("../../errors/ApiError"));
-const users_model_1 = require("../users/users.model");
 const config_1 = __importDefault(require("../../../config"));
-const jwtHelpers_1 = require("../../../helper/jwtHelpers");
-const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
 const users_1 = require("../../../enums/users");
+const jwtHelpers_1 = require("../../../helper/jwtHelpers");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const admin_model_1 = require("../admin/admin.model");
+const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
 const moderator_model_1 = require("../moderator/moderator.model");
+const users_model_1 = require("../users/users.model");
 const loginUserFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
     if (!(email && password)) {

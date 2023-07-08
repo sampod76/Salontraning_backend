@@ -19,23 +19,22 @@ const jwtHelpers_1 = require("../../helper/jwtHelpers");
 const ApiError_1 = __importDefault(require("../errors/ApiError"));
 const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('this is all coickes', req.cookies);
         //get authorization token
-        const token = req.headers.authorization;
-        // const tokenCookie = req.cookies('accessToken');
-        if (!token /* && !tokenCookie */) {
+        // const token = req.headers.authorization;
+        const tokenCookie = req.cookies.refreshToken;
+        if ( /* !token  */!tokenCookie) {
             throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized ');
         }
         // verify token
         let verifiedUser = null;
-        verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-        // console.log(verifiedUser);
-        /*  if(tokenCookie){
-          verifiedUser = jwtHelpers.verifyToken(
-            tokenCookie,
-            config.jwt.secret as Secret
-          );
-        } */
+        // verifiedUser = jwtHelpers.verifyToken(
+        //   tokenCookie,
+        //   config.jwt.secret as Secret
+        // );
+        // // console.log(verifiedUser);
+        // if (tokenCookie) {
+        verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(tokenCookie, config_1.default.jwt.refresh_secret);
+        // }
         //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু টাইপি স্ক্রিপ্ট এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
         // {role,email}
         if (!(verifiedUser === null || verifiedUser === void 0 ? void 0 : verifiedUser.role)) {
