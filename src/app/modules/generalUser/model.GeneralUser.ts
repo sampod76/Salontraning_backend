@@ -36,7 +36,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     profileImage: {
       type: Types.ObjectId,
       ref: 'FileUploade',
-      required: true,
+      // required: true,
     },
     uid: {
       type: String,

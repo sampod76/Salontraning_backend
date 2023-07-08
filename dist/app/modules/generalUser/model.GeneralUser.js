@@ -46,7 +46,7 @@ const GeneralUserSchema = new mongoose_1.Schema({
     profileImage: {
         type: mongoose_1.Types.ObjectId,
         ref: 'FileUploade',
-        required: true,
+        // required: true,
     },
     uid: {
         type: String,
