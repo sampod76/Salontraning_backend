@@ -25,10 +25,8 @@ const authMiddleware =
       // verify token
       let verifiedUser = null;
 
-      verifiedUser = jwtHelpers.verifyToken(
-        tokenCookie,
-        config.jwt.secret as Secret
-      );
+      verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+
       // // console.log(verifiedUser);
       // if (tokenCookie) {
       // verifiedUser = jwtHelpers.verifyToken(
