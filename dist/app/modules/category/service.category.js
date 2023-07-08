@@ -124,7 +124,9 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
         { $skip: Number(skip) || 0 },
         { $limit: Number(limit) || 15 },
     ];
+    console.log(pipeline);
     const result = yield model_category_1.Category.aggregate(pipeline);
+    console.log(result, 127);
     const total = yield model_category_1.Category.countDocuments(whereConditions);
     return {
         meta: {

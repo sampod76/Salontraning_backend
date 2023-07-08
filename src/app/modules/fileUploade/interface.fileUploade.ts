@@ -15,7 +15,7 @@ export type IFileUploade = {
   filename: string;
   path: string;
   size?: number;
-  url?: number;
+  url?: string;
   mimetype?: string;
   category?: string;
   tag?: string[];

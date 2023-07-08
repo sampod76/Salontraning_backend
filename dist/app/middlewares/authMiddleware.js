@@ -32,7 +32,6 @@ const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 
         // verify token
         let verifiedUser = null;
         verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-        // // console.log(verifiedUser);
         // if (tokenCookie) {
         // verifiedUser = jwtHelpers.verifyToken(
         //   tokenCookie,

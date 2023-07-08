@@ -25,6 +25,10 @@ const paginationHelper_1 = require("../../../helper/paginationHelper");
 const model_fileUploade_1 = require("./model.fileUploade");
 const consent_fileUploade_1 = require("./consent.fileUploade");
 const createFileUploadeByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    payload.url =
+        payload.mimetype === 'uploadFile/images'
+            ? `${process.env.REAL_HOST_SERVER_SIDE}/images/${payload.filename}`
+            : `${process.env.REAL_HOST_SERVER_SIDE}/vedios/${payload.filename}`;
     const result = yield model_fileUploade_1.FileUploade.create(payload);
     return result;
 });

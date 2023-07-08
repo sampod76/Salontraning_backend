@@ -122,7 +122,9 @@ const getAllCategoryFromDb = async (
     { $limit: Number(limit) || 15 },
   ];
 
+  console.log(pipeline);
   const result = await Category.aggregate(pipeline);
+  console.log(result, 127);
   const total = await Category.countDocuments(whereConditions);
   return {
     meta: {
