@@ -82,7 +82,7 @@ const createGeneralUserByFirebase = catchAsync(
         email: result?.email,
         phone: result.phone,
         // ...result,
-        // accessToken,
+        accessToken,
       },
     });
 

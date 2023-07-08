@@ -70,7 +70,7 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
             email: result === null || result === void 0 ? void 0 : result.email,
             phone: result.phone,
             // ...result,
-            // accessToken,
+            accessToken,
         },
     });
     // sendResponse<ILoginUserResponse>(res, {
