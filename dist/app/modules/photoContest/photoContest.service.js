@@ -332,6 +332,7 @@ req, payload) => __awaiter(void 0, void 0, void 0, function* () {
         };
     }
     console.log(quary, 376);
+    console.log(updateData);
     const result = yield photoContest_model_1.PhotoContestUser.findOneAndUpdate(quary, updateData, {
         new: true,
         runValidators: true,

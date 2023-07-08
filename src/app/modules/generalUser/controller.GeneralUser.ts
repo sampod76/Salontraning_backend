@@ -45,12 +45,15 @@ const createGeneralUserByFirebase = catchAsync(
       throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
     }
     const refreshToken = jwtHelpers.createToken(
-      { uid: result?.uid, role: result?.role },
+      { _id: result?._id, role: result?.role },
       config.jwt.refresh_secret as Secret,
       config.jwt.refresh_expires_in as string
     );
     const accessToken = jwtHelpers.createToken(
-      { uid: result?.uid, role: result?.role },
+      {
+        _id: result?._id,
+        role: result?.role,
+      },
       config.jwt.secret as Secret,
       config.jwt.expires_in as string
     );

@@ -42,8 +42,11 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
     if (!result) {
         throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'forbidden access!');
     }
-    const refreshToken = jwtHelpers_1.jwtHelpers.createToken({ uid: result === null || result === void 0 ? void 0 : result.uid, role: result === null || result === void 0 ? void 0 : result.role }, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
-    const accessToken = jwtHelpers_1.jwtHelpers.createToken({ uid: result === null || result === void 0 ? void 0 : result.uid, role: result === null || result === void 0 ? void 0 : result.role }, config_1.default.jwt.secret, config_1.default.jwt.expires_in);
+    const refreshToken = jwtHelpers_1.jwtHelpers.createToken({ _id: result === null || result === void 0 ? void 0 : result._id, role: result === null || result === void 0 ? void 0 : result.role }, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
+    const accessToken = jwtHelpers_1.jwtHelpers.createToken({
+        _id: result === null || result === void 0 ? void 0 : result._id,
+        role: result === null || result === void 0 ? void 0 : result.role,
+    }, config_1.default.jwt.secret, config_1.default.jwt.expires_in);
     const cookieOptions = {
         // secure: config.env === 'production' ? true :false,
         //same

@@ -374,6 +374,7 @@ const voteMassageSharePhotoContestUserFromDb = async (
     };
   }
   console.log(quary, 376);
+  console.log(updateData);
 
   const result = await PhotoContestUser.findOneAndUpdate(quary, updateData, {
     new: true,
