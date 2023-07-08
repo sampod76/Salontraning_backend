@@ -8,7 +8,10 @@ import { ENUM_USER_ROLE } from '../../../enums/users';
 const router = express.Router();
 router
   .route('/')
-  .get(GeneralUserController.getAllGeneralUsers)
+  .get(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    GeneralUserController.getAllGeneralUsers
+  )
   // sign up user
   .post(
     validateRequestZod(

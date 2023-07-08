@@ -10,6 +10,7 @@ const authMiddleware =
   (...requiredRoles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log('this is all coickes', req.cookies);
       //get authorization token
       const token = req.headers.authorization;
       // const tokenCookie = req.cookies('accessToken');

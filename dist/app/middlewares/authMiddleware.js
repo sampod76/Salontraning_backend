@@ -19,6 +19,7 @@ const jwtHelpers_1 = require("../../helper/jwtHelpers");
 const ApiError_1 = __importDefault(require("../errors/ApiError"));
 const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log('this is all coickes', req.cookies);
         //get authorization token
         const token = req.headers.authorization;
         // const tokenCookie = req.cookies('accessToken');

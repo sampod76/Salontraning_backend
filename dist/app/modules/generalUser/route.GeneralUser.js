@@ -13,7 +13,7 @@ const users_1 = require("../../../enums/users");
 const router = express_1.default.Router();
 router
     .route('/')
-    .get(controller_GeneralUser_1.GeneralUserController.getAllGeneralUsers)
+    .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), controller_GeneralUser_1.GeneralUserController.getAllGeneralUsers)
     // sign up user
     .post((0, validateRequestZod_1.default)(validation_GeneralUser_1.GeneralUserValidation.createGeneralUserByFirebaseZodSchema), controller_GeneralUser_1.GeneralUserController.createGeneralUserByFirebase);
 router
