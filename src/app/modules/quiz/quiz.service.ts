@@ -86,6 +86,7 @@ const getAllQuizFromDb = async (
 // get single e form db
 const getSingleQuizFromDb = async (id: string): Promise<IQuiz | null> => {
   const result = await Quiz.findById(id);
+
   return result;
 };
 

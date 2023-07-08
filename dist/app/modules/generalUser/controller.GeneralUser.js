@@ -55,7 +55,7 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
     };
     //এটার মাধ্যমে ক্লাইন সাইডে আমার পাঠানো রেসপন্স এর বাইরেও অটোমেটিকলি সে এই cookie সেট করে দেবে
     res.cookie('refreshToken', refreshToken, cookieOptions);
-    res.cookie('accessToken', accessToken, cookieOptions);
+    // res.cookie('accessToken', accessToken, cookieOptions);
     // const result2 = { ...result.toObject() };
     res.status(200).send({
         statusCode: http_status_1.default.OK,
@@ -70,7 +70,7 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
             email: result === null || result === void 0 ? void 0 : result.email,
             phone: result.phone,
             // ...result,
-            accessToken,
+            // accessToken,
         },
     });
     // sendResponse<ILoginUserResponse>(res, {

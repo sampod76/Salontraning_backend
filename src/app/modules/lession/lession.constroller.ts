@@ -22,12 +22,6 @@ const createLession = catchAsync(async (req: Request, res: Response) => {
     message: 'successfull create  Lession',
     data: result,
   });
-  // next();
-  /* res.status(200).send({
-      success: true,
-      data: result,
-      message: 'successfull create  Lession',
-    }); */
 });
 
 const getAllLession = catchAsync(async (req: Request, res: Response) => {

@@ -43,12 +43,6 @@ const createLession = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         message: 'successfull create  Lession',
         data: result,
     });
-    // next();
-    /* res.status(200).send({
-        success: true,
-        data: result,
-        message: 'successfull create  Lession',
-      }); */
 }));
 const getAllLession = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */

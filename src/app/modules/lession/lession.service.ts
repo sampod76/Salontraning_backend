@@ -1,4 +1,4 @@
-import { SortOrder } from 'mongoose';
+import { SortOrder, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
@@ -90,6 +90,7 @@ const getAllLessionFromDb = async (
 // get single e form db
 const getSingleLessionFromDb = async (id: string): Promise<ILession | null> => {
   const result = await Lession.findById(id);
+
   return result;
 };
 

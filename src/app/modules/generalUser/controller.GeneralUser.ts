@@ -65,7 +65,7 @@ const createGeneralUserByFirebase = catchAsync(
     };
     //এটার মাধ্যমে ক্লাইন সাইডে আমার পাঠানো রেসপন্স এর বাইরেও অটোমেটিকলি সে এই cookie সেট করে দেবে
     res.cookie('refreshToken', refreshToken, cookieOptions);
-    res.cookie('accessToken', accessToken, cookieOptions);
+    // res.cookie('accessToken', accessToken, cookieOptions);
 
     // const result2 = { ...result.toObject() };
 
@@ -82,7 +82,7 @@ const createGeneralUserByFirebase = catchAsync(
         email: result?.email,
         phone: result.phone,
         // ...result,
-        accessToken,
+        // accessToken,
       },
     });
 
