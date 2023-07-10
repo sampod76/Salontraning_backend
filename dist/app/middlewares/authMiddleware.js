@@ -21,8 +21,10 @@ const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 
     try {
         //get authorization token
         const token = req.headers.authorization;
-        const tokenCookie = req.cookies.refreshToken;
-        console.log(token, tokenCookie);
+        console.log(token, Math.random() * 100);
+        // const tokenCookie = req.cookies.refreshToken;
+        // console.log(token);
+        // console.log(tokenCookie, 'cookie');
         // if (!tokenCookie) {
         //   throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
         // }

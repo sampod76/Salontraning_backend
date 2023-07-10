@@ -76,6 +76,7 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
     const pipeline = [
         { $match: whereConditions },
         //*********** */ thumbnail to same thumbnail images****
+        ///***************** */ images field ******start
         {
             $lookup: {
                 from: 'fileuploades',
@@ -94,7 +95,6 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
                             createdAt: 0,
                             updatedAt: 0,
                             userId: 0,
-                            // tag: 0,
                         },
                     },
                     {
@@ -117,9 +117,16 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
         {
             $project: { thumbnail: 0 },
         },
+        //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
         {
             $addFields: {
-                thumbnail: '$thumbnailInfo',
+                thumbnail: {
+                    $cond: {
+                        if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+                        then: [{}],
+                        else: '$thumbnailInfo',
+                    },
+                },
             },
         },
         {
@@ -130,6 +137,7 @@ const getAllPhotoContestUserFromDb = (filters, paginationOptions) => __awaiter(v
         {
             $unwind: '$thumbnail',
         },
+        ///***************** */ images field ******end*********
         // *********  ******thumbnali end**************
         //
         {
@@ -171,6 +179,7 @@ const getSinglePhotoContestUserFromDb = (id,
 req) => __awaiter(void 0, void 0, void 0, function* () {
     const pipeline = [
         { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
+        ///***************** */ images field ******start
         {
             $lookup: {
                 from: 'fileuploades',
@@ -211,9 +220,16 @@ req) => __awaiter(void 0, void 0, void 0, function* () {
         {
             $project: { thumbnail: 0 },
         },
+        //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
         {
             $addFields: {
-                thumbnail: '$thumbnailInfo',
+                thumbnail: {
+                    $cond: {
+                        if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+                        then: [{}],
+                        else: '$thumbnailInfo',
+                    },
+                },
             },
         },
         {
@@ -224,6 +240,7 @@ req) => __awaiter(void 0, void 0, void 0, function* () {
         {
             $unwind: '$thumbnail',
         },
+        ///***************** */ images field ******end*********
         ////
         ////
         ///
@@ -259,7 +276,7 @@ req) => __awaiter(void 0, void 0, void 0, function* () {
     //   path: 'userId',
     //   select: { name: 1, email: 1, phone: 1 },
     // });
-    console.log(result, id);
+    // console.log(result, id);
     return result[0];
 });
 // update e form db

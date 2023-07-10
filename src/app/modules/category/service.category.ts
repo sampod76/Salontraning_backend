@@ -104,9 +104,16 @@ const getAllCategoryFromDb = async (
     {
       $project: { thumbnail: 0 },
     },
+    //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
     {
       $addFields: {
-        thumbnail: '$thumbnailInfo',
+        thumbnail: {
+          $cond: {
+            if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+            then: [{}],
+            else: '$thumbnailInfo',
+          },
+        },
       },
     },
     {
@@ -122,9 +129,9 @@ const getAllCategoryFromDb = async (
     { $limit: Number(limit) || 15 },
   ];
 
-  console.log(pipeline);
+  // console.log(pipeline);
   const result = await Category.aggregate(pipeline);
-  console.log(result, 127);
+  // console.log(result, 127);
   const total = await Category.countDocuments(whereConditions);
   return {
     meta: {
@@ -142,6 +149,7 @@ const getSingleCategoryFromDb = async (
 ): Promise<ICategory | null> => {
   const pipeline: PipelineStage[] = [
     { $match: { _id: new Types.ObjectId(id) } },
+    ///***************** */ images field ******start
     {
       $lookup: {
         from: 'fileuploades',
@@ -184,9 +192,16 @@ const getSingleCategoryFromDb = async (
     {
       $project: { thumbnail: 0 },
     },
+    //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
     {
       $addFields: {
-        thumbnail: '$thumbnailInfo',
+        thumbnail: {
+          $cond: {
+            if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+            then: [{}],
+            else: '$thumbnailInfo',
+          },
+        },
       },
     },
     {
@@ -197,6 +212,7 @@ const getSingleCategoryFromDb = async (
     {
       $unwind: '$thumbnail',
     },
+    ///***************** */ images field ******end*********
 
     ///
   ];

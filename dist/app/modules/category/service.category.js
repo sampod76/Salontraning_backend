@@ -107,9 +107,16 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
         {
             $project: { thumbnail: 0 },
         },
+        //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
         {
             $addFields: {
-                thumbnail: '$thumbnailInfo',
+                thumbnail: {
+                    $cond: {
+                        if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+                        then: [{}],
+                        else: '$thumbnailInfo',
+                    },
+                },
             },
         },
         {
@@ -124,9 +131,9 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
         { $skip: Number(skip) || 0 },
         { $limit: Number(limit) || 15 },
     ];
-    console.log(pipeline);
+    // console.log(pipeline);
     const result = yield model_category_1.Category.aggregate(pipeline);
-    console.log(result, 127);
+    // console.log(result, 127);
     const total = yield model_category_1.Category.countDocuments(whereConditions);
     return {
         meta: {
@@ -141,6 +148,7 @@ const getAllCategoryFromDb = (filters, paginationOptions) => __awaiter(void 0, v
 const getSingleCategoryFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const pipeline = [
         { $match: { _id: new mongoose_1.Types.ObjectId(id) } },
+        ///***************** */ images field ******start
         {
             $lookup: {
                 from: 'fileuploades',
@@ -181,9 +189,16 @@ const getSingleCategoryFromDb = (id) => __awaiter(void 0, void 0, void 0, functi
         {
             $project: { thumbnail: 0 },
         },
+        //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
         {
             $addFields: {
-                thumbnail: '$thumbnailInfo',
+                thumbnail: {
+                    $cond: {
+                        if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+                        then: [{}],
+                        else: '$thumbnailInfo',
+                    },
+                },
             },
         },
         {
@@ -194,6 +209,7 @@ const getSingleCategoryFromDb = (id) => __awaiter(void 0, void 0, void 0, functi
         {
             $unwind: '$thumbnail',
         },
+        ///***************** */ images field ******end*********
         ///
     ];
     const result = yield model_category_1.Category.aggregate(pipeline);

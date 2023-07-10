@@ -145,6 +145,7 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
                 as: 'publisherDetails',
             },
         },
+        ///***************** */ images field ******start
         {
             $lookup: {
                 from: 'fileuploades',
@@ -185,9 +186,16 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
         {
             $project: { thumbnail: 0 },
         },
+        //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
         {
             $addFields: {
-                thumbnail: '$thumbnailInfo',
+                thumbnail: {
+                    $cond: {
+                        if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+                        then: [{}],
+                        else: '$thumbnailInfo',
+                    },
+                },
             },
         },
         {
@@ -198,6 +206,7 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
         {
             $unwind: '$thumbnail',
         },
+        ///***************** */ images field ******end*********
         { $sort: sortConditions },
         { $skip: Number(skip) || 0 },
         { $limit: Number(limit) || 15 },
@@ -252,6 +261,7 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 as: 'quizzes',
             },
         },
+        ///***************** */ images field ******start
         {
             $lookup: {
                 from: 'fileuploades',
@@ -292,9 +302,16 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
         {
             $project: { thumbnail: 0 },
         },
+        //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
         {
             $addFields: {
-                thumbnail: '$thumbnailInfo',
+                thumbnail: {
+                    $cond: {
+                        if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+                        then: [{}],
+                        else: '$thumbnailInfo',
+                    },
+                },
             },
         },
         {
@@ -305,6 +322,7 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
         {
             $unwind: '$thumbnail',
         },
+        ///***************** */ images field ******end*********
     ]);
     return result[0];
 });

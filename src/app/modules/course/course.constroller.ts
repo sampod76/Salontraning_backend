@@ -26,6 +26,7 @@ const createCourse = catchAsync(async (req: Request, res: Response) => {
 
 const getAllCourse = catchAsync(async (req: Request, res: Response) => {
   //****************search and filter start******* */
+  // console.log(req.query);
   let queryObject = req.query;
   queryObject = Object.fromEntries(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

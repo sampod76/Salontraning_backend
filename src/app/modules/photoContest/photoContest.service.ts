@@ -80,6 +80,7 @@ const getAllPhotoContestUserFromDb = async (
     { $match: whereConditions },
 
     //*********** */ thumbnail to same thumbnail images****
+    ///***************** */ images field ******start
     {
       $lookup: {
         from: 'fileuploades',
@@ -99,7 +100,6 @@ const getAllPhotoContestUserFromDb = async (
               createdAt: 0,
               updatedAt: 0,
               userId: 0,
-              // tag: 0,
             },
           },
           {
@@ -123,9 +123,16 @@ const getAllPhotoContestUserFromDb = async (
     {
       $project: { thumbnail: 0 },
     },
+    //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
     {
       $addFields: {
-        thumbnail: '$thumbnailInfo',
+        thumbnail: {
+          $cond: {
+            if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+            then: [{}],
+            else: '$thumbnailInfo',
+          },
+        },
       },
     },
     {
@@ -136,7 +143,7 @@ const getAllPhotoContestUserFromDb = async (
     {
       $unwind: '$thumbnail',
     },
-
+    ///***************** */ images field ******end*********
     // *********  ******thumbnali end**************
     //
 
@@ -184,6 +191,7 @@ const getSinglePhotoContestUserFromDb = async (
 ): Promise<IPhotoContestUser | null> => {
   const pipeline: PipelineStage[] = [
     { $match: { _id: new Types.ObjectId(id) } },
+    ///***************** */ images field ******start
     {
       $lookup: {
         from: 'fileuploades',
@@ -226,9 +234,16 @@ const getSinglePhotoContestUserFromDb = async (
     {
       $project: { thumbnail: 0 },
     },
+    //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
     {
       $addFields: {
-        thumbnail: '$thumbnailInfo',
+        thumbnail: {
+          $cond: {
+            if: { $eq: [{ $size: '$thumbnailInfo' }, 0] },
+            then: [{}],
+            else: '$thumbnailInfo',
+          },
+        },
       },
     },
     {
@@ -239,6 +254,7 @@ const getSinglePhotoContestUserFromDb = async (
     {
       $unwind: '$thumbnail',
     },
+    ///***************** */ images field ******end*********
 
     ////
     ////
@@ -276,7 +292,7 @@ const getSinglePhotoContestUserFromDb = async (
   //   path: 'userId',
   //   select: { name: 1, email: 1, phone: 1 },
   // });
-  console.log(result, id);
+  // console.log(result, id);
   return result[0];
 };
 

@@ -46,6 +46,7 @@ const createCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
 }));
 const getAllCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filter start******* */
+    // console.log(req.query);
     let queryObject = req.query;
     queryObject = Object.fromEntries(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
