@@ -3,7 +3,7 @@ import { GENDER } from './constant.GeneralUser';
 
 const createGeneralUserByFirebaseZodSchema = z.object({
   body: z.object({
-    name: z.string(),
+    name: z.string().optional(),
     gender: z.enum([...GENDER] as [string, ...string[]]).optional(),
     dateOfBirth: z.string().optional(),
     email: z.string().email().optional(),

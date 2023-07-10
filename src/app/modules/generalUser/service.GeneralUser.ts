@@ -17,6 +17,7 @@ const createGeneralUserByFirebaseFromDb = async (
   payload: IGeneralUser
 ): Promise<IGeneralUser | null> => {
   let result = null;
+
   result = await GeneralUser.findOne({ uid: payload?.uid });
   if (!result) {
     result = await GeneralUser.create(payload);

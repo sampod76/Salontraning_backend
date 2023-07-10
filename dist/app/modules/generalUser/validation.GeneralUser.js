@@ -5,7 +5,7 @@ const zod_1 = require("zod");
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const createGeneralUserByFirebaseZodSchema = zod_1.z.object({
     body: zod_1.z.object({
-        name: zod_1.z.string(),
+        name: zod_1.z.string().optional(),
         gender: zod_1.z.enum([...constant_GeneralUser_1.GENDER]).optional(),
         dateOfBirth: zod_1.z.string().optional(),
         email: zod_1.z.string().email().optional(),
