@@ -61,6 +61,7 @@ const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 
     }
     catch (error) {
         next(error);
+        // throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized');
     }
 });
 exports.default = authMiddleware;

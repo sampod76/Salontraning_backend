@@ -48,7 +48,7 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         //same
         secure: config_1.default.env === 'production',
         httpOnly: true,
-        signed: true,
+        // signed: true,
     };
     //এটার মাধ্যমে ক্লাইন সাইডে আমার পাঠানো রেসপন্স এর বাইরেও অটোমেটিকলি সে এই cookie সেট করে দেবে
     res.cookie('refreshToken', refreshToken, cookieOptions);

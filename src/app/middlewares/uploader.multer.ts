@@ -14,6 +14,7 @@ import path from 'path';
 //-------------single file upload----start------------
 const storage: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log(req);
     cb(null, path.join(__dirname, '../../uploadFile/images/'));
   },
   filename: (
@@ -39,6 +40,7 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
+  console.log(file);
   if (
     file.mimetype === 'image/png' ||
     file.mimetype === 'image/jpg' ||

@@ -58,6 +58,7 @@ const authMiddleware =
       next();
     } catch (error) {
       next(error);
+      // throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized');
     }
   };
 

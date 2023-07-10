@@ -13,6 +13,7 @@ const path_1 = __importDefault(require("path"));
 //-------------single file upload----start------------
 const storage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
+        console.log(req);
         cb(null, path_1.default.join(__dirname, '../../uploadFile/images/'));
     },
     filename: (req, file, cb) => {
@@ -28,6 +29,7 @@ const storage = multer_1.default.diskStorage({
     },
 });
 const fileFilter = (req, file, cb) => {
+    console.log(file);
     if (file.mimetype === 'image/png' ||
         file.mimetype === 'image/jpg' ||
         file.mimetype === 'image/jpeg') {
