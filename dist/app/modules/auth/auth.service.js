@@ -74,6 +74,7 @@ const loginUserByUidFromDb = (uid, role) => __awaiter(void 0, void 0, void 0, fu
     return {
         accessToken,
         refreshToken,
+        isUserExist,
     };
 });
 const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {

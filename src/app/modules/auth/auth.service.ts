@@ -58,7 +58,7 @@ const loginUserFromDb = async (
 const loginUserByUidFromDb = async (
   uid: string,
   role: string
-): Promise<ILoginUserResponse> => {
+): Promise<ILoginUserResponse | any> => {
   let isUserExist = null;
   if (uid && role === ENUM_USER_ROLE.ADMIN) {
     isUserExist = await Admin.findOne({ uid });
@@ -93,6 +93,7 @@ const loginUserByUidFromDb = async (
   return {
     accessToken,
     refreshToken,
+    isUserExist,
   };
 };
 

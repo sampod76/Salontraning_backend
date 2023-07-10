@@ -29,7 +29,7 @@ const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 
         //   throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
         // }
         if (!token) {
-            throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized ');
+            throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'Unauthorized access');
         }
         // verify token
         let verifiedUser = null;
@@ -61,7 +61,6 @@ const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 
     }
     catch (error) {
         next(error);
-        // throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized');
     }
 });
 exports.default = authMiddleware;

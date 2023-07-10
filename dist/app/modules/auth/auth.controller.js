@@ -58,7 +58,16 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'successfull login',
-        data: othersData,
+        data: {
+            _id: othersData === null || othersData === void 0 ? void 0 : othersData._id,
+            name: othersData === null || othersData === void 0 ? void 0 : othersData.name,
+            uid: othersData === null || othersData === void 0 ? void 0 : othersData.uid,
+            status: othersData === null || othersData === void 0 ? void 0 : othersData.status,
+            email: othersData === null || othersData === void 0 ? void 0 : othersData.email,
+            phone: othersData.phone,
+            // ...result,
+            accessToken: othersData.accessToken,
+        },
     });
 }));
 const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

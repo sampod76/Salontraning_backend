@@ -8,7 +8,7 @@ import sendResponse from '../../share/sendResponse';
 import { IAdmin } from '../admin/admin.interface';
 import { IGeneralUser } from '../generalUser/interface.GeneralUser';
 import { IModerator } from '../moderator/moderator.interface';
-import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
+import { IRefreshTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
@@ -35,11 +35,20 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   res.cookie('accessToken', othersData.accessToken, cookieOptions);
 
   //set refre
-  sendResponse<ILoginUserResponse>(res, {
+  sendResponse<any>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'successfull login',
-    data: othersData,
+    data: {
+      _id: othersData?._id,
+      name: othersData?.name,
+      uid: othersData?.uid,
+      status: othersData?.status,
+      email: othersData?.email,
+      phone: othersData.phone,
+      // ...result,
+      accessToken: othersData.accessToken,
+    },
   });
 });
 

@@ -21,7 +21,7 @@ const authMiddleware =
       // }
 
       if (!token) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
       }
 
       // verify token
@@ -58,7 +58,6 @@ const authMiddleware =
       next();
     } catch (error) {
       next(error);
-      // throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized');
     }
   };
 

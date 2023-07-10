@@ -11,6 +11,7 @@ const ApiError_1 = __importDefault(require("../errors/ApiError"));
 const handleValidationError_1 = require("../errors/handleValidationError");
 const handleZodError_1 = __importDefault(require("../errors/handleZodError"));
 // import { errorLogger } from '../share/logger';
+const http_status_1 = __importDefault(require("http-status"));
 const handleCastError_1 = __importDefault(require("../errors/handleCastError"));
 const logger_1 = require("../share/logger");
 // import path from 'path';
@@ -41,6 +42,11 @@ const globalErrorHandler = (error, req, res, next) => {
         statusCode = simplifiedError.statusCode;
         message = simplifiedError.message;
         errorMessage = simplifiedError.errorMessages;
+    }
+    else if ((error === null || error === void 0 ? void 0 : error.name) === 'JsonWebTokenError') {
+        statusCode = http_status_1.default.UNAUTHORIZED;
+        message = 'Unauthorized access';
+        // errorMessage = "unauthorized access";
     }
     else if (error instanceof ApiError_1.default) {
         statusCode = error.statusCode;

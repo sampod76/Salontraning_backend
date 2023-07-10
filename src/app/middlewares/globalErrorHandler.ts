@@ -9,6 +9,7 @@ import { handleValidationError } from '../errors/handleValidationError';
 import handleZodError from '../errors/handleZodError';
 import { IGenericErrorMessage } from '../interface/error';
 // import { errorLogger } from '../share/logger';
+import httpStatus from 'http-status';
 import handleCastError from '../errors/handleCastError';
 import { errorLogger } from '../share/logger';
 // import path from 'path';
@@ -40,6 +41,10 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessage = simplifiedError.errorMessages;
+  } else if (error?.name === 'JsonWebTokenError') {
+    statusCode = httpStatus.UNAUTHORIZED;
+    message = 'Unauthorized access';
+    // errorMessage = "unauthorized access";
   } else if (error instanceof ApiError) {
     statusCode = error.statusCode;
     message = error.message;
