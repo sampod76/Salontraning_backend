@@ -42,7 +42,6 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     data: {
       _id: othersData?._id,
       name: othersData?.name,
-      uid: othersData?.uid,
       status: othersData?.status,
       email: othersData?.email,
       phone: othersData.phone,

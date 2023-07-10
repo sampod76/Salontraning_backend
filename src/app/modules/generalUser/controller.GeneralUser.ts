@@ -77,7 +77,7 @@ const createGeneralUserByFirebase = catchAsync(
       data: {
         _id: result?._id,
         name: result?.name,
-        uid: result?.uid,
+
         status: result?.status,
         email: result?.email,
         phone: result.phone,

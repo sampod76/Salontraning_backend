@@ -65,7 +65,6 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
         data: {
             _id: result === null || result === void 0 ? void 0 : result._id,
             name: result === null || result === void 0 ? void 0 : result.name,
-            uid: result === null || result === void 0 ? void 0 : result.uid,
             status: result === null || result === void 0 ? void 0 : result.status,
             email: result === null || result === void 0 ? void 0 : result.email,
             phone: result.phone,

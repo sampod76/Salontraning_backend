@@ -61,7 +61,6 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: {
             _id: othersData === null || othersData === void 0 ? void 0 : othersData._id,
             name: othersData === null || othersData === void 0 ? void 0 : othersData.name,
-            uid: othersData === null || othersData === void 0 ? void 0 : othersData.uid,
             status: othersData === null || othersData === void 0 ? void 0 : othersData.status,
             email: othersData === null || othersData === void 0 ? void 0 : othersData.email,
             phone: othersData.phone,
