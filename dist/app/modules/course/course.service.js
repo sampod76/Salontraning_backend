@@ -330,6 +330,7 @@ const getSingleCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
 const updateCourseFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { publish } = payload, otherData = __rest(payload, ["publish"]);
     const updateData = Object.assign({}, otherData);
+    console.log(updateData);
     if (publish && Object.keys(publish).length > 0) {
         Object.keys(publish).forEach(key => {
             const publishKey = `publish.${key}`; // `publish.status`
@@ -338,7 +339,11 @@ const updateCourseFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, fu
     }
     const result = yield course_model_1.Course.findOneAndUpdate({ _id: id }, updateData, {
         new: true,
+        runValidators: true,
     });
+    if (!result) {
+        throw new ApiError_1.default(500, 'course update fail!!😪😭😰');
+    }
     return result;
 });
 // delete e form db

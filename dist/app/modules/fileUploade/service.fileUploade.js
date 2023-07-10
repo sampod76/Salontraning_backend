@@ -22,11 +22,11 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileUploadeService = void 0;
 const paginationHelper_1 = require("../../../helper/paginationHelper");
-const model_fileUploade_1 = require("./model.fileUploade");
 const consent_fileUploade_1 = require("./consent.fileUploade");
+const model_fileUploade_1 = require("./model.fileUploade");
 const createFileUploadeByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     payload.url =
-        payload.mimetype === 'uploadFile/images'
+        payload.path === 'uploadFile/images'
             ? `${process.env.REAL_HOST_SERVER_SIDE}/images/${payload.filename}`
             : `${process.env.REAL_HOST_SERVER_SIDE}/vedios/${payload.filename}`;
     const result = yield model_fileUploade_1.FileUploade.create(payload);

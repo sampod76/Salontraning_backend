@@ -319,7 +319,7 @@ const updateCourseFromDb = async (
 ): Promise<ICourse | null> => {
   const { publish, ...otherData } = payload;
   const updateData = { ...otherData };
-
+  console.log(updateData);
   if (publish && Object.keys(publish).length > 0) {
     Object.keys(publish).forEach(key => {
       const publishKey = `publish.${key}`; // `publish.status`
@@ -328,7 +328,11 @@ const updateCourseFromDb = async (
   }
   const result = await Course.findOneAndUpdate({ _id: id }, updateData, {
     new: true,
+    runValidators: true,
   });
+  if (!result) {
+    throw new ApiError(500, 'course update fail!!😪😭😰');
+  }
   return result;
 };
 

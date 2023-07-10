@@ -26,6 +26,7 @@ const uploadeSingleFileByServer = catchAsync(
           : `uploadFile/vedios`,
       size: fileDetails?.size,
     };
+    console.log(fileDetails, '29 conste');
     sendResponse<any>(res, {
       success: true,
       statusCode: httpStatus.OK,

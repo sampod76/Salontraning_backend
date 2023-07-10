@@ -48,7 +48,7 @@ exports.uploadSingleImage = (0, multer_1.default)({
 //-------------single file upload----start------------
 const storageByProfile = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path_1.default.join(__dirname, '../../uploadFile/profile/'));
+        cb(null, path_1.default.join(__dirname, '../../uploadFile/images/'));
     },
     filename: (req, file, cb) => {
         const fileExt = path_1.default.extname(file.originalname);

@@ -62,7 +62,7 @@ export const uploadSingleImage: RequestHandler = multer({
 //-------------single file upload----start------------
 const storageByProfile: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../uploadFile/profile/'));
+    cb(null, path.join(__dirname, '../../uploadFile/images/'));
   },
   filename: (
     req,

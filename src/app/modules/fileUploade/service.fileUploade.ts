@@ -4,17 +4,18 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
 
+import { FILEUPLOADE_SEARCHABLE_FIELDS } from './consent.fileUploade';
 import { IFileUploade, IFileUploadeFilters } from './interface.fileUploade';
 import { FileUploade } from './model.fileUploade';
-import { FILEUPLOADE_SEARCHABLE_FIELDS } from './consent.fileUploade';
 
 const createFileUploadeByDb = async (
   payload: IFileUploade
 ): Promise<IFileUploade> => {
   payload.url =
-    payload.mimetype === 'uploadFile/images'
+    payload.path === 'uploadFile/images'
       ? `${process.env.REAL_HOST_SERVER_SIDE}/images/${payload.filename}`
       : `${process.env.REAL_HOST_SERVER_SIDE}/vedios/${payload.filename}`;
+
   const result = await FileUploade.create(payload);
 
   return result;

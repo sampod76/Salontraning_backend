@@ -45,6 +45,7 @@ const uploadeSingleFileByServer = (0, catchAsync_1.default)((req, res) => __awai
             : `uploadFile/vedios`,
         size: fileDetails === null || fileDetails === void 0 ? void 0 : fileDetails.size,
     };
+    console.log(fileDetails, '29 conste');
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
