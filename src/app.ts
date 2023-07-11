@@ -89,7 +89,7 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 //Application route
 app.use('/api/v1', routers);
 
-app.get('/success', async (req: Request, res: Response) => {
+app.post('/success', async (req: Request, res: Response) => {
   try {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId as string;
@@ -120,7 +120,6 @@ app.get('/success', async (req: Request, res: Response) => {
         if (error) {
           throw new ApiError(500, 'Payment is deny');
         } else {
-          console.log(payment);
           const find = await Purchased_courses.findOne({
             transactionID: paymentId,
           });
@@ -132,7 +131,11 @@ app.get('/success', async (req: Request, res: Response) => {
               'payment.method': 'payple',
             });
             if (!result._id) {
-              res.render('cancle');
+              // res.render('cancle');
+              res.status(400).json({
+                success: false,
+                message: 'payment faild!!',
+              });
             }
             // res.render('success', { payment });
             res.status(200).json({

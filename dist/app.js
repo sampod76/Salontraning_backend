@@ -76,7 +76,7 @@ app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 //Application route
 app.use('/api/v1', index_route_1.default);
-app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
@@ -96,7 +96,6 @@ app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     throw new ApiError_1.default(500, 'Payment is deny');
                 }
                 else {
-                    console.log(payment);
                     const find = yield purchased_courses_model_1.Purchased_courses.findOne({
                         transactionID: paymentId,
                     });
@@ -108,7 +107,11 @@ app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             'payment.method': 'payple',
                         });
                         if (!result._id) {
-                            res.render('cancle');
+                            // res.render('cancle');
+                            res.status(400).json({
+                                success: false,
+                                message: 'payment faild!!',
+                            });
                         }
                         // res.render('success', { payment });
                         res.status(200).json({

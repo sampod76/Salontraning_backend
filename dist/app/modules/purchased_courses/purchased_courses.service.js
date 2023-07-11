@@ -47,9 +47,9 @@ const createPurchased_coursesByDb = (payload, userId) => __awaiter(void 0, void 
         if (!addCourseByUser.modifiedCount) {
             throw new ApiError_1.default(404, 'Failed to by course');
         }
-        // payload.transactionID =
-        //   payload.transactionID ||
-        //   payload.courseId + '-' + payload.transactionID || Math.random().toString(16).slice(2);
+        payload.transactionID = payload.transactionID
+            ? payload.courseId + '-' + payload.transactionID
+            : payload.courseId + '-' + Math.random().toString(16).slice(2);
         const createPurchase = yield purchased_courses_model_1.Purchased_courses.create([payload], {
             session,
         });
