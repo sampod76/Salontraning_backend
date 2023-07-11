@@ -76,7 +76,7 @@ app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 //Application route
 app.use('/api/v1', index_route_1.default);
-app.post('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;

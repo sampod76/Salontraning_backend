@@ -89,7 +89,7 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 //Application route
 app.use('/api/v1', routers);
 
-app.post('/success', async (req: Request, res: Response) => {
+app.get('/success', async (req: Request, res: Response) => {
   try {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId as string;
