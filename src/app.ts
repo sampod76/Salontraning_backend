@@ -75,6 +75,7 @@ import routers from './app/routes/index_route';
 import { decrypt } from './helper/encryption';
 
 import ApiError from './app/errors/ApiError';
+import { IEncodedPaymentData } from './app/interface/encrypt';
 import { Purchased_courses } from './app/modules/purchased_courses/purchased_courses.model';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -89,23 +90,23 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 //Application route
 app.use('/api/v1', routers);
 
-app.get('/success', async (req: Request, res: Response) => {
+app.get('/success', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId as string;
+    const paymentId = req.query.paymentId;
     const app = req.query.app;
-    type IEncodedData = {
-      userId: string;
-      course_id: string;
-      amount: {
-        currency: string;
-        total: string;
-      };
-    };
-    const data: IEncodedData = decrypt(app as string);
+    if (
+      typeof payerId !== 'string' ||
+      typeof paymentId !== 'string' ||
+      typeof app !== 'string'
+    ) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized access !!');
+    }
+
+    const data = decrypt<IEncodedPaymentData>(app);
 
     const execute_payment_json = {
-      payer_id: payerId as string,
+      payer_id: payerId,
       transactions: [
         {
           amount: data?.amount,
@@ -147,26 +148,30 @@ app.get('/success', async (req: Request, res: Response) => {
       }
     );
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
-app.get('/success2', async (req: Request, res: Response) => {
-  try {
-    return res.render('success');
-  } catch (error) {
-    console.log(error);
+app.get(
+  '/success2',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      return res.render('success');
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 // Set the views directory and the view engine
 
-// app.get('/cancel', async (req: Request, res: Response) => {
-//   try {
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+app.get('/cancel', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    throw new ApiError(404, 'Payment faild');
+  } catch (error) {
+    next(error);
+    console.log(error);
+  }
+});
 
 // global error handlar
 app.use(globalErrorHandler);
@@ -198,6 +203,16 @@ const test = async () => {
     //     },
     //   }
     // );
+    // console.log(result);
+    // const data = {
+    //   name: 'sampod',
+    //   datoto: {
+    //     sampod: 120,
+    //     totoal: 141,
+    //   },
+    // };
+    // const result = encrypt(data);
+    // // const decode = decrypt('djdjddkjffff');
     // console.log(result);
   } catch (error) {
     console.log(error);

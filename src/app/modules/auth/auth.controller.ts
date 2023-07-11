@@ -90,23 +90,21 @@ const myProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const myProfileUpdate = catchAsync(async (req: Request, res: Response) => {
-//   //set refre
-//   const result = await AuthService.myProfileFromDb(
-//     req?.user?._id,
-//     req?.user?.role,
-//     req.body
-//   );
-//   sendResponse<IGeneralUser | IAdmin | IModerator>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'successfull get profile',
-//     data: result,
-//   });
-// });
+const myProfileUpdate = catchAsync(async (req: Request, res: Response) => {
+  //set refre
+
+  const result = await AuthService.updateProfileFromDb(req);
+  sendResponse<IGeneralUser | IAdmin | IModerator>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'successfull get profile',
+    data: result,
+  });
+});
 
 export const AuthController = {
   loginUser,
   refreshToken,
   myProfile,
+  myProfileUpdate,
 };

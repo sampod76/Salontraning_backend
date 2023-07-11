@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import paypal, { Payment } from 'paypal-rest-sdk';
 import Stripe from 'stripe';
-import { IEncodedData, encrypt } from '../../../helper/encryption';
+import { encrypt } from '../../../helper/encryption';
 import ApiError from '../../errors/ApiError';
+import { IEncodedPaymentData } from '../../interface/encrypt';
 import catchAsync from '../../share/catchAsync';
 import { GeneralUser } from '../generalUser/model.GeneralUser';
 import { Purchased_courses } from '../purchased_courses/purchased_courses.model';
@@ -75,7 +76,8 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
       message: 'You are already purchased course!!😭😭',
     });
   }
-  const data: IEncodedData = {
+
+  const data: IEncodedPaymentData = {
     userId: req?.user?._id,
     course_id: item.toString(),
     amount: {
@@ -84,7 +86,7 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
     },
   };
 
-  const encriptData = encrypt(data);
+  const encriptData = encrypt<IEncodedPaymentData>(data);
 
   const payment: Payment = {
     intent: 'sale',

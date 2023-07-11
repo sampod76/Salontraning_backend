@@ -76,11 +76,16 @@ app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 //Application route
 app.use('/api/v1', index_route_1.default);
-app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/success', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
         const app = req.query.app;
+        if (typeof payerId !== 'string' ||
+            typeof paymentId !== 'string' ||
+            typeof app !== 'string') {
+            throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'unauthorized access !!');
+        }
         const data = (0, encryption_1.decrypt)(app);
         const execute_payment_json = {
             payer_id: payerId,
@@ -124,24 +129,27 @@ app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        console.log(error);
+        next(error);
     }
 }));
-app.get('/success2', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/success2', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return res.render('success');
     }
     catch (error) {
-        console.log(error);
+        next(error);
     }
 }));
 // Set the views directory and the view engine
-// app.get('/cancel', async (req: Request, res: Response) => {
-//   try {
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+app.get('/cancel', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        throw new ApiError_1.default(404, 'Payment faild');
+    }
+    catch (error) {
+        next(error);
+        console.log(error);
+    }
+}));
 // global error handlar
 app.use(globalErrorHandler_1.default);
 //handle not found route
@@ -170,6 +178,16 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         //     },
         //   }
         // );
+        // console.log(result);
+        // const data = {
+        //   name: 'sampod',
+        //   datoto: {
+        //     sampod: 120,
+        //     totoal: 141,
+        //   },
+        // };
+        // const result = encrypt(data);
+        // // const decode = decrypt('djdjddkjffff');
         // console.log(result);
     }
     catch (error) {

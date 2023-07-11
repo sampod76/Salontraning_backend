@@ -9,6 +9,7 @@ import { GeneralUser } from '../generalUser/model.GeneralUser';
 import { Moderator } from '../moderator/moderator.model';
 import { User } from '../users/users.model';
 import { ILoginUser, ILoginUserResponse } from './auth.interface';
+import { Types } from 'mongoose';
 
 const loginUserFromDb = async (
   payload: ILoginUser
@@ -154,9 +155,51 @@ const myProfileFromDb = async (id: string, role: string) => {
   return isUserExist;
 };
 
+const updateProfileFromDb = async (req: any) => {
+  // //chack this user exist database
+  // const isUserExist = await User.isUserExist(verifiedToken?.userId);
+  let isUserExist = null;
+  if (req?.user?.role === ENUM_USER_ROLE.ADMIN) {
+    isUserExist = await Admin.findOneAndUpdate(
+      { _id: new Types.ObjectId(req?.user?._id) },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  } else if (req?.user?.role === ENUM_USER_ROLE.MODERATOR) {
+    isUserExist = await Moderator.findOneAndUpdate(
+      { _id: new Types.ObjectId(req?.user?._id) },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  } else if (req?.user?.role === ENUM_USER_ROLE.GENERAL_USER) {
+    isUserExist = await GeneralUser.findOneAndUpdate(
+      { _id: new Types.ObjectId(req?.user?._id) },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  }
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Update faild');
+  }
+
+  // generate new token
+
+  return isUserExist;
+};
+
 export const AuthService = {
   loginUserFromDb,
   loginUserByUidFromDb,
   myProfileFromDb,
+  updateProfileFromDb,
   refreshToken,
 };

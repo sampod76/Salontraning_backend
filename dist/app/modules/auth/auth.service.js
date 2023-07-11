@@ -22,6 +22,7 @@ const admin_model_1 = require("../admin/admin.model");
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
 const moderator_model_1 = require("../moderator/moderator.model");
 const users_model_1 = require("../users/users.model");
+const mongoose_1 = require("mongoose");
 const loginUserFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
     if (!(email && password)) {
@@ -125,9 +126,39 @@ const myProfileFromDb = (id, role) => __awaiter(void 0, void 0, void 0, function
     // generate new token
     return isUserExist;
 });
+const updateProfileFromDb = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f;
+    // //chack this user exist database
+    // const isUserExist = await User.isUserExist(verifiedToken?.userId);
+    let isUserExist = null;
+    if (((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.role) === users_1.ENUM_USER_ROLE.ADMIN) {
+        isUserExist = yield admin_model_1.Admin.findOneAndUpdate({ _id: new mongoose_1.Types.ObjectId((_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b._id) }, req.body, {
+            new: true,
+            runValidators: true,
+        });
+    }
+    else if (((_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c.role) === users_1.ENUM_USER_ROLE.MODERATOR) {
+        isUserExist = yield moderator_model_1.Moderator.findOneAndUpdate({ _id: new mongoose_1.Types.ObjectId((_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id) }, req.body, {
+            new: true,
+            runValidators: true,
+        });
+    }
+    else if (((_e = req === null || req === void 0 ? void 0 : req.user) === null || _e === void 0 ? void 0 : _e.role) === users_1.ENUM_USER_ROLE.GENERAL_USER) {
+        isUserExist = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ _id: new mongoose_1.Types.ObjectId((_f = req === null || req === void 0 ? void 0 : req.user) === null || _f === void 0 ? void 0 : _f._id) }, req.body, {
+            new: true,
+            runValidators: true,
+        });
+    }
+    if (!isUserExist) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Update faild');
+    }
+    // generate new token
+    return isUserExist;
+});
 exports.AuthService = {
     loginUserFromDb,
     loginUserByUidFromDb,
     myProfileFromDb,
+    updateProfileFromDb,
     refreshToken,
 };

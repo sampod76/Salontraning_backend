@@ -16,7 +16,8 @@ router.route('/login').post(
 (0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.loginZodSchema), auth_controller_1.AuthController.loginUser);
 router
     .route('/my-profile')
-    .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), auth_controller_1.AuthController.myProfile);
+    .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), auth_controller_1.AuthController.myProfile)
+    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), auth_controller_1.AuthController.myProfileUpdate);
 router
     .route('/refresh-token')
     .post((0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.refreshTokenZodSchema), auth_controller_1.AuthController.refreshToken);
