@@ -13,11 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPaymentController = void 0;
+const mongoose_1 = require("mongoose");
 const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const stripe_1 = __importDefault(require("stripe"));
+const encryption_1 = require("../../../helper/encryption");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
+const purchased_courses_model_1 = require("../purchased_courses/purchased_courses.model");
 // import { errorLogger, logger } from '../../share/logger';
 // import { z } from 'zod'
 const createPaymentStripe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,41 +56,46 @@ const createPaymentStripe = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     else {
         throw new ApiError_1.default(404, 'Payment faild');
     }
-    // next();
-    /* res.status(200).send({
-        success: true,
-        data: result,
-        message: 'successfull create  Lession',
-      }); */
 }));
 // payple intergrate
 const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d, _e;
     const { amount, item_list, description } = req.body;
     paypal_rest_sdk_1.default.configure({
         mode: 'sandbox',
         client_id: process.env.PAYPLE_CLIENT_ID,
         client_secret: process.env.PAYPLE_SECRET_KEY,
     });
-    // let itemListArray = item_list?.items?.map((value: any) => value?.sku);
-    // const result = await GeneralUser.findById(req?.user?._id);
-    // let courseIdExaite = result?.purchase_courses?.map(value =>
-    //   value?.course?.toString()
-    // );
-    // if (courseIdExaite) {
-    //   return res.status(404).send({
-    //     success: false,
-    //     statusCode: 404,
-    //     message: 'You are already purchased course!!😭😭',
-    //   });
-    // }
+    // const itemSkus = new Set(item_list?.items?.map((item: any) => item?.sku));
+    const item = new mongoose_1.Types.ObjectId((_c = item_list === null || item_list === void 0 ? void 0 : item_list.items[0]) === null || _c === void 0 ? void 0 : _c.sku);
+    const findByCourse = yield purchased_courses_model_1.Purchased_courses.findOne({
+        userId: new mongoose_1.Types.ObjectId((_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id),
+        course: new mongoose_1.Types.ObjectId(item),
+    });
+    if (findByCourse) {
+        return res.status(404).send({
+            success: false,
+            statusCode: 404,
+            message: 'You are already purchased course!!😭😭',
+        });
+    }
+    const data = {
+        userId: (_e = req === null || req === void 0 ? void 0 : req.user) === null || _e === void 0 ? void 0 : _e._id,
+        course_id: item.toString(),
+        amount: {
+            currency: (amount === null || amount === void 0 ? void 0 : amount.currency) || 'USD',
+            total: amount === null || amount === void 0 ? void 0 : amount.total,
+        },
+    };
+    const encriptData = (0, encryption_1.encrypt)(data);
     const payment = {
         intent: 'sale',
         payer: {
             payment_method: 'paypal',
         },
         redirect_urls: {
-            return_url: `${process.env.LOCALHOST_SERVER_SIDE}/success`,
-            cancel_url: `${process.env.LOCALHOST_SERVER_SIDE}/cancel`,
+            return_url: `${process.env.REAL_HOST_SERVER_SIDE}/success?app=${encriptData}`,
+            cancel_url: `${process.env.REAL_HOST_SERVER_SIDE}/cancel`,
         },
         transactions: [
             {
@@ -147,12 +155,12 @@ const createPaymentPayple = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     // });
 }));
 const createPaymentStripeAdvanceForNative = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _f, _g;
     const { paymentAmount: price, course_id } = req.body;
     const amount = parseFloat(price) * 100;
     //********** */ You are already purchased course!!*******
-    const result = yield model_GeneralUser_1.GeneralUser.findById((_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c._id);
-    const courseIdExaite = (_d = result === null || result === void 0 ? void 0 : result.purchase_courses) === null || _d === void 0 ? void 0 : _d.find(value => { var _a; return ((_a = value === null || value === void 0 ? void 0 : value.course) === null || _a === void 0 ? void 0 : _a.toString()) === course_id; });
+    const result = yield model_GeneralUser_1.GeneralUser.findById((_f = req === null || req === void 0 ? void 0 : req.user) === null || _f === void 0 ? void 0 : _f._id);
+    const courseIdExaite = (_g = result === null || result === void 0 ? void 0 : result.purchase_courses) === null || _g === void 0 ? void 0 : _g.find(value => { var _a; return ((_a = value === null || value === void 0 ? void 0 : value.course) === null || _a === void 0 ? void 0 : _a.toString()) === course_id; });
     if (courseIdExaite) {
         return res.status(404).send({
             success: false,

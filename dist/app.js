@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
+const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const express_1 = __importDefault(require("express"));
 // create xss-clean.d.ts file after work this xss
 const path_1 = __importDefault(require("path"));
@@ -37,6 +38,11 @@ app.use((0, xss_clean_1.default)());
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
+paypal_rest_sdk_1.default.configure({
+    mode: 'sandbox',
+    client_id: process.env.PAYPLE_CLIENT_ID,
+    client_secret: process.env.PAYPLE_SECRET_KEY,
+});
 const run = (req, res, next) => {
     try {
         // jwtHelpers.verifyToken(`${req.headers.authorization}`, config.jwt.secret as string);
@@ -54,6 +60,9 @@ const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 const index_route_1 = __importDefault(require("./app/routes/index_route"));
+const encryption_1 = require("./helper/encryption");
+const ApiError_1 = __importDefault(require("./app/errors/ApiError"));
+const purchased_courses_model_1 = require("./app/modules/purchased_courses/purchased_courses.model");
 app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtain the MAC address
@@ -73,7 +82,7 @@ app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     }
     // res.send('server is running');
 }));
-app.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/success', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.send({ message: 'server is running....' });
     }
@@ -86,25 +95,54 @@ app.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
 app.use('/api/v1', index_route_1.default);
 app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const payerId = req.query.PayerID;
-        // const paymentId = req.query.paymentId;
-        // console.log(payerId, paymentId);
-        // const execute_payment_json = {
-        //   payer_id: payerId,
-        //   transactions: [
-        //     {
-        //       amount: {
-        //         currency: 'USD',
-        //         total: amt,
-        //       },
-        //     },
-        //   ],
-        // };
+        const payerId = req.query.PayerID;
+        const paymentId = req.query.paymentId;
+        const app = req.query.app;
+        const data = (0, encryption_1.decrypt)(app);
+        const execute_payment_json = {
+            payer_id: payerId,
+            transactions: [
+                {
+                    amount: data === null || data === void 0 ? void 0 : data.amount,
+                },
+            ],
+        };
+        paypal_rest_sdk_1.default.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+            return __awaiter(this, void 0, void 0, function* () {
+                if (error) {
+                    throw new ApiError_1.default(500, 'Payment is deny');
+                }
+                else {
+                    console.log(payment);
+                    const find = yield purchased_courses_model_1.Purchased_courses.findOne({
+                        transactionID: paymentId,
+                    });
+                    if (!find) {
+                        const result = yield purchased_courses_model_1.Purchased_courses.create({
+                            userId: data.userId,
+                            course: data.course_id,
+                            transactionID: paymentId,
+                            'payment.method': 'payple',
+                        });
+                        if (!result._id) {
+                            throw new ApiError_1.default(500, 'Faild Payment');
+                        }
+                        return res.send(200).send({
+                            success: true,
+                            message: 'payment successfull',
+                        });
+                    }
+                }
+            });
+        });
     }
     catch (error) {
         console.log(error);
     }
 }));
+// Set the views directory and the view engine
+app.set('views', './views');
+app.set('view engine', 'ejs');
 // app.get('/cancel', async (req: Request, res: Response) => {
 //   try {
 //   } catch (error) {

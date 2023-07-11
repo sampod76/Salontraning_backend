@@ -151,6 +151,9 @@ app.get('/success', async (req: Request, res: Response) => {
               transactionID: paymentId,
               'payment.method': 'payple',
             });
+            if (!result._id) {
+              throw new ApiError(500, 'Faild Payment');
+            }
             return res.send(200).send({
               success: true,
               message: 'payment successfull',
@@ -163,6 +166,9 @@ app.get('/success', async (req: Request, res: Response) => {
     console.log(error);
   }
 });
+// Set the views directory and the view engine
+app.set('views', './views');
+app.set('view engine', 'ejs');
 
 // app.get('/cancel', async (req: Request, res: Response) => {
 //   try {
