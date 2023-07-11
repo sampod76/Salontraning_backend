@@ -81,7 +81,7 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
 //All calculations will be done here while buying any product
 purchasedCoursesSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { price = 0, discount = { value: 0 }, vat = 0, courseId, } = (yield course_model_1.Course.findById(this.course));
+        const { price = 0, discount = { value: 0 }, vat = 0, } = (yield course_model_1.Course.findById(this.course));
         if ((discount.expiryDate && new Date(discount.expiryDate) < new Date()) ||
             (discount.startDate && new Date(discount.startDate) > new Date())) {
             discount.value = 0;
@@ -91,8 +91,6 @@ purchasedCoursesSchema.pre('save', function (next) {
         this.payment.discount = discount.value;
         this.payment.vat = vat;
         this.payment.price = price;
-        this.transactionID =
-            courseId + '-' + this.transactionID || Math.random().toString(16).slice(2);
         next();
         // Math.random().toString(16).slice(2);
     });

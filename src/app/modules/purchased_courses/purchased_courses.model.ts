@@ -90,7 +90,6 @@ purchasedCoursesSchema.pre('save', async function (next) {
     price = 0,
     discount = { value: 0 },
     vat = 0,
-    courseId,
   } = (await Course.findById(this.course)) as ICourse;
 
   if (
@@ -106,8 +105,6 @@ purchasedCoursesSchema.pre('save', async function (next) {
   this.payment.discount = discount.value;
   this.payment.vat = vat;
   this.payment.price = price;
-  this.transactionID =
-    courseId + '-' + this.transactionID || Math.random().toString(16).slice(2);
   next();
   // Math.random().toString(16).slice(2);
 });
