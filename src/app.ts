@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import paypal, { Payment } from 'paypal-rest-sdk';
 import express, {
   Application,
   NextFunction,
@@ -9,6 +8,7 @@ import express, {
   RequestHandler,
   Response,
 } from 'express';
+import paypal from 'paypal-rest-sdk';
 // create xss-clean.d.ts file after work this xss
 import path from 'path';
 import xss from 'xss-clean';
@@ -65,46 +65,26 @@ app.use(
   express.static(path.join(__dirname, './uploadFile/vedios/'))
 );
 
+app.set('view engine', 'ejs');
+app.set('views', path.resolve('./views/success.ejs'));
+
 import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 import routers from './app/routes/index_route';
-import { IEncodedData, decrypt } from './helper/encryption';
+import { decrypt } from './helper/encryption';
 
 import ApiError from './app/errors/ApiError';
 import { Purchased_courses } from './app/modules/purchased_courses/purchased_courses.model';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Obtain the MAC address
-    // const networkInterfaces = os.networkInterfaces();
-    // console.log(networkInterfaces);
-
-    // const interfaceName = 'eth0'; // Adjust the interface name as needed
-    // if (networkInterfaces[interfaceName]) {
-    //   const macAddress = networkInterfaces[interfaceName][0].mac;
-    //   console.log('MAC address:', macAddress);
-    // } else {
-    //   console.log(`Network interface '${interfaceName}' not found.`);
-    // }
     res.send({ message: 'server is running....' });
   } catch (error) {
     next(error);
   }
   // res.send('server is running');
 });
-
-app.post(
-  '/success',
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      res.send({ message: 'server is running....' });
-    } catch (error) {
-      next(error);
-    }
-    // res.send('server is running');
-  }
-);
 
 //Application route
 app.use('/api/v1', routers);
@@ -152,11 +132,12 @@ app.get('/success', async (req: Request, res: Response) => {
               'payment.method': 'payple',
             });
             if (!result._id) {
-              throw new ApiError(500, 'Faild Payment');
+              res.render('cancle');
             }
-            return res.send(200).send({
+            // res.render('success', { payment });
+            res.status(200).json({
               success: true,
-              message: 'payment successfull',
+              message: 'payment success!!',
             });
           }
         }
@@ -166,9 +147,15 @@ app.get('/success', async (req: Request, res: Response) => {
     console.log(error);
   }
 });
+
+app.get('/success2', async (req: Request, res: Response) => {
+  try {
+    return res.render('success');
+  } catch (error) {
+    console.log(error);
+  }
+});
 // Set the views directory and the view engine
-app.set('views', './views');
-app.set('view engine', 'ejs');
 
 // app.get('/cancel', async (req: Request, res: Response) => {
 //   try {

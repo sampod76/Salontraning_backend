@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
-const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const express_1 = __importDefault(require("express"));
+const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 // create xss-clean.d.ts file after work this xss
 const path_1 = __importDefault(require("path"));
 const xss_clean_1 = __importDefault(require("xss-clean"));
@@ -56,6 +56,8 @@ const run = (req, res, next) => {
 app.use('/images', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/images/')));
 app.use('/profile', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/profile/')));
 app.use('/vedios', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/vedios/')));
+app.set('view engine', 'ejs');
+app.set('views', path_1.default.resolve('./views/success.ejs'));
 const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
@@ -64,25 +66,6 @@ const encryption_1 = require("./helper/encryption");
 const ApiError_1 = __importDefault(require("./app/errors/ApiError"));
 const purchased_courses_model_1 = require("./app/modules/purchased_courses/purchased_courses.model");
 app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        // Obtain the MAC address
-        // const networkInterfaces = os.networkInterfaces();
-        // console.log(networkInterfaces);
-        // const interfaceName = 'eth0'; // Adjust the interface name as needed
-        // if (networkInterfaces[interfaceName]) {
-        //   const macAddress = networkInterfaces[interfaceName][0].mac;
-        //   console.log('MAC address:', macAddress);
-        // } else {
-        //   console.log(`Network interface '${interfaceName}' not found.`);
-        // }
-        res.send({ message: 'server is running....' });
-    }
-    catch (error) {
-        next(error);
-    }
-    // res.send('server is running');
-}));
-app.post('/success', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.send({ message: 'server is running....' });
     }
@@ -125,11 +108,12 @@ app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             'payment.method': 'payple',
                         });
                         if (!result._id) {
-                            throw new ApiError_1.default(500, 'Faild Payment');
+                            res.render('cancle');
                         }
-                        return res.send(200).send({
+                        // res.render('success', { payment });
+                        res.status(200).json({
                             success: true,
-                            message: 'payment successfull',
+                            message: 'payment success!!',
                         });
                     }
                 }
@@ -140,9 +124,15 @@ app.get('/success', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         console.log(error);
     }
 }));
+app.get('/success2', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return res.render('success');
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
 // Set the views directory and the view engine
-app.set('views', './views');
-app.set('view engine', 'ejs');
 // app.get('/cancel', async (req: Request, res: Response) => {
 //   try {
 //   } catch (error) {
