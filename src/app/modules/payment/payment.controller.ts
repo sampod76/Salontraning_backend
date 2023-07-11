@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
+import { Types } from 'mongoose';
 import paypal, { Payment } from 'paypal-rest-sdk';
 import Stripe from 'stripe';
+import { IEncodedData, encrypt } from '../../../helper/encryption';
 import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
 import { GeneralUser } from '../generalUser/model.GeneralUser';
+import { Purchased_courses } from '../purchased_courses/purchased_courses.model';
 
 // import { errorLogger, logger } from '../../share/logger';
 
@@ -46,12 +49,6 @@ const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
   } else {
     throw new ApiError(404, 'Payment faild');
   }
-  // next();
-  /* res.status(200).send({
-      success: true,
-      data: result,
-      message: 'successfull create  Lession',
-    }); */
 });
 
 // payple intergrate
@@ -64,27 +61,39 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
     client_secret: process.env.PAYPLE_SECRET_KEY as string,
   });
 
-  // let itemListArray = item_list?.items?.map((value: any) => value?.sku);
-  // const result = await GeneralUser.findById(req?.user?._id);
-  // let courseIdExaite = result?.purchase_courses?.map(value =>
-  //   value?.course?.toString()
-  // );
+  // const itemSkus = new Set(item_list?.items?.map((item: any) => item?.sku));
+  const item = new Types.ObjectId(item_list?.items[0]?.sku);
+  const findByCourse = await Purchased_courses.findOne({
+    userId: new Types.ObjectId(req?.user?._id),
+    course: new Types.ObjectId(item),
+  });
 
-  // if (courseIdExaite) {
-  //   return res.status(404).send({
-  //     success: false,
-  //     statusCode: 404,
-  //     message: 'You are already purchased course!!😭😭',
-  //   });
-  // }
+  if (findByCourse) {
+    return res.status(404).send({
+      success: false,
+      statusCode: 404,
+      message: 'You are already purchased course!!😭😭',
+    });
+  }
+  const data: IEncodedData = {
+    userId: req?.user?._id,
+    course_id: item.toString(),
+    amount: {
+      currency: amount?.currency || 'USD',
+      total: amount?.total,
+    },
+  };
+
+  const encriptData = encrypt(data);
+
   const payment: Payment = {
     intent: 'sale',
     payer: {
       payment_method: 'paypal',
     },
     redirect_urls: {
-      return_url: `${process.env.LOCALHOST_SERVER_SIDE}/success`,
-      cancel_url: `${process.env.LOCALHOST_SERVER_SIDE}/cancel`,
+      return_url: `${process.env.REAL_HOST_SERVER_SIDE}/success?app=${encriptData}`,
+      cancel_url: `${process.env.REAL_HOST_SERVER_SIDE}/cancel`,
     },
     transactions: [
       {

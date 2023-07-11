@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import paypal, { Payment } from 'paypal-rest-sdk';
 import express, {
   Application,
   NextFunction,
@@ -31,7 +32,11 @@ app.use(xss());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
+paypal.configure({
+  mode: 'sandbox',
+  client_id: process.env.PAYPLE_CLIENT_ID as string,
+  client_secret: process.env.PAYPLE_SECRET_KEY as string,
+});
 const run: RequestHandler = (req, res, next) => {
   try {
     // jwtHelpers.verifyToken(`${req.headers.authorization}`, config.jwt.secret as string);
@@ -64,6 +69,10 @@ import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 import routers from './app/routes/index_route';
+import { IEncodedData, decrypt } from './helper/encryption';
+
+import ApiError from './app/errors/ApiError';
+import { Purchased_courses } from './app/modules/purchased_courses/purchased_courses.model';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -85,34 +94,71 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   // res.send('server is running');
 });
 
-app.post('/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.send({ message: 'server is running....' });
-  } catch (error) {
-    next(error);
+app.post(
+  '/success',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.send({ message: 'server is running....' });
+    } catch (error) {
+      next(error);
+    }
+    // res.send('server is running');
   }
-  // res.send('server is running');
-});
+);
 
 //Application route
 app.use('/api/v1', routers);
 
 app.get('/success', async (req: Request, res: Response) => {
   try {
-    // const payerId = req.query.PayerID;
-    // const paymentId = req.query.paymentId;
-    // console.log(payerId, paymentId);
-    // const execute_payment_json = {
-    //   payer_id: payerId,
-    //   transactions: [
-    //     {
-    //       amount: {
-    //         currency: 'USD',
-    //         total: amt,
-    //       },
-    //     },
-    //   ],
-    // };
+    const payerId = req.query.PayerID;
+    const paymentId = req.query.paymentId as string;
+    const app = req.query.app;
+    type IEncodedData = {
+      userId: string;
+      course_id: string;
+      amount: {
+        currency: string;
+        total: string;
+      };
+    };
+    const data: IEncodedData = decrypt(app as string);
+
+    const execute_payment_json = {
+      payer_id: payerId as string,
+      transactions: [
+        {
+          amount: data?.amount,
+        },
+      ],
+    };
+
+    paypal.payment.execute(
+      paymentId,
+      execute_payment_json,
+      async function (error, payment) {
+        if (error) {
+          throw new ApiError(500, 'Payment is deny');
+        } else {
+          console.log(payment);
+          const find = await Purchased_courses.findOne({
+            transactionID: paymentId,
+          });
+          if (!find) {
+            const result = await Purchased_courses.create({
+              userId: data.userId,
+              course: data.course_id,
+              transactionID: paymentId,
+              'payment.method': 'payple',
+            });
+            return res.send(200).send({
+              success: true,
+              message: 'payment successfull',
+            });
+          }
+        }
+      }
+    );
   } catch (error) {
     console.log(error);
   }

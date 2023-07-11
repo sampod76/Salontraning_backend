@@ -40,6 +40,10 @@ const createPurchased_coursesByDb = async (
       throw new ApiError(404, 'Failed to by course');
     }
 
+    // payload.transactionID =
+    //   payload.transactionID ||
+    //   payload.courseId + '-' + payload.transactionID || Math.random().toString(16).slice(2);
+
     const createPurchase = await Purchased_courses.create([payload], {
       session,
     });
