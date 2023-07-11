@@ -26,12 +26,6 @@ const createPurchased_courses = catchAsync(
       message: 'successfull create  Purchased_courses',
       data: result,
     });
-    // next();
-    /* res.status(200).send({
-      success: true,
-      data: result,
-      message: 'successfull create  Purchased_courses',
-    }); */
   }
 );
 
