@@ -27,6 +27,10 @@ export type IRunContest = {
   status?: 'active' | 'deactive' | 'save';
   winnerList?: IPhotoContestUser[];
   winnerPrize?: [];
+  total_winer: {
+    number: number;
+    condition: object;
+  };
   duration_time: {
     startDate: string;
     endDate: string;

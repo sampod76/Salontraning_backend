@@ -27,16 +27,17 @@ const lession_model_1 = require("./lession.model");
 const lession_utils_1 = require("./lession.utils");
 const createLessionByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     payload.lessionId = yield (0, lession_utils_1.generateLessionId)(payload.courseId);
-    const result = (yield lession_model_1.Lession.create(payload)).populate({
-        path: 'course',
-        // select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
-        // populate: [
-        //   {
-        //     path: 'moderator',
-        //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-        //   }
-        // ],
-    });
+    const result = yield lession_model_1.Lession.create(payload);
+    // .populate({
+    //   path: 'course',
+    //   // select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
+    //   // populate: [
+    //   //   {
+    //   //     path: 'moderator',
+    //   //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+    //   //   }
+    //   // ],
+    // });
     return result;
 });
 //getAllLessionFromDb
@@ -72,7 +73,8 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield lession_model_1.Lession.find(whereConditions)
-        .populate('course')
+        .populate('course', 'courseId title publisherName')
+        .populate('thumbnail')
         .sort(sortConditions)
         .skip(Number(skip))
         .limit(Number(limit));
@@ -88,7 +90,9 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
 });
 // get single e form db
 const getSingleLessionFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield lession_model_1.Lession.findById(id);
+    const result = yield lession_model_1.Lession.findById(id)
+        .populate('course', 'courseId title publisherName')
+        .populate('thumbnail');
     return result;
 });
 // update e form db

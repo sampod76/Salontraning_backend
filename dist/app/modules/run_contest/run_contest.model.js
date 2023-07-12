@@ -37,13 +37,19 @@ const RunContestSchema = new mongoose_1.Schema({
             type: Date,
         },
     },
+    total_winer: {
+        number: { type: Number, min: 0 },
+        condition: {
+            type: Object,
+        },
+    },
     //after contest end then update
     winnerList: [
         {
             photo_contest_id: {
                 type: mongoose_1.Types.ObjectId,
                 ref: 'Photo_contest_user',
-                require: [true, 'user id is required'],
+                require: [true, 'photo_contest_id is required'],
             },
             email: String,
             name: String,

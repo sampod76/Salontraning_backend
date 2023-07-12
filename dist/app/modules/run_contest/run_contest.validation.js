@@ -11,6 +11,10 @@ const createRunContestZodSchema = zod_1.z.object({
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
         winnerList: zod_1.z.array(zod_1.z.unknown()).optional(),
         winnerPrize: zod_1.z.array(zod_1.z.unknown()).optional(),
+        total_winer: zod_1.z.object({
+            number: zod_1.z.number().min(0).optional(),
+            condition: zod_1.z.object({}).optional(),
+        }),
         duration_time: zod_1.z.object({
             startDate: zod_1.z.string(),
             endDate: zod_1.z.string(),
@@ -26,6 +30,10 @@ const updateRunContestZodSchema = zod_1.z.object({
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
         winnerList: zod_1.z.array(zod_1.z.unknown()).optional(),
         winnerPrize: zod_1.z.array(zod_1.z.unknown()).optional(),
+        total_winer: zod_1.z.object({
+            number: zod_1.z.number().min(0).optional(),
+            condition: zod_1.z.object({}).optional(),
+        }),
         duration_time: zod_1.z
             .object({
             startDate: zod_1.z.string().optional(),

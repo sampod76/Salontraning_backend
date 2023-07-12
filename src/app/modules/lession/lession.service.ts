@@ -12,16 +12,17 @@ const createLessionByDb = async (
   payload: ILession
 ): Promise<ILession | null> => {
   payload.lessionId = await generateLessionId(payload.courseId);
-  const result = (await Lession.create(payload)).populate({
-    path: 'course',
-    // select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
-    // populate: [
-    //   {
-    //     path: 'moderator',
-    //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
-    //   }
-    // ],
-  });
+  const result = await Lession.create(payload);
+  // .populate({
+  //   path: 'course',
+  //   // select: { needsPasswordChange: 0, createdAt: 0, updatedAt: 0, __v: 0 },
+  //   // populate: [
+  //   //   {
+  //   //     path: 'moderator',
+  //   //     select: { createdAt: 0, updatedAt: 0, __v: 0 },
+  //   //   }
+  //   // ],
+  // });
   return result;
 };
 
@@ -72,7 +73,8 @@ const getAllLessionFromDb = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await Lession.find(whereConditions)
-    .populate('course')
+    .populate('course', 'courseId title publisherName')
+    .populate('thumbnail')
     .sort(sortConditions)
     .skip(Number(skip))
     .limit(Number(limit));
@@ -90,7 +92,9 @@ const getAllLessionFromDb = async (
 
 // get single e form db
 const getSingleLessionFromDb = async (id: string): Promise<ILession | null> => {
-  const result = await Lession.findById(id);
+  const result = await Lession.findById(id)
+    .populate('course', 'courseId title publisherName')
+    .populate('thumbnail');
 
   return result;
 };
