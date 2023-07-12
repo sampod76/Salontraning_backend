@@ -9,4 +9,9 @@ exports.QUIZ_SEARCHABLE_FIELDS = [
     'header_2',
     'tag',
 ];
-exports.QUIZ_FILTERABLE_FIELDS = ['searchTerm', 'courseId', 'date'];
+exports.QUIZ_FILTERABLE_FIELDS = [
+    'searchTerm',
+    'courseId',
+    'date',
+    'course',
+];

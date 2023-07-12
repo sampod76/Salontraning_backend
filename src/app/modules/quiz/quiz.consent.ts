@@ -6,4 +6,9 @@ export const QUIZ_SEARCHABLE_FIELDS = [
   'header_2',
   'tag',
 ];
-export const QUIZ_FILTERABLE_FIELDS = ['searchTerm', 'courseId', 'date'];
+export const QUIZ_FILTERABLE_FIELDS = [
+  'searchTerm',
+  'courseId',
+  'date',
+  'course',
+];

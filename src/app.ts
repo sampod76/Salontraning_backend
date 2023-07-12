@@ -17,13 +17,14 @@ app.use(cors());
 
 // app.use(
 //   cors({
-//     origin: process.env.LOCALHOST_CLIENT_SIDE,
+//     origin: '*',
 //     credentials: true,
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //   })
 // );
 
-/* app.use(function (req, res, next) {
+/*
+ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.DEV_URL)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept")
   next()

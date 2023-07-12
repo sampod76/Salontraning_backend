@@ -5,6 +5,8 @@ import { IFileUploade } from '../fileUploade/interface.fileUploade';
 export type IQuizFilters = {
   searchTerm?: string;
   title?: string;
+  course?: string;
+  courseId?: string;
   status?: 'active' | 'deactive' | 'save';
 };
 

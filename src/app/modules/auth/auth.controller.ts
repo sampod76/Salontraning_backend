@@ -97,7 +97,7 @@ const myProfileUpdate = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IGeneralUser | IAdmin | IModerator>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'successfull get profile',
+    message: 'successfull update profile',
     data: result,
   });
 });
