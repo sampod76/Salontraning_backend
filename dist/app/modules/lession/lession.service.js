@@ -72,6 +72,7 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield lession_model_1.Lession.find(whereConditions)
+        .populate('course')
         .sort(sortConditions)
         .skip(Number(skip))
         .limit(Number(limit));

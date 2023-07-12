@@ -72,6 +72,7 @@ const getAllLessionFromDb = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await Lession.find(whereConditions)
+    .populate('course')
     .sort(sortConditions)
     .skip(Number(skip))
     .limit(Number(limit));
