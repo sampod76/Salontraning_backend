@@ -43,7 +43,6 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
         thumbnail: {
           type: Types.ObjectId,
           ref: 'FileUploade',
-          required: true,
         },
       },
     ],

@@ -42,7 +42,6 @@ const QuizSchema = new mongoose_1.Schema({
             thumbnail: {
                 type: mongoose_1.Types.ObjectId,
                 ref: 'FileUploade',
-                required: true,
             },
         },
     ],

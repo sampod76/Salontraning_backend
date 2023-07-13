@@ -14,6 +14,7 @@ const LessionSchema = new mongoose_1.Schema({
         required: true,
         trim: true,
     },
+    courseTitle: String,
     vedio: {
         type: {
             link: {
@@ -26,6 +27,7 @@ const LessionSchema = new mongoose_1.Schema({
     },
     serial_no: Number,
     duration: Number,
+    publish_date: Date,
     header_1: {
         type: String,
         trim: true,
@@ -41,7 +43,7 @@ const LessionSchema = new mongoose_1.Schema({
     thumbnail: {
         type: mongoose_1.Types.ObjectId,
         ref: 'FileUploade',
-        required: true,
+        // required: true,
     },
     status: {
         type: String,

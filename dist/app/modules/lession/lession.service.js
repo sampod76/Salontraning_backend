@@ -21,6 +21,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LessionService = void 0;
+const mongoose_1 = require("mongoose");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const lession_consent_1 = require("./lession.consent");
 const lession_model_1 = require("./lession.model");
@@ -58,9 +59,11 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
     }
     if (Object.keys(filtersData).length) {
         andConditions.push({
-            $and: Object.entries(filtersData).map(([field, value]) => ({
-                [field]: value,
-            })),
+            $and: Object.entries(filtersData).map(([field, value]) => field === 'course'
+                ? { [field]: new mongoose_1.Types.ObjectId(value) }
+                : {
+                    [field]: value,
+                }),
         });
     }
     //****************search and filters end**********/

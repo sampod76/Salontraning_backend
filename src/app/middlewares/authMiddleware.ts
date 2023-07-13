@@ -12,7 +12,7 @@ const authMiddleware =
     try {
       //get authorization token
       const token = req.headers.authorization;
-      console.log(token, Math.random() * 100);
+      // console.log(token, Math.random() * 100);
       // const tokenCookie = req.cookies.refreshToken;
       // console.log(token);
       // console.log(tokenCookie, 'cookie');

@@ -5,6 +5,7 @@ exports.LESSION_SEARCHABLE_FIELDS = [
     'lessonId',
     'courseId',
     'title',
+    'courseTitle',
     'description',
     'header_1',
     'header_2',

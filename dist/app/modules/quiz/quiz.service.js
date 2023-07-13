@@ -21,6 +21,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuizService = void 0;
+const mongoose_1 = require("mongoose");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const quiz_consent_1 = require("./quiz.consent");
 const quiz_model_1 = require("./quiz.model");
@@ -55,11 +56,14 @@ const getAllQuizFromDb = (filters, paginationOptions) => __awaiter(void 0, void 
     }
     if (Object.keys(filtersData).length) {
         andConditions.push({
-            $and: Object.entries(filtersData).map(([field, value]) => ({
-                [field]: value,
-            })),
+            $and: Object.entries(filtersData).map(([field, value]) => field === 'course'
+                ? { [field]: new mongoose_1.Types.ObjectId(value) }
+                : {
+                    [field]: value,
+                }),
         });
     }
+    console.log(andConditions);
     //****************search and filters end**********/
     //****************pagination start **************/
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
@@ -72,7 +76,8 @@ const getAllQuizFromDb = (filters, paginationOptions) => __awaiter(void 0, void 
     const result = yield quiz_model_1.Quiz.find(whereConditions)
         .sort(sortConditions)
         .skip(Number(skip))
-        .limit(Number(limit));
+        .limit(Number(limit))
+        .populate('course', 'title courseId categoryDetails');
     const total = yield quiz_model_1.Quiz.countDocuments(whereConditions);
     return {
         meta: {

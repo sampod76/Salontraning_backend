@@ -12,6 +12,7 @@ const createLessionZodSchema = zod_1.z.object({
         courseId: zod_1.z.string({ required_error: 'courseId is required' }),
         //
         //
+        courseTitle: zod_1.z.string().optional(),
         header_1: zod_1.z.string().optional(),
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),
@@ -23,6 +24,7 @@ const createLessionZodSchema = zod_1.z.object({
 const updateLessionZodSchema = zod_1.z.object({
     body: zod_1.z.object({
         title: zod_1.z.string().optional(),
+        courseTitle: zod_1.z.string().optional(),
         header_1: zod_1.z.string().optional(),
         header_2: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),

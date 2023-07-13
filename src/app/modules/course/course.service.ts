@@ -43,7 +43,17 @@ const getAllCourseFromDb = async (
   paginationOptions: IPaginationOption
 ): Promise<IGenericResponse<ICourse[]>> => {
   //****************search and filters start************/
-  const { searchTerm, ...filtersData } = filters;
+  const { searchTerm, select, ...filtersData } = filters;
+
+  // Split the string and extract field names
+  const projection: any = {};
+  if (select) {
+    const fieldNames = select?.split(',').map(field => field.trim());
+    // Create the projection object
+    fieldNames.forEach(field => {
+      projection[field] = 1;
+    });
+  }
 
   const andConditions = [];
   if (searchTerm) {

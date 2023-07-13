@@ -10,6 +10,7 @@ const createLessionZodSchema = z.object({
     courseId: z.string({ required_error: 'courseId is required' }),
     //
     //
+    courseTitle: z.string().optional(),
     header_1: z.string().optional(),
     header_2: z.string().optional(),
     description: z.string().optional(),
@@ -22,6 +23,7 @@ const createLessionZodSchema = z.object({
 const updateLessionZodSchema = z.object({
   body: z.object({
     title: z.string().optional(),
+    courseTitle: z.string().optional(),
     header_1: z.string().optional(),
     header_2: z.string().optional(),
     description: z.string().optional(),

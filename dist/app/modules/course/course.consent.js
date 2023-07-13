@@ -17,5 +17,6 @@ exports.COURSE_FILTERABLE_FIELDS = [
     'date',
     'categoryDetails.category',
     'reviews.star',
+    'select',
 ];
 exports.COURSE_TYPES = ['free', 'paid', 'open', 'closed', 'recurrig'];

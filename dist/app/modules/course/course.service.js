@@ -82,7 +82,16 @@ const createCourseByDb = (payload) => __awaiter(void 0, void 0, void 0, function
 //getAllCourseFromDb
 const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filters start************/
-    const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
+    const { searchTerm, select } = filters, filtersData = __rest(filters, ["searchTerm", "select"]);
+    // Split the string and extract field names
+    const projection = {};
+    if (select) {
+        const fieldNames = select === null || select === void 0 ? void 0 : select.split(',').map(field => field.trim());
+        // Create the projection object
+        fieldNames.forEach(field => {
+            projection[field] = 1;
+        });
+    }
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({

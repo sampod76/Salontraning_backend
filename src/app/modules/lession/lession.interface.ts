@@ -17,6 +17,7 @@ export type ILessionSearchableField = {
   header_2?: string;
   description?: string;
   lessonId?: string;
+  courseTitle?: string;
 };
 
 export type ILession = {
@@ -25,9 +26,11 @@ export type ILession = {
   header_1?: string;
   header_2?: string;
   description?: string;
+  courseTitle?: string;
   thumbnail?: string | IFileUploade;
   status?: 'active' | 'deactive' | 'save';
   tag?: string[];
+  publish_date?: string;
   duration?: string;
   vedio: { link: string; player_no: number };
   serial_no: number;

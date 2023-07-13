@@ -10,6 +10,7 @@ export type ICourseFilters = {
   status?: string;
   'categoryDetails.category'?: string;
   'reviews.star'?: number;
+  select?: string;
 };
 
 // export type ICourseSearchableField = {

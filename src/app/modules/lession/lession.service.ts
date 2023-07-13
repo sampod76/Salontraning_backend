@@ -1,4 +1,4 @@
-import { SortOrder } from 'mongoose';
+import { SortOrder, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
@@ -51,9 +51,13 @@ const getAllLessionFromDb = async (
 
   if (Object.keys(filtersData).length) {
     andConditions.push({
-      $and: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      $and: Object.entries(filtersData).map(([field, value]) =>
+        field === 'course'
+          ? { [field]: new Types.ObjectId(value) }
+          : {
+              [field]: value,
+            }
+      ),
     });
   }
 

@@ -1,6 +1,5 @@
 export const QUIZ_SEARCHABLE_FIELDS = [
   'courseId',
-  'title',
   'description',
   'header_1',
   'header_2',

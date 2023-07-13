@@ -14,6 +14,7 @@ export const COURSE_FILTERABLE_FIELDS = [
   'date',
   'categoryDetails.category',
   'reviews.star',
+  'select',
 ];
 
 export const COURSE_TYPES = ['free', 'paid', 'open', 'closed', 'recurrig'];
