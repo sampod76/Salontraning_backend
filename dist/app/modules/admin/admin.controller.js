@@ -20,6 +20,15 @@ const pick_1 = __importDefault(require("../../share/pick"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const admin_constant_1 = require("./admin.constant");
 const admin_service_1 = require("./admin.service");
+const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminService.crateAdminFromDb(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Admin create successfully !',
+        data: result,
+    });
+}));
 const getAllAdmins = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filters = (0, pick_1.default)(req.query, admin_constant_1.adminFilterableFields);
     const paginationOptions = (0, pick_1.default)(req.query, pagination_1.PAGINATION_FIELDS);
@@ -65,6 +74,7 @@ const deleteAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 }));
 exports.AdminController = {
     getAllAdmins,
+    createAdmin,
     getSingleAdmin,
     updateAdmin,
     deleteAdmin,

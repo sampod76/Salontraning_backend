@@ -9,6 +9,17 @@ import { adminFilterableFields } from './admin.constant';
 import { IAdmin } from './admin.interface';
 import { AdminService } from './admin.service';
 
+const createAdmin = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminService.crateAdminFromDb(req.body);
+
+  sendResponse<IAdmin>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Admin create successfully !',
+    data: result,
+  });
+});
+
 const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, adminFilterableFields);
   const paginationOptions = pick(req.query, PAGINATION_FIELDS);
@@ -66,6 +77,7 @@ const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
 
 export const AdminController = {
   getAllAdmins,
+  createAdmin,
   getSingleAdmin,
   updateAdmin,
   deleteAdmin,

@@ -20,6 +20,10 @@ const AdminSchema = new mongoose_1.Schema({
         type: String,
         default: users_1.ENUM_USER_ROLE.ADMIN,
     },
+    uid: {
+        type: String,
+        unique: true,
+    },
     email: {
         type: String,
         unique: true,

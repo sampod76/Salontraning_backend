@@ -24,15 +24,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminService = void 0;
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-dgetAllAdminisable @typescript-eslint/no-explicit-any */
-const mongoose_1 = __importDefault(require("mongoose"));
 const http_status_1 = __importDefault(require("http-status"));
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
-const users_model_1 = require("../users/users.model");
 const admin_constant_1 = require("./admin.constant");
 const admin_model_1 = require("./admin.model");
+const crateAdminFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    // check if the Admin is exist
+    const result = yield admin_model_1.Admin.create(payload);
+    return result;
+});
 const getAllAdminsFromDb = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
@@ -96,32 +97,12 @@ const updateAdminFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, fun
     return result;
 });
 const deleteAdminFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    // check if the Admin is exist
-    const isExist = yield admin_model_1.Admin.findOne({ id });
-    if (!isExist) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Admin not found !');
-    }
-    const session = yield mongoose_1.default.startSession();
-    try {
-        session.startTransaction();
-        //delete Admin first
-        const result = yield admin_model_1.Admin.findOneAndDelete({ id }, { session });
-        if (!result) {
-            throw new ApiError_1.default(404, 'Failed to delete student');
-        }
-        //delete user
-        yield users_model_1.User.deleteOne({ id });
-        session.commitTransaction();
-        session.endSession();
-        return result;
-    }
-    catch (error) {
-        session.abortTransaction();
-        throw error;
-    }
+    const result = yield admin_model_1.Admin.findOneAndDelete({ _id: id }, { runValidators: true, new: true });
+    return result;
 });
 exports.AdminService = {
     getAllAdminsFromDb,
+    crateAdminFromDb,
     getSingleAdminFromDb,
     updateAdminFromDb,
     deleteAdminFromDb,

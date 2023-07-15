@@ -24,13 +24,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModeratorService = void 0;
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-dgetAllModeratorisable @typescript-eslint/no-explicit-any */
-const mongoose_1 = __importDefault(require("mongoose"));
 const http_status_1 = __importDefault(require("http-status"));
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
-const users_model_1 = require("../users/users.model");
 const moderator_constant_1 = require("./moderator.constant");
 const moderator_model_1 = require("./moderator.model");
 const getAllModeratorsFromDb = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
@@ -100,29 +96,8 @@ const createModeratorFromDb = (payload) => __awaiter(void 0, void 0, void 0, fun
     return result;
 });
 const deleteModeratorFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    // check if the Moderator is exist
-    const isExist = yield moderator_model_1.Moderator.findOne({ id });
-    if (!isExist) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Moderator not found !');
-    }
-    const session = yield mongoose_1.default.startSession();
-    try {
-        session.startTransaction();
-        //delete Moderator first
-        const result = yield moderator_model_1.Moderator.findOneAndDelete({ id }, { session });
-        if (!result) {
-            throw new ApiError_1.default(404, 'Failed to delete student');
-        }
-        //delete user
-        yield users_model_1.User.deleteOne({ id });
-        session.commitTransaction();
-        session.endSession();
-        return result;
-    }
-    catch (error) {
-        session.abortTransaction();
-        throw error;
-    }
+    const result = yield moderator_model_1.Moderator.findOneAndDelete({ _id: id });
+    return result;
 });
 exports.ModeratorService = {
     createModeratorFromDb,

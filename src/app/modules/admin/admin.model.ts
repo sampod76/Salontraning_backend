@@ -20,6 +20,10 @@ const AdminSchema = new Schema<IAdmin, AdminModel>(
       type: String,
       default: ENUM_USER_ROLE.ADMIN,
     },
+    uid: {
+      type: String,
+      unique: true,
+    },
 
     email: {
       type: String,

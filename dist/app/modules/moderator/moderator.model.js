@@ -31,10 +31,10 @@ const ModeratorSchema = new mongoose_1.Schema({
         unique: true,
         // required: true,
     },
-    uid: {
-        type: String,
-        unique: true,
-    },
+    // uid: {
+    //   type: String,
+    //   unique: true,
+    // },
     emergencyphone: {
         type: String,
     },
@@ -47,7 +47,7 @@ const ModeratorSchema = new mongoose_1.Schema({
     profileImage: {
         type: mongoose_1.Types.ObjectId,
         ref: 'FileUploade',
-        required: true,
+        // required: true,
     },
     status: {
         type: String,

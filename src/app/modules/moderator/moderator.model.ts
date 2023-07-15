@@ -1,6 +1,6 @@
 import { Schema, Types, model } from 'mongoose';
-import { IModerator, ModeratorModel } from './moderator.interface';
 import { ENUM_USER_ROLE } from '../../../enums/users';
+import { IModerator, ModeratorModel } from './moderator.interface';
 
 const ModeratorSchema = new Schema<IModerator, ModeratorModel>(
   {
@@ -32,10 +32,10 @@ const ModeratorSchema = new Schema<IModerator, ModeratorModel>(
       unique: true,
       // required: true,
     },
-    uid: {
-      type: String,
-      unique: true,
-    },
+    // uid: {
+    //   type: String,
+    //   unique: true,
+    // },
     emergencyphone: {
       type: String,
     },
@@ -50,7 +50,7 @@ const ModeratorSchema = new Schema<IModerator, ModeratorModel>(
     profileImage: {
       type: Types.ObjectId,
       ref: 'FileUploade',
-      required: true,
+      // required: true,
     },
     status: {
       type: String,

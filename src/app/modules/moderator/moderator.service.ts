@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-dgetAllModeratorisable @typescript-eslint/no-explicit-any */
-import mongoose, { SortOrder } from 'mongoose';
+import { SortOrder } from 'mongoose';
 
 import httpStatus from 'http-status';
 
@@ -8,9 +8,9 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
-import { User } from '../users/users.model';
-import { IModerator, IModeratorFilters } from './moderator.interface';
+
 import { moderatorSearchableFields } from './moderator.constant';
+import { IModerator, IModeratorFilters } from './moderator.interface';
 import { Moderator } from './moderator.model';
 
 const getAllModeratorsFromDb = async (
@@ -114,32 +114,8 @@ const createModeratorFromDb = async (
 const deleteModeratorFromDb = async (
   id: string
 ): Promise<IModerator | null> => {
-  // check if the Moderator is exist
-  const isExist = await Moderator.findOne({ id });
-
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Moderator not found !');
-  }
-
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-    //delete Moderator first
-    const result = await Moderator.findOneAndDelete({ id }, { session });
-    if (!result) {
-      throw new ApiError(404, 'Failed to delete student');
-    }
-    //delete user
-    await User.deleteOne({ id });
-    session.commitTransaction();
-    session.endSession();
-
-    return result;
-  } catch (error) {
-    session.abortTransaction();
-    throw error;
-  }
+  const result = await Moderator.findOneAndDelete({ _id: id });
+  return result;
 };
 
 export const ModeratorService = {

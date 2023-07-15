@@ -5,6 +5,7 @@ export type IAdmin = {
   profileImage?: string;
   dateOfBirth?: string;
   email: string;
+  uid: string;
   phone: string;
   emergencyphone?: string;
   gender?: 'male' | 'female';

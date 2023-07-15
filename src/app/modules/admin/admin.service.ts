@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-dgetAllAdminisable @typescript-eslint/no-explicit-any */
-import mongoose, { SortOrder } from 'mongoose';
+import { SortOrder } from 'mongoose';
 
 import httpStatus from 'http-status';
 
@@ -8,10 +8,15 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
-import { User } from '../users/users.model';
+
 import { adminSearchableFields } from './admin.constant';
 import { IAdmin, IAdminFilters } from './admin.interface';
 import { Admin } from './admin.model';
+const crateAdminFromDb = async (payload: IAdmin): Promise<IAdmin | null> => {
+  // check if the Admin is exist
+  const result = await Admin.create(payload);
+  return result;
+};
 
 const getAllAdminsFromDb = async (
   filters: IAdminFilters,
@@ -100,36 +105,16 @@ const updateAdminFromDb = async (
 };
 
 const deleteAdminFromDb = async (id: string): Promise<IAdmin | null> => {
-  // check if the Admin is exist
-  const isExist = await Admin.findOne({ id });
-
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Admin not found !');
-  }
-
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-    //delete Admin first
-    const result = await Admin.findOneAndDelete({ id }, { session });
-    if (!result) {
-      throw new ApiError(404, 'Failed to delete student');
-    }
-    //delete user
-    await User.deleteOne({ id });
-    session.commitTransaction();
-    session.endSession();
-
-    return result;
-  } catch (error) {
-    session.abortTransaction();
-    throw error;
-  }
+  const result = await Admin.findOneAndDelete(
+    { _id: id },
+    { runValidators: true, new: true }
+  );
+  return result;
 };
 
 export const AdminService = {
   getAllAdminsFromDb,
+  crateAdminFromDb,
   getSingleAdminFromDb,
   updateAdminFromDb,
   deleteAdminFromDb,
