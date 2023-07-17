@@ -63,9 +63,6 @@ const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 const index_route_1 = __importDefault(require("./app/routes/index_route"));
-const encryption_1 = require("./helper/encryption");
-const ApiError_1 = __importDefault(require("./app/errors/ApiError"));
-const purchased_courses_model_1 = require("./app/modules/purchased_courses/purchased_courses.model");
 app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.send({ message: 'server is running....' });
@@ -77,80 +74,7 @@ app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 //Application route
 app.use('/api/v1', index_route_1.default);
-app.get('/success', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const payerId = req.query.PayerID;
-        const paymentId = req.query.paymentId;
-        const app = req.query.app;
-        if (typeof payerId !== 'string' ||
-            typeof paymentId !== 'string' ||
-            typeof app !== 'string') {
-            throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'unauthorized access !!');
-        }
-        const data = (0, encryption_1.decrypt)(app);
-        const execute_payment_json = {
-            payer_id: payerId,
-            transactions: [
-                {
-                    amount: data === null || data === void 0 ? void 0 : data.amount,
-                },
-            ],
-        };
-        paypal_rest_sdk_1.default.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (error) {
-                    throw new ApiError_1.default(500, 'Payment is deny');
-                }
-                else {
-                    const find = yield purchased_courses_model_1.Purchased_courses.findOne({
-                        transactionID: paymentId,
-                    });
-                    if (!find) {
-                        const result = yield purchased_courses_model_1.Purchased_courses.create({
-                            userId: data.userId,
-                            course: data.course_id,
-                            transactionID: paymentId,
-                            'payment.method': 'payple',
-                        });
-                        if (!result._id) {
-                            // res.render('cancle');
-                            res.status(400).json({
-                                success: false,
-                                message: 'payment faild!!',
-                            });
-                        }
-                        // res.render('success', { payment });
-                        res.status(200).json({
-                            success: true,
-                            message: 'payment success!!',
-                        });
-                    }
-                }
-            });
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-app.get('/success2', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        return res.render('success');
-    }
-    catch (error) {
-        next(error);
-    }
-}));
 // Set the views directory and the view engine
-app.get('/cancel', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        throw new ApiError_1.default(404, 'Payment faild');
-    }
-    catch (error) {
-        next(error);
-        console.log(error);
-    }
-}));
 // global error handlar
 app.use(globalErrorHandler_1.default);
 //handle not found route
@@ -180,15 +104,16 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         //   }
         // );
         // console.log(result);
-        // const data = {
-        //   name: 'sampod',
-        //   datoto: {
-        //     sampod: 120,
-        //     totoal: 141,
-        //   },
-        // };
-        // const result = encrypt(data);
-        // // const decode = decrypt('djdjddkjffff');
+        // const result = await PhotoContestUser.deleteMany();
+        // console.log(result);
+        // const result = await GeneralUser.updateMany(
+        //   {},
+        //   {
+        //     purchase_courses: [],
+        //   }
+        // );
+        // const result = await FileUploade.deleteMany({});
+        // const result = await RunContest.deleteMany({});
         // console.log(result);
     }
     catch (error) {

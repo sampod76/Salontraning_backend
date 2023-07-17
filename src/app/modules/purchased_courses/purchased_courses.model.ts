@@ -19,7 +19,7 @@ const purchasedCoursesSchema = new Schema<
     userName: {
       type: String,
       trim: true,
-      required: true,
+      // required: true,
     },
     email: {
       type: String,
@@ -55,7 +55,7 @@ const purchasedCoursesSchema = new Schema<
         },
         paymentType: {
           type: String,
-          enum: ['card'],
+          // enum: ['card'],
           default: 'card',
         },
 
@@ -84,7 +84,7 @@ const purchasedCoursesSchema = new Schema<
   }
 );
 
-//All calculations will be done here while buying any product
+// All calculations will be done here while buying any product
 purchasedCoursesSchema.pre('save', async function (next) {
   const {
     price = 0,
@@ -101,7 +101,6 @@ purchasedCoursesSchema.pre('save', async function (next) {
 
   const afterDiscount = price - (price / 100) * discount.value;
   this.payment.total = afterDiscount + (afterDiscount / 100) * vat;
-
   this.payment.discount = discount.value;
   this.payment.vat = vat;
   this.payment.price = price;

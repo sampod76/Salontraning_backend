@@ -11,7 +11,7 @@ const RunContestSchema = new mongoose_1.Schema({
     thumbnail: {
         type: mongoose_1.Types.ObjectId,
         ref: 'FileUploade',
-        required: true,
+        // required: true,
     },
     status: {
         type: String,
@@ -23,9 +23,9 @@ const RunContestSchema = new mongoose_1.Schema({
             thumbnail: {
                 type: mongoose_1.Types.ObjectId,
                 ref: 'FileUploade',
-                required: true,
+                // required: true,
             },
-            prize_serial: { type: Number, unique: true },
+            prize_serial: { type: Number },
             prize_value: Number,
         },
     ],
@@ -49,7 +49,7 @@ const RunContestSchema = new mongoose_1.Schema({
             photo_contest_id: {
                 type: mongoose_1.Types.ObjectId,
                 ref: 'Photo_contest_user',
-                require: [true, 'photo_contest_id is required'],
+                // require: [true, 'photo_contest_id is required'],
             },
             email: String,
             name: String,

@@ -17,24 +17,24 @@ export type IPurchased_coursesSearchableField = {
 };
 
 export type IPayment = {
-  price: number;
+  price?: number;
   vat?: number;
   discount?: number;
   total: number;
-  method: string;
-  paymentType: string;
+  method?: string;
+  paymentType?: string;
   method_TransactionID?: string;
 };
 
 export type IPurchased_courses = {
-  userId: Types.ObjectId | IGeneralUser;
-  userName: string;
+  userId: Types.ObjectId | IGeneralUser | any;
+  userName?: string;
   email?: string;
   phone?: string;
   payment: IPayment;
   transactionID: string;
-  course: Types.ObjectId | ICourse;
-  courseId: string;
+  course: Types.ObjectId | ICourse | any;
+  courseId?: string;
 };
 
 export type Purchased_coursesModel = Model<

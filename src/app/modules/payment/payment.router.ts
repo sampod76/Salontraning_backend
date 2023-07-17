@@ -30,4 +30,7 @@ router
     createPaymentController.createPaymentPayple
   );
 
+router.route('/success').get(createPaymentController.chackPayplePayment);
+router.route('/cancle').get(createPaymentController.canclePayplePayment);
+
 export const PaymentRoute = router;

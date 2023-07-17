@@ -15,8 +15,9 @@ import ApiError from '../../errors/ApiError';
 import { GeneralUser } from '../generalUser/model.GeneralUser';
 const { ObjectId } = mongoose.Types;
 
+//
 const createPurchased_coursesByDb = async (
-  payload: IPurchased_courses,
+  payload: IPurchased_courses | any,
   userId: string
 ): Promise<IPurchased_courses | null> => {
   // let newCoursePurchase = null;
@@ -40,16 +41,16 @@ const createPurchased_coursesByDb = async (
     throw new ApiError(404, 'Failed to by course');
   }
 
-  payload.transactionID = payload.transactionID
-    ? payload.courseId + '-' + payload.transactionID
-    : payload.courseId + '-' + Math.random().toString(16).slice(2);
+  // payload.transactionID = payload.transactionID
+  //   ? payload.courseId + '-' + payload.transactionID
+  //   : payload.courseId + '-' + Math.random().toString(16).slice(2);
 
   // const createPurchase = await Purchased_courses.create([payload], {
   //   session,
   // });
   const createPurchase = await Purchased_courses.create(payload);
 
-  if (createPurchase) {
+  if (!createPurchase) {
     throw new ApiError(404, 'Failed to by course');
   }
 
@@ -194,9 +195,9 @@ export const Purchased_coursesService = {
 //       throw new ApiError(404, 'Failed to by course');
 //     }
 
-//     payload.transactionID = payload.transactionID
-//       ? payload.courseId + '-' + payload.transactionID
-//       : payload.courseId + '-' + Math.random().toString(16).slice(2);
+//     // payload.transactionID = payload.transactionID
+//     //   ? payload.courseId + '-' + payload.transactionID
+//     //   : payload.courseId + '-' + Math.random().toString(16).slice(2);
 
 //     const createPurchase = await Purchased_courses.create([payload], {
 //       session,

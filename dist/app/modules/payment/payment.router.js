@@ -24,4 +24,6 @@ router
 router
     .route('/paypal')
     .post((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(payment_validation_1.PaymentValidation.createPaypleZodSchema), payment_controller_1.createPaymentController.createPaymentPayple);
+router.route('/success').get(payment_controller_1.createPaymentController.chackPayplePayment);
+router.route('/cancle').get(payment_controller_1.createPaymentController.canclePayplePayment);
 exports.PaymentRoute = router;

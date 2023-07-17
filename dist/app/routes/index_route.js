@@ -8,14 +8,15 @@ const auth_route_1 = require("../modules/auth/auth.route");
 const admin_route_1 = require("../modules/admin/admin.route");
 const route_category_1 = require("../modules/category/route.category");
 const course_route_1 = require("../modules/course/course.route");
+const deshbord_router_1 = require("../modules/deshbord/deshbord.router");
 const route_fileUploade_1 = require("../modules/fileUploade/route.fileUploade");
 const route_GeneralUser_1 = require("../modules/generalUser/route.GeneralUser");
 const lession_route_1 = require("../modules/lession/lession.route");
 const moderator_route_1 = require("../modules/moderator/moderator.route");
 const payment_router_1 = require("../modules/payment/payment.router");
+const photoContest_route_1 = require("../modules/photoContest/photoContest.route");
 const purchased_courses_route_1 = require("../modules/purchased_courses/purchased_courses.route");
 const quiz_route_1 = require("../modules/quiz/quiz.route");
-const photoContest_route_1 = require("../modules/photoContest/photoContest.route");
 const run_contest_route_1 = require("../modules/run_contest/run_contest.route");
 // import { UserRoute } from '../modules/users/users.router';
 //https://docs.google.com/document/d/1gTsTpFvhfZB-2y0_BbZQVzmbG3YwsZwPrwAbsYqpOzM/edit
@@ -25,6 +26,10 @@ const moduleRoutes = [
     //   path: '/users',
     //   route: UserRoute,
     // },
+    {
+        path: '/deshbord',
+        route: deshbord_router_1.DeshbordRoute,
+    },
     {
         path: '/general-user',
         route: route_GeneralUser_1.GeneralUserRoutes,

@@ -73,11 +73,6 @@ import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 import routers from './app/routes/index_route';
-import { decrypt } from './helper/encryption';
-
-import ApiError from './app/errors/ApiError';
-import { IEncodedPaymentData } from './app/interface/encrypt';
-import { Purchased_courses } from './app/modules/purchased_courses/purchased_courses.model';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -91,88 +86,7 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 //Application route
 app.use('/api/v1', routers);
 
-app.get('/success', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId;
-    const app = req.query.app;
-    if (
-      typeof payerId !== 'string' ||
-      typeof paymentId !== 'string' ||
-      typeof app !== 'string'
-    ) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized access !!');
-    }
-
-    const data = decrypt<IEncodedPaymentData>(app);
-
-    const execute_payment_json = {
-      payer_id: payerId,
-      transactions: [
-        {
-          amount: data?.amount,
-        },
-      ],
-    };
-
-    paypal.payment.execute(
-      paymentId,
-      execute_payment_json,
-      async function (error, payment) {
-        if (error) {
-          throw new ApiError(500, 'Payment is deny');
-        } else {
-          const find = await Purchased_courses.findOne({
-            transactionID: paymentId,
-          });
-          if (!find) {
-            const result = await Purchased_courses.create({
-              userId: data.userId,
-              course: data.course_id,
-              transactionID: paymentId,
-              'payment.method': 'payple',
-            });
-            if (!result._id) {
-              // res.render('cancle');
-              res.status(400).json({
-                success: false,
-                message: 'payment faild!!',
-              });
-            }
-            // res.render('success', { payment });
-            res.status(200).json({
-              success: true,
-              message: 'payment success!!',
-            });
-          }
-        }
-      }
-    );
-  } catch (error) {
-    next(error);
-  }
-});
-
-app.get(
-  '/success2',
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      return res.render('success');
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 // Set the views directory and the view engine
-
-app.get('/cancel', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    throw new ApiError(404, 'Payment faild');
-  } catch (error) {
-    next(error);
-    console.log(error);
-  }
-});
 
 // global error handlar
 app.use(globalErrorHandler);
@@ -205,15 +119,16 @@ const test = async () => {
     //   }
     // );
     // console.log(result);
-    // const data = {
-    //   name: 'sampod',
-    //   datoto: {
-    //     sampod: 120,
-    //     totoal: 141,
-    //   },
-    // };
-    // const result = encrypt(data);
-    // // const decode = decrypt('djdjddkjffff');
+    // const result = await PhotoContestUser.deleteMany();
+    // console.log(result);
+    // const result = await GeneralUser.updateMany(
+    //   {},
+    //   {
+    //     purchase_courses: [],
+    //   }
+    // );
+    // const result = await FileUploade.deleteMany({});
+    // const result = await RunContest.deleteMany({});
     // console.log(result);
   } catch (error) {
     console.log(error);

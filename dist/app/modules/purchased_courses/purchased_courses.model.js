@@ -21,7 +21,7 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
     userName: {
         type: String,
         trim: true,
-        required: true,
+        // required: true,
     },
     email: {
         type: String,
@@ -55,7 +55,7 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
             },
             paymentType: {
                 type: String,
-                enum: ['card'],
+                // enum: ['card'],
                 default: 'card',
             },
             method_TransactionID: {
@@ -78,7 +78,7 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
         virtuals: true,
     },
 });
-//All calculations will be done here while buying any product
+// All calculations will be done here while buying any product
 purchasedCoursesSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const { price = 0, discount = { value: 0 }, vat = 0, } = (yield course_model_1.Course.findById(this.course));
