@@ -15,6 +15,7 @@ const createRunContestByDb = async (
   payload: IRunContest
 ): Promise<IRunContest | null> => {
   const contestId = await generateContestId();
+  console.log(payload);
   const result = (await RunContest.create({ ...payload, contestId })).populate(
     'winnerPrize.thumbnail winnerList.photo_contest_id'
   );
@@ -27,8 +28,15 @@ const getAllRunContestFromDb = async (
   paginationOptions: IPaginationOption
 ): Promise<IGenericResponse<IRunContest[]>> => {
   //****************search and filters start************/
-  const { searchTerm, ...filtersData } = filters;
-
+  const { searchTerm, select, ...filtersData } = filters;
+  const projection: any = {};
+  if (select) {
+    const fieldNames = select?.split(',').map(field => field.trim());
+    // Create the projection object
+    fieldNames.forEach(field => {
+      projection[field] = 1;
+    });
+  }
   const andConditions = [];
   if (searchTerm) {
     andConditions.push({
@@ -66,11 +74,16 @@ const getAllRunContestFromDb = async (
   const whereConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await RunContest.find(whereConditions)
-    .populate('winnerPrize.thumbnail winnerList.photo_contest_id')
-    .sort(sortConditions)
-    .skip(Number(skip))
-    .limit(Number(limit));
+  let result = null;
+  if (select) {
+    result = await RunContest.find({}).select({ ...projection });
+  } else {
+    result = await RunContest.find(whereConditions)
+      .populate('winnerPrize.thumbnail winnerList.photo_contest_id')
+      .sort(sortConditions)
+      .skip(Number(skip))
+      .limit(Number(limit));
+  }
 
   const total = await RunContest.countDocuments(whereConditions);
   return {

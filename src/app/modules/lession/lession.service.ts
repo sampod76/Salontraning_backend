@@ -60,6 +60,7 @@ const getAllLessionFromDb = async (
       ),
     });
   }
+  console.log(filtersData);
 
   //****************search and filters end**********/
 
@@ -108,6 +109,7 @@ const updateLessionFromDb = async (
   id: string,
   payload: Partial<ILession>
 ): Promise<ILession | null> => {
+  console.log(payload);
   const result = await Lession.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });

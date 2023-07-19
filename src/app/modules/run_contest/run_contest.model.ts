@@ -26,7 +26,7 @@ const RunContestSchema = new Schema<IRunContest, RunContestModel>(
           ref: 'FileUploade',
           // required: true,
         },
-        prize_serial: { type: Number },
+        prize_serial: Number,
         prize_value: Number,
       },
     ],

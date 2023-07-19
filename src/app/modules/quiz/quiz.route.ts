@@ -13,6 +13,14 @@ router
     QuizController.createQuiz
   );
 
+// router
+//   .route('/single-quiz/:id')
+//   .get(QuizController.getSingleQuiz)
+//   .patch(
+//     validateRequestZod(QuizValidation.updateQuizZodSchema),
+//     QuizController.updateQuiz
+//   )
+//   .delete(QuizController.deleteQuiz);
 router
   .route('/:id')
   .get(QuizController.getSingleQuiz)

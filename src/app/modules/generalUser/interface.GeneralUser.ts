@@ -34,4 +34,5 @@ export type IGeneralUserFilters = {
   searchTerm?: string;
   email?: string;
   phone?: string;
+  status?: string;
 };

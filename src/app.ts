@@ -121,15 +121,18 @@ const test = async () => {
     // console.log(result);
     // const result = await PhotoContestUser.deleteMany();
     // console.log(result);
-    // const result = await GeneralUser.updateMany(
+    // const result3 = await GeneralUser.updateMany(
     //   {},
     //   {
     //     purchase_courses: [],
     //   }
     // );
     // const result = await FileUploade.deleteMany({});
-    // const result = await RunContest.deleteMany({});
-    // console.log(result);
+    // const result = await RunContest.find({});
+    // const result5 = await Purchased_courses.deleteMany();
+    // const result2 = await PhotoContestUser.deleteMany({});
+    // const result2 = await RunContest.deleteMany({});
+    // console.log(result2);
   } catch (error) {
     console.log(error);
   }

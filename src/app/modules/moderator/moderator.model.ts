@@ -32,10 +32,10 @@ const ModeratorSchema = new Schema<IModerator, ModeratorModel>(
       unique: true,
       // required: true,
     },
-    // uid: {
-    //   type: String,
-    //   unique: true,
-    // },
+    uid: {
+      type: String,
+      unique: true,
+    },
     emergencyphone: {
       type: String,
     },

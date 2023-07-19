@@ -46,6 +46,7 @@ const getAllGeneralUsersFromDb = (filters, paginationOptions) => __awaiter(void 
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
     const andConditions = [];
+    console.log(filters);
     if (searchTerm) {
         andConditions.push({
             $or: constant_GeneralUser_1.GeneralUserSearchableFields.map(field => ({

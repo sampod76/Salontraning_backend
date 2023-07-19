@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
+const mongoose_1 = require("mongoose");
 const config_1 = __importDefault(require("../../../config"));
 const users_1 = require("../../../enums/users");
 const jwtHelpers_1 = require("../../../helper/jwtHelpers");
@@ -22,7 +23,6 @@ const admin_model_1 = require("../admin/admin.model");
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
 const moderator_model_1 = require("../moderator/moderator.model");
 const users_model_1 = require("../users/users.model");
-const mongoose_1 = require("mongoose");
 const loginUserFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
     if (!(email && password)) {
@@ -67,10 +67,14 @@ const loginUserByUidFromDb = (uid, role) => __awaiter(void 0, void 0, void 0, fu
     const accessToken = jwtHelpers_1.jwtHelpers.createToken({
         role: isUserExist.role,
         _id: isUserExist._id,
+        email: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.email,
+        name: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.name,
     }, config_1.default.jwt.secret, config_1.default.jwt.expires_in);
     const refreshToken = jwtHelpers_1.jwtHelpers.createToken({
         role: isUserExist.role,
         _id: isUserExist._id,
+        email: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.email,
+        name: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.name,
     }, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
     return {
         accessToken,
@@ -102,7 +106,12 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'User does not exist');
     }
     // generate new token
-    const newAccessToken = jwtHelpers_1.jwtHelpers.createToken({ email: isUserExist.email, role: isUserExist.role }, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
+    const newAccessToken = jwtHelpers_1.jwtHelpers.createToken({
+        role: isUserExist.role,
+        _id: isUserExist._id,
+        email: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.email,
+        name: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.name,
+    }, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
     return {
         accessToken: newAccessToken,
     };

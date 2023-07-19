@@ -19,10 +19,14 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuizService = void 0;
 const mongoose_1 = require("mongoose");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const quiz_consent_1 = require("./quiz.consent");
 const quiz_model_1 = require("./quiz.model");
 const createQuizByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -94,10 +98,36 @@ const getSingleQuizFromDb = (id) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 // update e form db
-const updateQuizFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield quiz_model_1.Quiz.findOneAndUpdate({ _id: id }, payload, {
-        new: true,
-    });
+const updateQuizFromDb = (id, query, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    let result = null;
+    if (query === null || query === void 0 ? void 0 : query.singleQuizId) {
+        result = yield quiz_model_1.Quiz.findOneAndUpdate({
+            _id: id,
+            'quizList._id': query.singleQuizId,
+        }, { $set: { 'quizList.$': payload } });
+    }
+    else if (query.createQuiz === 'yes') {
+        result = yield quiz_model_1.Quiz.findOneAndUpdate({ _id: id }, {
+            $push: { quizList: payload },
+        }, {
+            new: true,
+        });
+    }
+    else if (query.deleteByQuizId) {
+        result = yield quiz_model_1.Quiz.findOneAndUpdate({ _id: id }, {
+            $pull: { quizList: { _id: new mongoose_1.Types.ObjectId(query.deleteByQuizId) } },
+        }, {
+            new: true,
+        });
+    }
+    else {
+        result = yield quiz_model_1.Quiz.findByIdAndUpdate(id, payload, {
+            new: true,
+        });
+    }
+    if (!result) {
+        throw new ApiError_1.default(400, 'Failed to update the quiz');
+    }
     return result;
 });
 // delete e form db

@@ -11,6 +11,7 @@ export type ICourseFilters = {
   'categoryDetails.category'?: string;
   'reviews.star'?: number;
   select?: string;
+  publisher?: string;
 };
 
 // export type ICourseSearchableField = {

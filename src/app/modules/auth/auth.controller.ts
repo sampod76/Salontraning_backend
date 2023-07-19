@@ -45,6 +45,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
       status: othersData?.isUserExist?.status,
       email: othersData?.isUserExist?.email,
       phone: othersData?.isUserExist?.phone,
+      role: othersData?.isUserExist?.role,
       // ...result,
       accessToken: othersData.accessToken,
     },

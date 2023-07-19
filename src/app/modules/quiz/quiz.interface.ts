@@ -7,6 +7,9 @@ export type IQuizFilters = {
   title?: string;
   course?: string;
   courseId?: string;
+  singleQuizId?: string;
+  deleteByQuizId?: string;
+  createQuiz?: 'yes';
   status?: 'active' | 'deactive' | 'save';
 };
 

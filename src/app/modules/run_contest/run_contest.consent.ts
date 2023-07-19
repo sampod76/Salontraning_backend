@@ -4,4 +4,5 @@ export const RUNCONTEST_FILTERABLE_FIELDS = [
   'lessonId',
   'courseId',
   'date',
+  'select',
 ];

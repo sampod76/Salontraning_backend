@@ -110,6 +110,7 @@ const getUserToCourseFromDb = async (
               // Additional filter conditions for collection2
             },
           },
+
           // Additional stages for collection2
           // প্রথম লুকাপ চালানোর পরে যে ডাটা আসছে তার উপরে যদি আমি যেই কোন কিছু করতে চাই তাহলে এখানে করতে হবে |যেমন আমি এখানে project করেছি
           {
@@ -145,7 +146,7 @@ const getUserToCourseFromDb = async (
         _id: 1,
         name: 1,
         purchase_courses: 1,
-        course: { _id: 1, title: 1, thumbnail: 1 },
+        course: { _id: 1, title: 1, thumbnail: 1, price: 1 },
         lessions: { _id: 1, title: 1, vedio: 1, course: 1 },
       },
     },
@@ -203,15 +204,18 @@ const updateGeneralUserFromDb = async (
   payload: Partial<IGeneralUser>,
   req: any
 ): Promise<IGeneralUser | null> => {
-  const { _id } = (await GeneralUser.findOne({ id })) as IGeneralUser & {
+  const resultFind = (await GeneralUser.findById(id)) as IGeneralUser & {
     _id: Types.ObjectId;
   };
 
-  if (!_id) {
+  if (!resultFind?._id) {
     throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found !');
   }
 
-  if (_id !== req?.user?._id || req.user.role !== ENUM_USER_ROLE.ADMIN) {
+  if (
+    resultFind?._id !== req?.user?._id ||
+    req.user.role !== ENUM_USER_ROLE.ADMIN
+  ) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Unauthorise person!');
   }
 

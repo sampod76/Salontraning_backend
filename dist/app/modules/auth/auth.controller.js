@@ -32,8 +32,8 @@ const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const auth_service_1 = require("./auth.service");
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
-    const _f = req.body, { uid, role = users_1.ENUM_USER_ROLE.GENERAL_USER } = _f, payload = __rest(_f, ["uid", "role"]);
+    var _a, _b, _c, _d, _e, _f;
+    const _g = req.body, { uid, role = users_1.ENUM_USER_ROLE.GENERAL_USER } = _g, payload = __rest(_g, ["uid", "role"]);
     let result = null;
     if (uid) {
         result = yield auth_service_1.AuthService.loginUserByUidFromDb(uid, role);
@@ -65,6 +65,7 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
             status: (_c = othersData === null || othersData === void 0 ? void 0 : othersData.isUserExist) === null || _c === void 0 ? void 0 : _c.status,
             email: (_d = othersData === null || othersData === void 0 ? void 0 : othersData.isUserExist) === null || _d === void 0 ? void 0 : _d.email,
             phone: (_e = othersData === null || othersData === void 0 ? void 0 : othersData.isUserExist) === null || _e === void 0 ? void 0 : _e.phone,
+            role: (_f = othersData === null || othersData === void 0 ? void 0 : othersData.isUserExist) === null || _f === void 0 ? void 0 : _f.role,
             // ...result,
             accessToken: othersData.accessToken,
         },
@@ -93,9 +94,9 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 const myProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h;
+    var _h, _j;
     //set refre
-    const result = yield auth_service_1.AuthService.myProfileFromDb((_g = req === null || req === void 0 ? void 0 : req.user) === null || _g === void 0 ? void 0 : _g._id, (_h = req === null || req === void 0 ? void 0 : req.user) === null || _h === void 0 ? void 0 : _h.role);
+    const result = yield auth_service_1.AuthService.myProfileFromDb((_h = req === null || req === void 0 ? void 0 : req.user) === null || _h === void 0 ? void 0 : _h._id, (_j = req === null || req === void 0 ? void 0 : req.user) === null || _j === void 0 ? void 0 : _j.role);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

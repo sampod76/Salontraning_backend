@@ -1,12 +1,13 @@
 import { Model } from 'mongoose';
-import { IPhotoContestUser } from '../photoContest/photoContest.interface';
 import { IFileUploade } from '../fileUploade/interface.fileUploade';
+import { IPhotoContestUser } from '../photoContest/photoContest.interface';
 
 // import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
 export type IRunContestFilters = {
   searchTerm?: string;
   title?: string;
+  select?: string;
   status?: 'active' | 'deactive' | 'save';
 };
 

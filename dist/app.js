@@ -62,6 +62,7 @@ app.set('views', path_1.default.resolve('./views/success.ejs'));
 const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
+const run_contest_model_1 = require("./app/modules/run_contest/run_contest.model");
 const index_route_1 = __importDefault(require("./app/routes/index_route"));
 app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -106,15 +107,17 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         // console.log(result);
         // const result = await PhotoContestUser.deleteMany();
         // console.log(result);
-        // const result = await GeneralUser.updateMany(
+        // const result3 = await GeneralUser.updateMany(
         //   {},
         //   {
         //     purchase_courses: [],
         //   }
         // );
         // const result = await FileUploade.deleteMany({});
-        // const result = await RunContest.deleteMany({});
-        // console.log(result);
+        const result = yield run_contest_model_1.RunContest.find({});
+        // const result5 = await Purchased_courses.deleteMany();
+        // const result2 = await RunContest.deleteMany({});
+        // console.log(result2);
     }
     catch (error) {
         console.log(error);

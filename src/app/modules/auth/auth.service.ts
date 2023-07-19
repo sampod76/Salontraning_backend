@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 import config from '../../../config';
 import { ENUM_USER_ROLE } from '../../../enums/users';
 import { jwtHelpers } from '../../../helper/jwtHelpers';
@@ -9,7 +10,6 @@ import { GeneralUser } from '../generalUser/model.GeneralUser';
 import { Moderator } from '../moderator/moderator.model';
 import { User } from '../users/users.model';
 import { ILoginUser, ILoginUserResponse } from './auth.interface';
-import { Types } from 'mongoose';
 
 const loginUserFromDb = async (
   payload: ILoginUser
@@ -77,6 +77,8 @@ const loginUserByUidFromDb = async (
     {
       role: isUserExist.role,
       _id: isUserExist._id,
+      email: isUserExist?.email,
+      name: isUserExist?.name,
     },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
@@ -86,6 +88,8 @@ const loginUserByUidFromDb = async (
     {
       role: isUserExist.role,
       _id: isUserExist._id,
+      email: isUserExist?.email,
+      name: isUserExist?.name,
     },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
@@ -125,7 +129,12 @@ const refreshToken = async (token: string) => {
 
   // generate new token
   const newAccessToken = jwtHelpers.createToken(
-    { email: isUserExist.email, role: isUserExist.role },
+    {
+      role: isUserExist.role,
+      _id: isUserExist._id,
+      email: isUserExist?.email,
+      name: isUserExist?.name,
+    },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   );

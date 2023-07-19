@@ -5,7 +5,7 @@ const createLessionZodSchema = z.object({
     title: z.string().min(1, { message: 'Title is required' }).trim(),
     vedio: z.object({ link: z.string(), player_no: z.number() }),
     serial_no: z.number().optional(),
-    duration: z.string().optional(),
+    duration: z.number().optional(),
     course: z.string({ required_error: 'course id is required' }),
     courseId: z.string({ required_error: 'courseId is required' }),
     //
@@ -36,7 +36,7 @@ const updateLessionZodSchema = z.object({
       .object({ link: z.string().optional(), player_no: z.number().optional() })
       .optional(),
     serial_no: z.number().optional(),
-    duration: z.string().optional(),
+    duration: z.number().optional(),
   }),
 });
 export const LessionValidation = {

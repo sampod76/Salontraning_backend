@@ -31,6 +31,7 @@ const purchased_courses_model_1 = require("./purchased_courses.model");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
 const { ObjectId } = mongoose_1.default.Types;
+//
 const createPurchased_coursesByDb = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
     // let newCoursePurchase = null;
     // const session = await mongoose.startSession();
@@ -163,9 +164,9 @@ exports.Purchased_coursesService = {
 //     if (!addCourseByUser.modifiedCount) {
 //       throw new ApiError(404, 'Failed to by course');
 //     }
-//     payload.transactionID = payload.transactionID
-//       ? payload.courseId + '-' + payload.transactionID
-//       : payload.courseId + '-' + Math.random().toString(16).slice(2);
+//     // payload.transactionID = payload.transactionID
+//     //   ? payload.courseId + '-' + payload.transactionID
+//     //   : payload.courseId + '-' + Math.random().toString(16).slice(2);
 //     const createPurchase = await Purchased_courses.create([payload], {
 //       session,
 //     });

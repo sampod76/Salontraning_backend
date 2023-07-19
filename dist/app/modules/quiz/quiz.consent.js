@@ -13,4 +13,7 @@ exports.QUIZ_FILTERABLE_FIELDS = [
     'courseId',
     'date',
     'course',
+    'singleQuizId',
+    'createQuiz',
+    'deleteByQuizId', //delete quiz
 ];

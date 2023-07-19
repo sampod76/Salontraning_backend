@@ -52,6 +52,11 @@ const AdminSchema = new Schema<IAdmin, AdminModel>(
       type: String,
       // required: true,
     },
+    status: {
+      type: String,
+      enum: ['active', 'deactive'],
+      default: 'active',
+    },
     // academicAdmin: {
     //   type: Types.ObjectId,
     //   ref: 'AcademicAdmin',

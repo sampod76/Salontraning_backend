@@ -12,6 +12,7 @@ export type IAdmin = {
   address?: string;
   designation?: string;
   role?: string;
+  status?: string;
 };
 
 export type AdminModel = Model<IAdmin, Record<string, unknown>>;
@@ -24,4 +25,5 @@ export type IAdminFilters = {
   emergencyphone?: string;
   gender?: 'male' | 'female';
   designation?: string;
+  status?: string;
 };

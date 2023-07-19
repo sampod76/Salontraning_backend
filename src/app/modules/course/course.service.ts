@@ -74,9 +74,11 @@ const getAllCourseFromDb = async (
       $and: Object.entries(filtersData).map(([field, value]) =>
         field === 'price'
           ? { [field]: { $gte: parseInt(value as string) } }
-          : {
-              [field]: value,
-            }
+          : field === 'publisher'
+          ? { [field]: new Types.ObjectId(value) }
+          : field === 'categoryDetails.category'
+          ? { [field]: new Types.ObjectId(value) }
+          : { [field]: value }
       ),
     });
   }
@@ -200,7 +202,12 @@ const getAllCourseFromDb = async (
     { $limit: Number(limit) || 15 },
   ];
 
-  const result = await Course.aggregate(pipeline);
+  let result = null;
+  if (select) {
+    result = await Course.find({}).select({ ...projection });
+  } else {
+    result = await Course.aggregate(pipeline);
+  }
 
   const total = await Course.countDocuments(whereConditions);
   return {

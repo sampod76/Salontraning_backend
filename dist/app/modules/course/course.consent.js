@@ -14,6 +14,7 @@ exports.COURSE_FILTERABLE_FIELDS = [
     'searchTerm',
     'price',
     'status',
+    'publisher',
     'date',
     'categoryDetails.category',
     'reviews.star',

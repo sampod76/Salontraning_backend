@@ -8,7 +8,24 @@ const createRunContestZodSchema = z.object({
     // thumbnail: z.string().or(IFileUploadeSchema).optional(),
     status: z.enum(['active', 'deactive', 'save']).optional(),
     winnerList: z.array(z.unknown()).optional(),
-    winnerPrize: z.array(z.unknown()).optional(),
+    // winnerPrize: z
+    //   .array(
+    //     z.object({
+    //       title: z.string().optional(),
+    //       thumbnail: z.string().optional(),
+    //       prize_serial: z.number().optional(),
+    //       prize_value: z.number().optional(),
+    //     })
+    //   )
+    //   .optional(),
+    winnerPrize: z.array(
+      z.object({
+        title: z.string(),
+        thumbnail: z.string().optional(),
+        prize_serial: z.number(),
+        prize_value: z.number(),
+      })
+    ),
     total_winer: z.object({
       number: z.number().min(0).optional(),
       condition: z.object({}).optional(),
@@ -29,10 +46,12 @@ const updateRunContestZodSchema = z.object({
     status: z.enum(['active', 'deactive', 'save']).optional(),
     winnerList: z.array(z.unknown()).optional(),
     winnerPrize: z.array(z.unknown()).optional(),
-    total_winer: z.object({
-      number: z.number().min(0).optional(),
-      condition: z.object({}).optional(),
-    }),
+    total_winer: z
+      .object({
+        number: z.number().min(0).optional(),
+        condition: z.object({}).optional(),
+      })
+      .optional(),
     duration_time: z
       .object({
         startDate: z.string().optional(),

@@ -56,7 +56,6 @@ const getAllQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     queryObject = Object.fromEntries(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
-    console.log(queryObject);
     const filters = (0, pick_1.default)(queryObject, quiz_consent_1.QUIZ_FILTERABLE_FIELDS);
     //****************pagination start************ */
     const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
@@ -82,8 +81,12 @@ const getSingleQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 const updateQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
+    let queryObject = req.query;
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
     const updateData = req.body;
-    const result = yield quiz_service_1.QuizService.updateQuizFromDb(id, updateData);
+    const result = yield quiz_service_1.QuizService.updateQuizFromDb(id, queryObject, updateData);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

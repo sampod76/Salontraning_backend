@@ -108,9 +108,11 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
         andConditions.push({
             $and: Object.entries(filtersData).map(([field, value]) => field === 'price'
                 ? { [field]: { $gte: parseInt(value) } }
-                : {
-                    [field]: value,
-                }),
+                : field === 'publisher'
+                    ? { [field]: new mongoose_1.Types.ObjectId(value) }
+                    : field === 'categoryDetails.category'
+                        ? { [field]: new mongoose_1.Types.ObjectId(value) }
+                        : { [field]: value }),
         });
     }
     //****************search and filters end**********/
@@ -220,7 +222,13 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
         { $skip: Number(skip) || 0 },
         { $limit: Number(limit) || 15 },
     ];
-    const result = yield course_model_1.Course.aggregate(pipeline);
+    let result = null;
+    if (select) {
+        result = yield course_model_1.Course.find({}).select(Object.assign({}, projection));
+    }
+    else {
+        result = yield course_model_1.Course.aggregate(pipeline);
+    }
     const total = yield course_model_1.Course.countDocuments(whereConditions);
     return {
         meta: {

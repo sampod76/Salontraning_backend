@@ -66,6 +66,7 @@ const getAllLessionFromDb = (filters, paginationOptions) => __awaiter(void 0, vo
                 }),
         });
     }
+    console.log(filtersData);
     //****************search and filters end**********/
     //****************pagination start **************/
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
@@ -100,6 +101,7 @@ const getSingleLessionFromDb = (id) => __awaiter(void 0, void 0, void 0, functio
 });
 // update e form db
 const updateLessionFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payload);
     const result = yield lession_model_1.Lession.findOneAndUpdate({ _id: id }, payload, {
         new: true,
     });

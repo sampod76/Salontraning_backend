@@ -29,13 +29,22 @@ const run_contest_consent_1 = require("./run_contest.consent");
 const run_contest_utils_1 = require("./run_contest.utils");
 const createRunContestByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const contestId = yield (0, run_contest_utils_1.generateContestId)();
+    console.log(payload);
     const result = (yield run_contest_model_1.RunContest.create(Object.assign(Object.assign({}, payload), { contestId }))).populate('winnerPrize.thumbnail winnerList.photo_contest_id');
     return result;
 });
 //getAllRunContestFromDb
 const getAllRunContestFromDb = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     //****************search and filters start************/
-    const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
+    const { searchTerm, select } = filters, filtersData = __rest(filters, ["searchTerm", "select"]);
+    const projection = {};
+    if (select) {
+        const fieldNames = select === null || select === void 0 ? void 0 : select.split(',').map(field => field.trim());
+        // Create the projection object
+        fieldNames.forEach(field => {
+            projection[field] = 1;
+        });
+    }
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
@@ -64,11 +73,17 @@ const getAllRunContestFromDb = (filters, paginationOptions) => __awaiter(void 0,
     }
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield run_contest_model_1.RunContest.find(whereConditions)
-        .populate('winnerPrize.thumbnail winnerList.photo_contest_id')
-        .sort(sortConditions)
-        .skip(Number(skip))
-        .limit(Number(limit));
+    let result = null;
+    if (select) {
+        result = yield run_contest_model_1.RunContest.find({}).select(Object.assign({}, projection));
+    }
+    else {
+        result = yield run_contest_model_1.RunContest.find(whereConditions)
+            .populate('winnerPrize.thumbnail winnerList.photo_contest_id')
+            .sort(sortConditions)
+            .skip(Number(skip))
+            .limit(Number(limit));
+    }
     const total = yield run_contest_model_1.RunContest.countDocuments(whereConditions);
     return {
         meta: {

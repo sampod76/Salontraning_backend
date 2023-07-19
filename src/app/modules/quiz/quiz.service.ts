@@ -4,6 +4,7 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
 
+import ApiError from '../../errors/ApiError';
 import { QUIZ_SEARCHABLE_FIELDS } from './quiz.consent';
 import { IQuiz, IQuizFilters } from './quiz.interface';
 import { Quiz } from './quiz.model';
@@ -98,11 +99,46 @@ const getSingleQuizFromDb = async (id: string): Promise<IQuiz | null> => {
 // update e form db
 const updateQuizFromDb = async (
   id: string,
-  payload: Partial<IQuiz>
+  query: IQuizFilters,
+  payload: Partial<IQuiz> & { _id: string }
 ): Promise<IQuiz | null> => {
-  const result = await Quiz.findOneAndUpdate({ _id: id }, payload, {
-    new: true,
-  });
+  let result = null;
+  if (query?.singleQuizId) {
+    result = await Quiz.findOneAndUpdate(
+      {
+        _id: id,
+        'quizList._id': query.singleQuizId,
+      },
+      { $set: { 'quizList.$': payload } }
+    );
+  } else if (query.createQuiz === 'yes') {
+    result = await Quiz.findOneAndUpdate(
+      { _id: id },
+      {
+        $push: { quizList: payload },
+      },
+      {
+        new: true,
+      }
+    );
+  } else if (query.deleteByQuizId) {
+    result = await Quiz.findOneAndUpdate(
+      { _id: id },
+      {
+        $pull: { quizList: { _id: new Types.ObjectId(query.deleteByQuizId) } },
+      },
+      {
+        new: true,
+      }
+    );
+  } else {
+    result = await Quiz.findByIdAndUpdate(id, payload, {
+      new: true,
+    });
+  }
+  if (!result) {
+    throw new ApiError(400, 'Failed to update the quiz');
+  }
   return result;
 };
 

@@ -38,7 +38,7 @@ const getAllQuiz = catchAsync(async (req: Request, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(queryObject).filter(([_, value]) => Boolean(value))
   );
-  console.log(queryObject);
+
   const filters = pick(queryObject, QUIZ_FILTERABLE_FIELDS);
 
   //****************pagination start************ */
@@ -69,9 +69,18 @@ const getSingleQuiz = catchAsync(async (req: Request, res: Response) => {
 });
 const updateQuiz = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
+  let queryObject = req.query;
+  queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value))
+  );
   const updateData = req.body;
 
-  const result = await QuizService.updateQuizFromDb(id, updateData);
+  const result = await QuizService.updateQuizFromDb(
+    id,
+    queryObject,
+    updateData
+  );
 
   sendResponse<IQuiz>(res, {
     success: true,

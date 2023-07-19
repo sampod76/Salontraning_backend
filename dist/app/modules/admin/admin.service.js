@@ -75,11 +75,11 @@ const getAllAdminsFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     };
 });
 const getSingleAdminFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield admin_model_1.Admin.findOne({ id });
+    const result = yield admin_model_1.Admin.findById(id);
     return result;
 });
 const updateAdminFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const isExist = yield admin_model_1.Admin.findOne({ id });
+    const isExist = yield admin_model_1.Admin.findById(id);
     if (!isExist) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Admin not found !');
     }

@@ -11,6 +11,7 @@ const createAdminZodSchema = z.object({
     emergencyphone: z.string().optional(),
     address: z.string().optional(),
     designation: z.string().optional(),
+    status: z.string().optional(),
   }),
 });
 const updateAdminZodSchema = z.object({
@@ -23,6 +24,7 @@ const updateAdminZodSchema = z.object({
     emergencyphone: z.string().optional(),
     address: z.string().optional(),
     designation: z.string().optional(),
+    status: z.string().optional(),
   }),
 });
 

@@ -13,34 +13,39 @@ const authMiddleware =
       //get authorization token
       const token = req.headers.authorization;
       // console.log(token, Math.random() * 100);
-      // const tokenCookie = req.cookies.refreshToken;
-      // console.log(token);
-      // console.log(tokenCookie, 'cookie');
-      // if (!tokenCookie) {
-      //   throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
-      // }
-
-      if (!token) {
+      const tokenCookie = req.cookies.refreshToken;
+      let verifiedUser = null;
+      if (!token && !tokenCookie) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
       }
-
-      // verify token
-      let verifiedUser = null;
-      verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
-
-      // if (tokenCookie) {
-      // verifiedUser = jwtHelpers.verifyToken(
-      //   tokenCookie,
-      //   config.jwt.refresh_secret as Secret
-      // );
-      // }
-
-      //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু টাইপি স্ক্রিপ্ট এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
-
-      // {role,email}
-      if (!verifiedUser?.role) {
-        verifiedUser.role = ENUM_USER_ROLE.GENERAL_USER;
+      // verify token only general user
+      if (token) {
+        verifiedUser = jwtHelpers.verifyToken(
+          token,
+          config.jwt.secret as Secret
+        );
       }
+      //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু typescript এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
+      // {role,email}
+
+      if (
+        !tokenCookie &&
+        verifiedUser?.role &&
+        verifiedUser.role === ENUM_USER_ROLE.ADMIN
+      ) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden access');
+      }
+
+      if (tokenCookie) {
+        const verifiAdmin = jwtHelpers.verifyToken(
+          tokenCookie,
+          config.jwt.refresh_secret as Secret
+        );
+        if (verifiAdmin?.role === ENUM_USER_ROLE.ADMIN) {
+          verifiedUser = verifiAdmin;
+        }
+      }
+
       req.user = verifiedUser;
 
       // role diye guard korar jnno

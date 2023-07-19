@@ -49,6 +49,11 @@ const AdminSchema = new mongoose_1.Schema({
         type: String,
         // required: true,
     },
+    status: {
+        type: String,
+        enum: ['active', 'deactive'],
+        default: 'active',
+    },
     // academicAdmin: {
     //   type: Types.ObjectId,
     //   ref: 'AcademicAdmin',
