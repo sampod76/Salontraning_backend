@@ -15,12 +15,20 @@ router.route('/').get(RunContestController.getAllRunContest).post(
 );
 
 router
+  .route('/winners/:id')
+  .put(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    validateRequestZod(RunContestValidation.updateRunContestZodSchema),
+    RunContestController.updateRunContestWinner
+  );
+
+router
   .route('/:id')
   .get(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     RunContestController.getSingleRunContest
   )
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN),
     validateRequestZod(RunContestValidation.updateRunContestZodSchema),
     RunContestController.updateRunContest

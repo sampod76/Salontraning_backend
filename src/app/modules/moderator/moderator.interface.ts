@@ -19,7 +19,7 @@ export type ModeratorModel = Model<IModerator, Record<string, unknown>>;
 
 export type IModeratorFilters = {
   searchTerm?: string;
-
+  status?: string;
   email?: string;
   phone?: string;
   emergencyphone?: string;

@@ -4,11 +4,13 @@ type IOtherInfo = { uid: string; photoURL: string };
 
 type IPurchaseCourses = {
   course: string;
-  quiz: [];
-  total_completed_lessions: string[];
+  quiz?: [];
+  total_completed_lessions?: string[];
 };
 
 export type IGeneralUser = {
+  _id: unknown;
+  // _id?: string;
   name: string; //embedded object
   gender?: 'male' | 'female';
   dateOfBirth?: string;

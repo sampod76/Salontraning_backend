@@ -132,6 +132,9 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     */
     const pipeline = [
         { $match: whereConditions },
+        { $sort: sortConditions },
+        { $skip: Number(skip) || 0 },
+        { $limit: Number(limit) || 15 },
         {
             $lookup: {
                 from: 'moderators',
@@ -218,13 +221,12 @@ const getAllCourseFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
             $unwind: '$thumbnail',
         },
         ///***************** */ images field ******end*********
-        { $sort: sortConditions },
-        { $skip: Number(skip) || 0 },
-        { $limit: Number(limit) || 15 },
     ];
     let result = null;
     if (select) {
-        result = yield course_model_1.Course.find({}).select(Object.assign({}, projection));
+        result = yield course_model_1.Course.find({})
+            .sort({ title: 1 })
+            .select(Object.assign({}, projection));
     }
     else {
         result = yield course_model_1.Course.aggregate(pipeline);

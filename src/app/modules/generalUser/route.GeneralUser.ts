@@ -1,9 +1,9 @@
 import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/users';
+import authMiddleware from '../../middlewares/authMiddleware';
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { GeneralUserController } from './controller.GeneralUser';
 import { GeneralUserValidation } from './validation.GeneralUser';
-import authMiddleware from '../../middlewares/authMiddleware';
-import { ENUM_USER_ROLE } from '../../../enums/users';
 
 const router = express.Router();
 router
@@ -29,7 +29,7 @@ router
 
 router
   .route('/update-course-quiz/:id')
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     GeneralUserController.updateCourseVedioOrQuiz
   );
@@ -44,7 +44,7 @@ router
     authMiddleware(ENUM_USER_ROLE.ADMIN),
     GeneralUserController.deleteGeneralUser
   )
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     validateRequestZod(GeneralUserValidation.updateGeneralUserZodSchema),
     GeneralUserController.updateGeneralUser

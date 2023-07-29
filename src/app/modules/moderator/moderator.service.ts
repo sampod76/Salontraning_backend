@@ -12,6 +12,8 @@ import { IPaginationOption } from '../../interface/pagination';
 import { moderatorSearchableFields } from './moderator.constant';
 import { IModerator, IModeratorFilters } from './moderator.interface';
 import { Moderator } from './moderator.model';
+import { Request } from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 
 const getAllModeratorsFromDb = async (
   filters: IModeratorFilters,
@@ -50,7 +52,7 @@ const getAllModeratorsFromDb = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await Moderator.find(whereConditions)
-
+    .populate('profileImage')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -68,19 +70,25 @@ const getAllModeratorsFromDb = async (
 };
 
 const getSingleModeratorFromDb = async (
-  id: string
+  id: string,
+  req: Request
 ): Promise<IModerator | null> => {
-  const result = await Moderator.findOne({ id });
-
+  if (req.user?.role !== ENUM_USER_ROLE.ADMIN && req.user?._id !== id) {
+    throw new ApiError(500, 'unauthorise access!!');
+  }
+  const result = await Moderator.findOne({ _id: id });
   return result;
 };
 
 const updateModeratorFromDb = async (
   id: string,
-  payload: Partial<IModerator>
+  payload: Partial<IModerator>,
+  req: Request
 ): Promise<IModerator | null> => {
-  const isExist = await Moderator.findOne({ id });
-
+  if (req.user?.role !== ENUM_USER_ROLE.ADMIN && req.user?._id !== id) {
+    throw new ApiError(500, 'unauthorise access!!');
+  }
+  const isExist = await Moderator.findOne({ _id: id });
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Moderator not found !');
   }
@@ -96,7 +104,7 @@ const updateModeratorFromDb = async (
   }
 
   const result = await Moderator.findOneAndUpdate(
-    { id },
+    { _id: id },
     updatedModeratorData,
     {
       new: true,
@@ -107,6 +115,16 @@ const updateModeratorFromDb = async (
 const createModeratorFromDb = async (
   payload: Partial<IModerator>
 ): Promise<IModerator | null> => {
+  const removeFalseValue = (obj: any) => {
+    const falseValues = [undefined, '', 'undefined', null, 'null'];
+    for (const key in obj) {
+      if (falseValues.includes(obj[key])) {
+        delete obj[key];
+      }
+    }
+  };
+
+  removeFalseValue(payload);
   const result = await Moderator.create(payload);
   return result;
 };

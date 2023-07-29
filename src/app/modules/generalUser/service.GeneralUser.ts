@@ -16,12 +16,25 @@ import { GeneralUser } from './model.GeneralUser';
 const createGeneralUserByFirebaseFromDb = async (
   payload: IGeneralUser
 ): Promise<IGeneralUser | null> => {
+  const removeFalseValue = (obj: any) => {
+    const falseValues = [undefined, '', 'undefined', null, 'null'];
+    for (const key in obj) {
+      if (falseValues.includes(obj[key])) {
+        delete obj[key];
+      }
+    }
+  };
+
+  removeFalseValue(payload);
+  console.log(payload, 'apple login 29 serveice');
+  // return payload;
   let result = null;
 
   result = await GeneralUser.findOne({ uid: payload?.uid });
   if (!result) {
     result = await GeneralUser.create(payload);
   }
+  console.log(result, 'apple login 37 serveice');
   return result;
 };
 
@@ -63,6 +76,7 @@ const getAllGeneralUsersFromDb = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await GeneralUser.find(whereConditions)
+    .populate('profileImage')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -82,10 +96,9 @@ const getAllGeneralUsersFromDb = async (
 const getSingleGeneralUserFromDb = async (
   id: string
 ): Promise<IGeneralUser | null> => {
-  const result = await GeneralUser.findById(id).populate(
-    'purchase_courses.course',
-    'courseId title thumbnail createdAt'
-  );
+  const result = await GeneralUser.findById(id)
+    .populate('purchase_courses.course', 'courseId title thumbnail createdAt')
+    .populate('profileImage');
 
   return result;
 };
@@ -182,7 +195,11 @@ const updateCourseVedioOrQuizFromDb = async (
   }
   if (quiz) {
     result = await GeneralUser.findOneAndUpdate(
-      { _id: id, 'purchase_courses.course': course_id },
+      {
+        _id: new Types.ObjectId(id),
+        'purchase_courses.course': new Types.ObjectId(course_id),
+        // quiz: { $size: 0 },
+      },
       {
         $set: {
           'purchase_courses.$.quiz': quiz,
@@ -193,6 +210,9 @@ const updateCourseVedioOrQuizFromDb = async (
       }
     );
     // .projection({name:1, active:1, purchase_courses:1});
+  }
+  if (!result) {
+    throw new ApiError(400, 'Something is going wrong!!');
   }
 
   return result;

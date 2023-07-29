@@ -52,6 +52,7 @@ const QuizSchema = new mongoose_1.Schema({
     },
     course: {
         type: mongoose_1.Types.ObjectId,
+        required: true,
         ref: 'Course',
     },
     courseId: {

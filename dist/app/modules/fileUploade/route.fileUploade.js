@@ -33,6 +33,6 @@ router
 router
     .route('/:id')
     .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), constroller_fileUploade_1.FileUploadeController.getSingleFileUploade)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(validation_fileUploade_1.FileUploadeValidation.updateFileUploadezodSchema), constroller_fileUploade_1.FileUploadeController.updateFileUploade)
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(validation_fileUploade_1.FileUploadeValidation.updateFileUploadezodSchema), constroller_fileUploade_1.FileUploadeController.updateFileUploade)
     .delete(constroller_fileUploade_1.FileUploadeController.deleteFileUploade);
 exports.FileUploadeRoute = router;

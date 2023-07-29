@@ -13,6 +13,8 @@ import { Purchased_courses } from './purchased_courses.model';
 
 import ApiError from '../../errors/ApiError';
 import { GeneralUser } from '../generalUser/model.GeneralUser';
+import { Request } from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 const { ObjectId } = mongoose.Types;
 
 //
@@ -130,9 +132,17 @@ const getAllPurchased_coursesFromDb = async (
 
 // get single e form db
 const getSinglePurchased_coursesFromDb = async (
-  id: string
+  id: string,
+  req: Request
 ): Promise<IPurchased_courses | null> => {
   const result = await Purchased_courses.findById(id);
+
+  if (
+    req.user?.role !== ENUM_USER_ROLE.ADMIN &&
+    req.user?._id !== result?.userId
+  ) {
+    throw new ApiError(500, 'unauthorise access!!');
+  }
   return result;
 };
 

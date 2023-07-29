@@ -16,19 +16,24 @@ const RunContestSchema = new mongoose_1.Schema({
     status: {
         type: String,
         enum: ['active', 'deactive', 'save'],
+        default: 'active',
     },
-    winnerPrize: [
-        {
-            title: String,
-            thumbnail: {
-                type: mongoose_1.Types.ObjectId,
-                ref: 'FileUploade',
-                // required: true,
+    winnerPrize: {
+        type: [
+            {
+                type: {
+                    title: String,
+                    thumbnail: {
+                        type: mongoose_1.Types.ObjectId,
+                        ref: 'FileUploade',
+                        // required: true,
+                    },
+                    prize_serial: { type: Number },
+                    prize_value: { type: Number },
+                },
             },
-            prize_serial: Number,
-            prize_value: Number,
-        },
-    ],
+        ],
+    },
     duration_time: {
         startDate: {
             type: Date,
@@ -46,14 +51,17 @@ const RunContestSchema = new mongoose_1.Schema({
     //after contest end then update
     winnerList: [
         {
-            photo_contest_id: {
-                type: mongoose_1.Types.ObjectId,
-                ref: 'Photo_contest_user',
-                // require: [true, 'photo_contest_id is required'],
+            type: {
+                photo_contest_id: {
+                    type: mongoose_1.Types.ObjectId,
+                    ref: 'Photo_contest_user',
+                    // require: [true, 'photo_contest_id is required'],
+                },
+                userId: { type: mongoose_1.Types.ObjectId, ref: 'General_user' },
+                email: String,
+                name: String,
+                phone: String,
             },
-            email: String,
-            name: String,
-            phone: String,
         },
     ],
 }, {

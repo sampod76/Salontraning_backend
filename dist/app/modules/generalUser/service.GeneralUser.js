@@ -35,6 +35,16 @@ const model_GeneralUser_1 = require("./model.GeneralUser");
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const removeFalseValue = (obj) => {
+        const falseValues = [undefined, '', 'undefined', null, 'null'];
+        for (const key in obj) {
+            if (falseValues.includes(obj[key])) {
+                delete obj[key];
+            }
+        }
+    };
+    removeFalseValue(payload);
+    // return payload;
     let result = null;
     result = yield model_GeneralUser_1.GeneralUser.findOne({ uid: payload === null || payload === void 0 ? void 0 : payload.uid });
     if (!result) {
@@ -46,7 +56,6 @@ const getAllGeneralUsersFromDb = (filters, paginationOptions) => __awaiter(void 
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
     const andConditions = [];
-    console.log(filters);
     if (searchTerm) {
         andConditions.push({
             $or: constant_GeneralUser_1.GeneralUserSearchableFields.map(field => ({
@@ -70,6 +79,7 @@ const getAllGeneralUsersFromDb = (filters, paginationOptions) => __awaiter(void 
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield model_GeneralUser_1.GeneralUser.find(whereConditions)
+        .populate('profileImage')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -84,7 +94,9 @@ const getAllGeneralUsersFromDb = (filters, paginationOptions) => __awaiter(void 
     };
 });
 const getSingleGeneralUserFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield model_GeneralUser_1.GeneralUser.findById(id).populate('purchase_courses.course', 'courseId title thumbnail createdAt');
+    const result = yield model_GeneralUser_1.GeneralUser.findById(id)
+        .populate('purchase_courses.course', 'courseId title thumbnail createdAt')
+        .populate('profileImage');
     return result;
 });
 // user to course
@@ -140,7 +152,7 @@ const getUserToCourseFromDb = (id) => __awaiter(void 0, void 0, void 0, function
                 _id: 1,
                 name: 1,
                 purchase_courses: 1,
-                course: { _id: 1, title: 1, thumbnail: 1 },
+                course: { _id: 1, title: 1, thumbnail: 1, price: 1 },
                 lessions: { _id: 1, title: 1, vedio: 1, course: 1 },
             },
         },
@@ -166,7 +178,11 @@ const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0,
         });
     }
     if (quiz) {
-        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ _id: id, 'purchase_courses.course': course_id }, {
+        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({
+            _id: new mongoose_1.Types.ObjectId(id),
+            'purchase_courses.course': new mongoose_1.Types.ObjectId(course_id),
+            // quiz: { $size: 0 },
+        }, {
             $set: {
                 'purchase_courses.$.quiz': quiz,
             },
@@ -175,16 +191,20 @@ const updateCourseVedioOrQuizFromDb = (id, payload) => __awaiter(void 0, void 0,
         });
         // .projection({name:1, active:1, purchase_courses:1});
     }
+    if (!result) {
+        throw new ApiError_1.default(400, 'Something is going wrong!!');
+    }
     return result;
 });
 // module 15 --> 14,15 vedio
 const updateGeneralUserFromDb = (id, payload, req) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { _id } = (yield model_GeneralUser_1.GeneralUser.findOne({ id }));
-    if (!_id) {
+    const resultFind = (yield model_GeneralUser_1.GeneralUser.findById(id));
+    if (!(resultFind === null || resultFind === void 0 ? void 0 : resultFind._id)) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'GeneralUser not found !');
     }
-    if (_id !== ((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id) || req.user.role !== users_1.ENUM_USER_ROLE.ADMIN) {
+    if ((resultFind === null || resultFind === void 0 ? void 0 : resultFind._id) !== ((_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id) ||
+        req.user.role !== users_1.ENUM_USER_ROLE.ADMIN) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Unauthorise person!');
     }
     const GeneralUserData = __rest(payload, []);

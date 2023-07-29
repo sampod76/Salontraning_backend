@@ -29,8 +29,7 @@ const run_contest_consent_1 = require("./run_contest.consent");
 const run_contest_utils_1 = require("./run_contest.utils");
 const createRunContestByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const contestId = yield (0, run_contest_utils_1.generateContestId)();
-    console.log(payload);
-    const result = (yield run_contest_model_1.RunContest.create(Object.assign(Object.assign({}, payload), { contestId }))).populate('winnerPrize.thumbnail winnerList.photo_contest_id');
+    const result = yield run_contest_model_1.RunContest.create(Object.assign(Object.assign({}, payload), { contestId }));
     return result;
 });
 //getAllRunContestFromDb
@@ -69,7 +68,7 @@ const getAllRunContestFromDb = (filters, paginationOptions) => __awaiter(void 0,
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(paginationOptions);
     const sortConditions = {};
     if (sortBy && sortOrder) {
-        sortConditions[sortBy] = sortOrder;
+        sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
     }
     //****************pagination end ***************/
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
@@ -106,6 +105,32 @@ const updateRunContestFromDb = (id, req, payload) => __awaiter(void 0, void 0, v
     });
     return result;
 });
+// update e form db
+const updateRunContestWinnerFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    // const resultPhotoContest =await PhotoContestUser.find().limit()
+    // const lastId = await RunContest.findById(id).lean();
+    // const winerPerson = await PhotoContestUser.aggregate([
+    //   {
+    //     $addFields: {
+    //       loveReacts_count: { $size: { $ifNull: ['$loveReacts', []] } },
+    //     },
+    //   },
+    //   { $sort: { loveReacts: -1 } },
+    //   {
+    //     $limit:
+    //       Number(lastId?.total_winer?.number || lastId?.winnerPrize?.length) || 3,
+    //   },
+    // ]);
+    // const result = await RunContest.findOneAndUpdate(
+    //   { _id: new Types.ObjectId(id) },
+    //   payload,
+    //   {
+    //     new: true,
+    //   }
+    // );
+    // return result;
+    return null;
+});
 // delete e form db
 const deleteRunContestByIdFromDb = (id, req) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -124,4 +149,5 @@ exports.RunContestService = {
     getSingleRunContestFromDb,
     updateRunContestFromDb,
     deleteRunContestByIdFromDb,
+    updateRunContestWinnerFromDb,
 };

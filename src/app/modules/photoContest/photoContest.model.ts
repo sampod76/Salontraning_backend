@@ -61,7 +61,7 @@ const PhotoContestSchemaUser = new Schema<
     // after winer then this field auto file up
     winnerData: {
       type: {
-        contest_id: { type: Types.ObjectId },
+        contest: { type: Types.ObjectId },
         contest_number: { type: String },
         date: {
           type: String,

@@ -62,7 +62,7 @@ const getSinglePurchased_courses = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     const result =
-      await Purchased_coursesService.getSinglePurchased_coursesFromDb(id);
+      await Purchased_coursesService.getSinglePurchased_coursesFromDb(id, req);
     sendResponse<IPurchased_courses>(res, {
       success: true,
       statusCode: httpStatus.OK,

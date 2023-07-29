@@ -18,6 +18,6 @@ router
 router
     .route('/:id')
     .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), admin_controller_1.AdminController.getSingleAdmin)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(admin_validations_1.AdminValidation.updateAdminZodSchema), admin_controller_1.AdminController.updateAdmin)
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(admin_validations_1.AdminValidation.updateAdminZodSchema), admin_controller_1.AdminController.updateAdmin)
     .delete((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), admin_controller_1.AdminController.deleteAdmin);
 exports.AdminRoutes = router;

@@ -30,6 +30,7 @@ const purchased_courses_consent_1 = require("./purchased_courses.consent");
 const purchased_courses_model_1 = require("./purchased_courses.model");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const model_GeneralUser_1 = require("../generalUser/model.GeneralUser");
+const users_1 = require("../../../enums/users");
 const { ObjectId } = mongoose_1.default.Types;
 //
 const createPurchased_coursesByDb = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -116,8 +117,13 @@ const getAllPurchased_coursesFromDb = (filters, paginationOptions) => __awaiter(
     };
 });
 // get single e form db
-const getSinglePurchased_coursesFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const getSinglePurchased_coursesFromDb = (id, req) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     const result = yield purchased_courses_model_1.Purchased_courses.findById(id);
+    if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) !== users_1.ENUM_USER_ROLE.ADMIN &&
+        ((_b = req.user) === null || _b === void 0 ? void 0 : _b._id) !== (result === null || result === void 0 ? void 0 : result.userId)) {
+        throw new ApiError_1.default(500, 'unauthorise access!!');
+    }
     return result;
 });
 // update e form db

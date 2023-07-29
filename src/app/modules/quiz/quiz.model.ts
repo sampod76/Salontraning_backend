@@ -53,6 +53,7 @@ const QuizSchema = new Schema<IQuiz, QuizModel>(
     },
     course: {
       type: Types.ObjectId,
+      required: true,
       ref: 'Course',
     },
     courseId: {

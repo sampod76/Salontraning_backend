@@ -45,15 +45,17 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     // console.log(req.cookies, 13);
     // set refresh token into cookie
     const cookieOptions = {
-        // secure: config.env === 'production' ? true :false,
+        // secure: config.env === 'production' ? true : false,
         //same
-        secure: config_1.default.env === 'production',
+        // secure: config.env === 'production',
+        secure: true,
         httpOnly: true,
         // signed: true,
+        sameSite: 'none',
     };
     //এটার মাধ্যমে ক্লাইন সাইডে আমার পাঠানো রেসপন্স এর বাইরেও অটোমেটিকলি সে এই cookie সেট করে দেবে
     res.cookie('refreshToken', refreshToken, cookieOptions);
-    res.cookie('accessToken', othersData.accessToken, cookieOptions);
+    // res.cookie('accessToken', othersData.accessToken, cookieOptions);
     //set refre
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

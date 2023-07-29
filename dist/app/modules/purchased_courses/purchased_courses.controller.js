@@ -66,7 +66,7 @@ const getAllPurchased_courses = (0, catchAsync_1.default)((req, res) => __awaite
 }));
 const getSinglePurchased_courses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const result = yield purchased_courses_service_1.Purchased_coursesService.getSinglePurchased_coursesFromDb(id);
+    const result = yield purchased_courses_service_1.Purchased_coursesService.getSinglePurchased_coursesFromDb(id, req);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

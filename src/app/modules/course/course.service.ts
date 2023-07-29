@@ -46,7 +46,7 @@ const getAllCourseFromDb = async (
   const { searchTerm, select, ...filtersData } = filters;
 
   // Split the string and extract field names
-  const projection: any = {};
+  const projection: { [key: string]: number } = {};
   if (select) {
     const fieldNames = select?.split(',').map(field => field.trim());
     // Create the projection object
@@ -108,7 +108,9 @@ const getAllCourseFromDb = async (
   */
   const pipeline: PipelineStage[] = [
     { $match: whereConditions },
-
+    { $sort: sortConditions },
+    { $skip: Number(skip) || 0 },
+    { $limit: Number(limit) || 15 },
     {
       $lookup: {
         from: 'moderators',
@@ -197,14 +199,13 @@ const getAllCourseFromDb = async (
       $unwind: '$thumbnail',
     },
     ///***************** */ images field ******end*********
-    { $sort: sortConditions },
-    { $skip: Number(skip) || 0 },
-    { $limit: Number(limit) || 15 },
   ];
 
   let result = null;
   if (select) {
-    result = await Course.find({}).select({ ...projection });
+    result = await Course.find({})
+      .sort({ title: 1 })
+      .select({ ...projection });
   } else {
     result = await Course.aggregate(pipeline);
   }

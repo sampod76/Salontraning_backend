@@ -19,15 +19,15 @@ router
     .route('/winner/:id')
     //after winner list
     // .get(PhotoContestUserController)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(photoContest_validation_1.PhotoContestUserValidation.updatePhotoContestUserWinner), photoContest_constroller_1.PhotoContestUserController.updatePhotoContestUser);
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(photoContest_validation_1.PhotoContestUserValidation.updatePhotoContestUserWinner), photoContest_constroller_1.PhotoContestUserController.updatePhotoContestUser);
 router
     .route('/voie-message-share/:id')
     //after winner list
     // .get(PhotoContestUserController)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(photoContest_validation_1.PhotoContestUserValidation.createPhotoContestVoteZodSchema), photoContest_constroller_1.PhotoContestUserController.voteMassageSharePhotoContestUser);
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(photoContest_validation_1.PhotoContestUserValidation.createPhotoContestVoteZodSchema), photoContest_constroller_1.PhotoContestUserController.voteMassageSharePhotoContestUser);
 router
     .route('/:id')
     .get(photoContest_constroller_1.PhotoContestUserController.getSinglePhotoContestUser)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(photoContest_validation_1.PhotoContestUserValidation.updatePhotoContestUserZodSchema), photoContest_constroller_1.PhotoContestUserController.updatePhotoContestUser)
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), (0, validateRequestZod_1.default)(photoContest_validation_1.PhotoContestUserValidation.updatePhotoContestUserZodSchema), photoContest_constroller_1.PhotoContestUserController.updatePhotoContestUser)
     .delete((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), photoContest_constroller_1.PhotoContestUserController.deletePhotoContestUser);
 exports.PhotoContestUserRoute = router;

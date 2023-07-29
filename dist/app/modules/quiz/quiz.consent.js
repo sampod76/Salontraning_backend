@@ -15,5 +15,6 @@ exports.QUIZ_FILTERABLE_FIELDS = [
     'course',
     'singleQuizId',
     'createQuiz',
-    'deleteByQuizId', //delete quiz
+    'deleteByQuizId',
+    'status',
 ];

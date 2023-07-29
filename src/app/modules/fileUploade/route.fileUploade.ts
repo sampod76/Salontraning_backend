@@ -65,7 +65,7 @@ router
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     FileUploadeController.getSingleFileUploade
   )
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     validateRequestZod(FileUploadeValidation.updateFileUploadezodSchema),
     FileUploadeController.updateFileUploade

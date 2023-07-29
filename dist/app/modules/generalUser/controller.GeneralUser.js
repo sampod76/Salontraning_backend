@@ -16,6 +16,7 @@ exports.GeneralUserController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../../config"));
 const pagination_1 = require("../../../constant/pagination");
+const users_1 = require("../../../enums/users");
 const jwtHelpers_1 = require("../../../helper/jwtHelpers");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../share/catchAsync"));
@@ -83,7 +84,11 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
     // });
 }));
 const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     const id = req.params.id;
+    if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) !== users_1.ENUM_USER_ROLE.ADMIN && ((_b = req.user) === null || _b === void 0 ? void 0 : _b._id) !== id) {
+        throw new ApiError_1.default(500, 'unauthorise access!!');
+    }
     const result = yield service_GeneralUser_1.GeneralUserService.getSingleGeneralUserFromDb(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -104,8 +109,12 @@ const getSingleGeneralUserToCourse = (0, catchAsync_1.default)((req, res) => __a
     });
 }));
 const updateGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     const id = req.params.id;
     const updatedData = req.body;
+    if (((_c = req.user) === null || _c === void 0 ? void 0 : _c.role) !== users_1.ENUM_USER_ROLE.ADMIN && ((_d = req.user) === null || _d === void 0 ? void 0 : _d._id) !== id) {
+        throw new ApiError_1.default(500, 'unauthorise access!!');
+    }
     const result = yield service_GeneralUser_1.GeneralUserService.updateGeneralUserFromDb(id, updatedData, req);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

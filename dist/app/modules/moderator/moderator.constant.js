@@ -9,6 +9,7 @@ exports.moderatorFilterableFields = [
     'phone',
     'emergencyphone',
     'designation',
+    'status',
 ];
 exports.moderatorSearchableFields = [
     'email',

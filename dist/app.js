@@ -24,17 +24,35 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 // app.use(
 //   cors({
-//     origin: '*',
+//     origin: ['https://salontrainingpro.app/'],
 //     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //   })
 // );
-/*
- app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.DEV_URL)
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept")
-  next()
-}) */
+// app.use(
+//   cors({
+//     origin: '*',
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+//   })
+// );
+//  app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", 'https://salontrainingpro.app')
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept")
+//   next()
+// })
+// const allowedHeaders = [
+//   'Origin',
+//   'X-Requested-With',
+//   'Content-Type',
+//   'Accept',
+//   'Authorization',
+// ];
+// app.use(
+//   cors({
+//     origin: 'https://salontrainingpro.app',
+//     allowedHeaders: allowedHeaders,
+//   })
+// );
 app.use((0, xss_clean_1.default)());
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
@@ -54,15 +72,14 @@ const run = (req, res, next) => {
         next(error);
     }
 };
-app.use('/images', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/images/')));
-app.use('/profile', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/profile/')));
-app.use('/vedios', run, express_1.default.static(path_1.default.join(__dirname, './uploadFile/vedios/')));
+app.use('/images', run, express_1.default.static(path_1.default.join(__dirname, '../dist/uploadFile/images/')));
+app.use('/profile', run, express_1.default.static(path_1.default.join(__dirname, '../dist/uploadFile/profile/')));
+app.use('/vedios', run, express_1.default.static(path_1.default.join(__dirname, '../dist/uploadFile/vedios/')));
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.resolve('./views/success.ejs'));
 const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
-const run_contest_model_1 = require("./app/modules/run_contest/run_contest.model");
 const index_route_1 = __importDefault(require("./app/routes/index_route"));
 app.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -114,8 +131,9 @@ const test = () => __awaiter(void 0, void 0, void 0, function* () {
         //   }
         // );
         // const result = await FileUploade.deleteMany({});
-        const result = yield run_contest_model_1.RunContest.find({});
+        // const result = await RunContest.find({});
         // const result5 = await Purchased_courses.deleteMany();
+        // const result2 = await PhotoContestUser.deleteMany({});
         // const result2 = await RunContest.deleteMany({});
         // console.log(result2);
     }

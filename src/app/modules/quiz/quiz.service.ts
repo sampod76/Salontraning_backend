@@ -77,7 +77,9 @@ const getAllQuizFromDb = async (
     .sort(sortConditions)
     .skip(Number(skip))
     .limit(Number(limit))
+    .select({ quizList: 0 })
     .populate('course', 'title courseId categoryDetails');
+
   const total = await Quiz.countDocuments(whereConditions);
   return {
     meta: {

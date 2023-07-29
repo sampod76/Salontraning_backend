@@ -16,6 +16,6 @@ router
 router
     .route('/:id')
     .get(quiz_constroller_1.QuizController.getSingleQuiz)
-    .patch((0, validateRequestZod_1.default)(quiz_validation_1.QuizValidation.updateQuizZodSchema), quiz_constroller_1.QuizController.updateQuiz)
+    .put((0, validateRequestZod_1.default)(quiz_validation_1.QuizValidation.updateQuizZodSchema), quiz_constroller_1.QuizController.updateQuiz)
     .delete(quiz_constroller_1.QuizController.deleteQuiz);
 exports.QuizRoute = router;

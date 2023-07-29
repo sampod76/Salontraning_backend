@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import config from '../../../config';
 import { PAGINATION_FIELDS } from '../../../constant/pagination';
+import { ENUM_USER_ROLE } from '../../../enums/users';
 import { jwtHelpers } from '../../../helper/jwtHelpers';
 import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
@@ -17,6 +17,7 @@ import { GeneralUserService } from './service.GeneralUser';
 const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
   let queryObject = req.query;
   queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(queryObject).filter(([_, value]) => Boolean(value))
   );
   const filter = pick(queryObject, GeneralUserFilterableFields);
@@ -38,9 +39,11 @@ const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
 
 const createGeneralUserByFirebase = catchAsync(
   async (req: Request, res: Response) => {
+    console.log('login apple 41 controller');
     const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
       req.body
     )) as IGeneralUser & { _id: Types.ObjectId };
+    console.log(result, 'login apple 45 controller');
     if (!result) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
     }
@@ -77,7 +80,6 @@ const createGeneralUserByFirebase = catchAsync(
       data: {
         _id: result?._id,
         name: result?.name,
-
         status: result?.status,
         email: result?.email,
         phone: result.phone,
@@ -100,6 +102,9 @@ const createGeneralUserByFirebase = catchAsync(
 
 const getSingleGeneralUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
+  if (req.user?.role !== ENUM_USER_ROLE.ADMIN && req.user?._id !== id) {
+    throw new ApiError(500, 'unauthorise access!!');
+  }
   const result = await GeneralUserService.getSingleGeneralUserFromDb(id);
   sendResponse<IGeneralUser>(res, {
     statusCode: httpStatus.OK,
@@ -115,6 +120,7 @@ const getSingleGeneralUserToCourse = catchAsync(
     const id = req.params.id;
 
     const result = await GeneralUserService.getUserToCourseFromDb(id);
+
     sendResponse<any>(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -127,7 +133,9 @@ const getSingleGeneralUserToCourse = catchAsync(
 const updateGeneralUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const updatedData = req.body;
-
+  if (req.user?.role !== ENUM_USER_ROLE.ADMIN && req.user?._id !== id) {
+    throw new ApiError(500, 'unauthorise access!!');
+  }
   const result = await GeneralUserService.updateGeneralUserFromDb(
     id,
     updatedData,

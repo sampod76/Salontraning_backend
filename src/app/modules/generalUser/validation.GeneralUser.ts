@@ -10,7 +10,7 @@ const createGeneralUserByFirebaseZodSchema = z.object({
     phone: z.string().optional(),
     address: z.string().optional(),
     profileImage: z.string().optional(),
-    uid: z.string().optional(),
+    uid: z.string({ required_error: 'uid must be provide' }),
     status: z.enum(['active', 'deactive']).optional(),
   }),
 });

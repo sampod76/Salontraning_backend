@@ -29,7 +29,7 @@ router
 router
   .route('/:id')
   .get(CourseController.getSingleCourse)
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN),
     validateRequestZod(CourseValidation.updateCourseZodSchema),
     CourseController.updateCourse

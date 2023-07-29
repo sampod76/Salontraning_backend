@@ -87,6 +87,29 @@ const updateRunContest = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateRunContestWinner = catchAsync(
+  async (req: Request, res: Response) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id } = req.params;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const updateData = req.body;
+
+    const result = await RunContestService
+      .updateRunContestWinnerFromDb
+      // id,
+      // req,
+      // updateData
+      ();
+
+    sendResponse<IRunContest>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'successfull update RunContest',
+      data: result,
+    });
+  }
+);
+
 const deleteRunContest = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await RunContestService.deleteRunContestByIdFromDb(id, req);
@@ -102,5 +125,6 @@ export const RunContestController = {
   getAllRunContest,
   getSingleRunContest,
   updateRunContest,
+  updateRunContestWinner,
   deleteRunContest,
 };

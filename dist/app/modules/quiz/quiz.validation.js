@@ -24,7 +24,7 @@ const createQuizZodSchema = zod_1.z.object({
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
         tag: zod_1.z.array(zod_1.z.string()).optional(),
         course: zod_1.z.string({ required_error: 'course _id is required' }),
-        courseId: zod_1.z.string({ required_error: 'courseId is required' }),
+        courseId: zod_1.z.string().optional(),
         hint: zod_1.z.string().trim().optional(),
     }),
 });

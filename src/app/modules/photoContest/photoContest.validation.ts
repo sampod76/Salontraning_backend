@@ -24,6 +24,7 @@ const updatePhotoContestUserZodSchema = z.object({
   }),
 });
 
+//create photo vote --loverect
 const createPhotoContestVoteZodSchema = z.object({
   body: z.object({
     loveReact: z.enum(['yes', 'no']).optional(),
@@ -33,11 +34,12 @@ const createPhotoContestVoteZodSchema = z.object({
   }),
 });
 
+//winner prize update
 const updatePhotoContestUserWinner = z.object({
   body: z.object({
     winnerData: z
       .object({
-        contest_id: z.string(),
+        contest: z.string(),
         contest_number: z.string().optional(),
         date: z.string(),
         winner: z.number().nonnegative(),
@@ -45,6 +47,7 @@ const updatePhotoContestUserWinner = z.object({
       .optional(),
   }),
 });
+
 export const PhotoContestUserValidation = {
   createPhotoContestUserZodSchema,
   updatePhotoContestUserZodSchema,

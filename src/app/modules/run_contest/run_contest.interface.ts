@@ -1,6 +1,5 @@
 import { Model } from 'mongoose';
 import { IFileUploade } from '../fileUploade/interface.fileUploade';
-import { IPhotoContestUser } from '../photoContest/photoContest.interface';
 
 // import { IFileUploade } from '../fileUploade/interface.fileUploade';
 
@@ -17,6 +16,21 @@ export type IRunContestSearchableField = {
   description?: string;
 };
 
+export type IWinnerPrize = {
+  title: string;
+  thumbnail?: string;
+  prize_serial?: number;
+  prize_value?: number;
+};
+
+export type IWinnerList = {
+  photo_contest_id: string; // Assuming Types.ObjectId is a string type
+  userId: string; // Assuming Types.ObjectId is a string type
+  email?: string;
+  name?: string;
+  phone?: string;
+};
+
 export type IRunContest = {
   contestId: number;
   title?: string;
@@ -26,8 +40,8 @@ export type IRunContest = {
   // images_album: (string | IFileUploade)[];
   images_album: Array<string | IFileUploade>;
   status?: 'active' | 'deactive' | 'save';
-  winnerList?: IPhotoContestUser[];
-  winnerPrize?: [];
+  winnerList?: IWinnerList[];
+  winnerPrize?: IWinnerPrize[];
   total_winer: {
     number: number;
     condition: object;

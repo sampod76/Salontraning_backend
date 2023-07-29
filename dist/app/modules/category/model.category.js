@@ -14,6 +14,10 @@ const CategorySchema = new mongoose_1.Schema({
         type: mongoose_1.Types.ObjectId,
         ref: 'FileUploade',
     },
+    status: {
+        type: String,
+        default: 'active',
+    },
 }, {
     timestamps: true,
     // strict: 'throw',

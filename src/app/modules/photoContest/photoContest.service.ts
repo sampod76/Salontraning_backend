@@ -17,6 +17,7 @@ const createPhotoContestUserByDb = async (
   payload: IPhotoContestUser
 ): Promise<IPhotoContestUser | null> => {
   const result = (await PhotoContestUser.create(payload)).populate('thumbnail');
+  console.log(result, 'photo contest join 20 service');
   return result;
 };
 

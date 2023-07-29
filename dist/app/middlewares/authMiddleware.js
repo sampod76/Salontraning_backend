@@ -14,37 +14,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
-const users_1 = require("../../enums/users");
 const jwtHelpers_1 = require("../../helper/jwtHelpers");
 const ApiError_1 = __importDefault(require("../errors/ApiError"));
 const authMiddleware = (...requiredRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //get authorization token
+        let verifiedUser = null;
         const token = req.headers.authorization;
         // console.log(token, Math.random() * 100);
-        // const tokenCookie = req.cookies.refreshToken;
-        // console.log(token);
-        // console.log(tokenCookie, 'cookie');
-        // if (!tokenCookie) {
-        //   throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized ');
-        // }
+        /* const tokenCookie = req.cookies;
+        console.log(tokenCookie, '1717174174');
+        if (!token && !tokenCookie) {
+          throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+        } */
         if (!token) {
             throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'Unauthorized access');
         }
-        // verify token
-        let verifiedUser = null;
-        verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-        // if (tokenCookie) {
-        // verifiedUser = jwtHelpers.verifyToken(
-        //   tokenCookie,
-        //   config.jwt.refresh_secret as Secret
-        // );
-        // }
-        //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু টাইপি স্ক্রিপ্ট এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
-        // {role,email}
-        if (!(verifiedUser === null || verifiedUser === void 0 ? void 0 : verifiedUser.role)) {
-            verifiedUser.role = users_1.ENUM_USER_ROLE.GENERAL_USER;
+        // verify token only general user
+        if (token) {
+            verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
         }
+        // console.log(verifiedUser);
+        //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু typescript এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
+        // {role,email}
+        // if (
+        //   !tokenCookie &&
+        //   verifiedUser?.role &&
+        //   verifiedUser.role === ENUM_USER_ROLE.ADMIN
+        // ) {
+        //   throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden access');
+        // }
+        // if (tokenCookie) {
+        //   const verifiAdmin = jwtHelpers.verifyToken(
+        //     tokenCookie,
+        //     config.jwt.refresh_secret as Secret
+        //   );
+        //   if (verifiAdmin?.role === ENUM_USER_ROLE.ADMIN) {
+        //     verifiedUser = verifiAdmin;
+        //   }
+        // }
         req.user = verifiedUser;
         // role diye guard korar jnno
         if (requiredRoles.length && !requiredRoles.includes(verifiedUser === null || verifiedUser === void 0 ? void 0 : verifiedUser.role)) {

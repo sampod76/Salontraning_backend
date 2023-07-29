@@ -51,7 +51,7 @@ const PhotoContestSchemaUser = new mongoose_1.Schema({
     // after winer then this field auto file up
     winnerData: {
         type: {
-            contest_id: { type: mongoose_1.Types.ObjectId },
+            contest: { type: mongoose_1.Types.ObjectId },
             contest_number: { type: String },
             date: {
                 type: String,

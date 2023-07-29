@@ -12,12 +12,12 @@ const auth_controller_1 = require("./auth.controller");
 const auth_validation_1 = require("./auth.validation");
 const router = express_1.default.Router();
 router.route('/login').post(
-// any role login -- uid and role must be provide
-(0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.loginZodSchema), auth_controller_1.AuthController.loginUser);
+    // any role login -- uid and role must be provide
+    (0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.loginZodSchema), auth_controller_1.AuthController.loginUser);
 router
     .route('/my-profile')
     .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), auth_controller_1.AuthController.myProfile)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), auth_controller_1.AuthController.myProfileUpdate);
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), auth_controller_1.AuthController.myProfileUpdate);
 router
     .route('/refresh-token')
     .post((0, validateRequestZod_1.default)(auth_validation_1.AuthValidation.refreshTokenZodSchema), auth_controller_1.AuthController.refreshToken);

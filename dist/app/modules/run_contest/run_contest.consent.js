@@ -8,4 +8,5 @@ exports.RUNCONTEST_FILTERABLE_FIELDS = [
     'courseId',
     'date',
     'select',
+    'status',
 ];

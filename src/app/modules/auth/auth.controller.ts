@@ -23,16 +23,23 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { refreshToken, ...othersData } = result;
   // console.log(req.cookies, 13);
   // set refresh token into cookie
-  const cookieOptions = {
-    // secure: config.env === 'production' ? true :false,
+  const cookieOptions: {
+    secure: boolean;
+    httpOnly: boolean;
+    sameSite: 'none' | undefined;
+  } = {
+    // secure: config.env === 'production' ? true : false,
     //same
-    secure: config.env === 'production',
+    // secure: config.env === 'production',
+    secure: true,
     httpOnly: true,
     // signed: true,
+    sameSite: 'none',
   };
+
   //এটার মাধ্যমে ক্লাইন সাইডে আমার পাঠানো রেসপন্স এর বাইরেও অটোমেটিকলি সে এই cookie সেট করে দেবে
   res.cookie('refreshToken', refreshToken, cookieOptions);
-  res.cookie('accessToken', othersData.accessToken, cookieOptions);
+  // res.cookie('accessToken', othersData.accessToken, cookieOptions);
 
   //set refre
   sendResponse<any>(res, {

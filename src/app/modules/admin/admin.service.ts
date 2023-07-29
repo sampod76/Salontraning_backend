@@ -14,6 +14,16 @@ import { IAdmin, IAdminFilters } from './admin.interface';
 import { Admin } from './admin.model';
 const crateAdminFromDb = async (payload: IAdmin): Promise<IAdmin | null> => {
   // check if the Admin is exist
+  const removeFalseValue = (obj: any) => {
+    const falseValues = [undefined, '', 'undefined', null, 'null'];
+    for (const key in obj) {
+      if (falseValues.includes(obj[key])) {
+        delete obj[key];
+      }
+    }
+  };
+
+  removeFalseValue(payload);
   const result = await Admin.create(payload);
   return result;
 };
@@ -55,7 +65,7 @@ const getAllAdminsFromDb = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await Admin.find(whereConditions)
-
+    .populate('profileImage')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -73,7 +83,7 @@ const getAllAdminsFromDb = async (
 };
 
 const getSingleAdminFromDb = async (id: string): Promise<IAdmin | null> => {
-  const result = await Admin.findById(id);
+  const result = await Admin.findById(id).populate('profileImage');
   return result;
 };
 

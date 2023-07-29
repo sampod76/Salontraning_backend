@@ -31,6 +31,15 @@ const admin_constant_1 = require("./admin.constant");
 const admin_model_1 = require("./admin.model");
 const crateAdminFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // check if the Admin is exist
+    const removeFalseValue = (obj) => {
+        const falseValues = [undefined, '', 'undefined', null, 'null'];
+        for (const key in obj) {
+            if (falseValues.includes(obj[key])) {
+                delete obj[key];
+            }
+        }
+    };
+    removeFalseValue(payload);
     const result = yield admin_model_1.Admin.create(payload);
     return result;
 });
@@ -61,6 +70,7 @@ const getAllAdminsFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield admin_model_1.Admin.find(whereConditions)
+        .populate('profileImage')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -75,7 +85,7 @@ const getAllAdminsFromDb = (filters, paginationOptions) => __awaiter(void 0, voi
     };
 });
 const getSingleAdminFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield admin_model_1.Admin.findById(id);
+    const result = yield admin_model_1.Admin.findById(id).populate('profileImage');
     return result;
 });
 const updateAdminFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {

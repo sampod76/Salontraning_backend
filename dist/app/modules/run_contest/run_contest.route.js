@@ -13,8 +13,11 @@ const run_contest_validation_1 = require("./run_contest.validation");
 const router = express_1.default.Router();
 router.route('/').get(run_contest_constroller_1.RunContestController.getAllRunContest).post((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(run_contest_validation_1.RunContestValidation.createRunContestZodSchema), run_contest_constroller_1.RunContestController.createRunContest);
 router
+    .route('/winners/:id')
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(run_contest_validation_1.RunContestValidation.updateRunContestZodSchema), run_contest_constroller_1.RunContestController.updateRunContestWinner);
+router
     .route('/:id')
     .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), run_contest_constroller_1.RunContestController.getSingleRunContest)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(run_contest_validation_1.RunContestValidation.updateRunContestZodSchema), run_contest_constroller_1.RunContestController.updateRunContest)
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(run_contest_validation_1.RunContestValidation.updateRunContestZodSchema), run_contest_constroller_1.RunContestController.updateRunContest)
     .delete((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), run_contest_constroller_1.RunContestController.deleteRunContest);
 exports.RunContestRoute = router;

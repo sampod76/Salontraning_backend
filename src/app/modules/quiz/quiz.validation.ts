@@ -24,7 +24,7 @@ const createQuizZodSchema = z.object({
     status: z.enum(['active', 'deactive', 'save']).optional(),
     tag: z.array(z.string()).optional(),
     course: z.string({ required_error: 'course _id is required' }), // Assuming the course is represented as a string
-    courseId: z.string({ required_error: 'courseId is required' }),
+    courseId: z.string().optional(),
     hint: z.string().trim().optional(),
   }),
 });

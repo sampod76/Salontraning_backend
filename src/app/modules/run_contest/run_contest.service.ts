@@ -1,4 +1,4 @@
-import { SortOrder, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { Request } from 'express';
@@ -15,10 +15,7 @@ const createRunContestByDb = async (
   payload: IRunContest
 ): Promise<IRunContest | null> => {
   const contestId = await generateContestId();
-  console.log(payload);
-  const result = (await RunContest.create({ ...payload, contestId })).populate(
-    'winnerPrize.thumbnail winnerList.photo_contest_id'
-  );
+  const result = await RunContest.create({ ...payload, contestId });
   return result;
 };
 
@@ -65,9 +62,9 @@ const getAllRunContestFromDb = async (
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOptions);
 
-  const sortConditions: { [key: string]: SortOrder } = {};
+  const sortConditions: { [key: string]: 1 | -1 } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder;
+    sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
   }
   //****************pagination end ***************/
 
@@ -122,6 +119,38 @@ const updateRunContestFromDb = async (
   return result;
 };
 
+// update e form db
+const updateRunContestWinnerFromDb = async (): // id: string,
+// req: Request,
+// payload: Partial<IRunContest>
+Promise<IRunContest | null> => {
+  // const resultPhotoContest =await PhotoContestUser.find().limit()
+
+  // const lastId = await RunContest.findById(id).lean();
+  // const winerPerson = await PhotoContestUser.aggregate([
+  //   {
+  //     $addFields: {
+  //       loveReacts_count: { $size: { $ifNull: ['$loveReacts', []] } },
+  //     },
+  //   },
+  //   { $sort: { loveReacts: -1 } },
+  //   {
+  //     $limit:
+  //       Number(lastId?.total_winer?.number || lastId?.winnerPrize?.length) || 3,
+  //   },
+  // ]);
+
+  // const result = await RunContest.findOneAndUpdate(
+  //   { _id: new Types.ObjectId(id) },
+  //   payload,
+  //   {
+  //     new: true,
+  //   }
+  // );
+  // return result;
+  return null;
+};
+
 // delete e form db
 const deleteRunContestByIdFromDb = async (
   id: string,
@@ -143,4 +172,5 @@ export const RunContestService = {
   getSingleRunContestFromDb,
   updateRunContestFromDb,
   deleteRunContestByIdFromDb,
+  updateRunContestWinnerFromDb,
 };

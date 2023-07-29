@@ -18,7 +18,7 @@ router
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     AuthController.myProfile
   )
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     AuthController.myProfileUpdate
   );

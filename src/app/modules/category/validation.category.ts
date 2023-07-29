@@ -6,12 +6,14 @@ const createCategoryZodSchema = z.object({
       required_error: 'Title is required',
     }),
     thumbnail: z.string().optional(),
+    status: z.string().optional(),
   }),
 });
 const updateCategoryZodSchema = z.object({
   body: z.object({
     title: z.string().optional(),
     thumbnail: z.string().optional(),
+    status: z.string().optional(),
   }),
 });
 

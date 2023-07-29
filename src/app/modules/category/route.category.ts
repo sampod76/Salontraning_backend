@@ -21,11 +21,14 @@ router
   .route('/:id')
   // This route is open
   .get(CategoryController.getSingleCategory)
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN),
     validateRequestZod(CategoryValidation.updateCategoryZodSchema),
     CategoryController.updateCategory
   )
-  .delete(CategoryController.deleteCategory);
+  .delete(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    CategoryController.deleteCategory
+  );
 
 export const CategoryRoute = router;

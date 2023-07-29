@@ -81,6 +81,7 @@ const getAllQuizFromDb = (filters, paginationOptions) => __awaiter(void 0, void 
         .sort(sortConditions)
         .skip(Number(skip))
         .limit(Number(limit))
+        .select({ quizList: 0 })
         .populate('course', 'title courseId categoryDetails');
     const total = yield quiz_model_1.Quiz.countDocuments(whereConditions);
     return {

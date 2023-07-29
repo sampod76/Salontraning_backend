@@ -16,7 +16,7 @@ router
 router
   .route('/:id')
   .get(QuizController.getSingleQuiz)
-  .patch(
+  .put(
     validateRequestZod(QuizValidation.updateQuizZodSchema),
     QuizController.updateQuiz
   )

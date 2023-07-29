@@ -22,7 +22,7 @@ router
   .route('/winner/:id')
   //after winner list
   // .get(PhotoContestUserController)
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN),
     validateRequestZod(PhotoContestUserValidation.updatePhotoContestUserWinner),
     PhotoContestUserController.updatePhotoContestUser
@@ -32,7 +32,7 @@ router
   .route('/voie-message-share/:id')
   //after winner list
   // .get(PhotoContestUserController)
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     validateRequestZod(
       PhotoContestUserValidation.createPhotoContestVoteZodSchema
@@ -43,7 +43,7 @@ router
 router
   .route('/:id')
   .get(PhotoContestUserController.getSinglePhotoContestUser)
-  .patch(
+  .put(
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     validateRequestZod(
       PhotoContestUserValidation.updatePhotoContestUserZodSchema

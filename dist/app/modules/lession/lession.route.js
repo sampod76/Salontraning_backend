@@ -16,6 +16,6 @@ router
 router
     .route('/:id')
     .get(lession_constroller_1.LessionController.getSingleLession)
-    .patch((0, validateRequestZod_1.default)(lession_validation_1.LessionValidation.updateLessionZodSchema), lession_constroller_1.LessionController.updateLession)
+    .put((0, validateRequestZod_1.default)(lession_validation_1.LessionValidation.updateLessionZodSchema), lession_constroller_1.LessionController.updateLession)
     .delete(lession_constroller_1.LessionController.deleteLession);
 exports.LessionRoute = router;

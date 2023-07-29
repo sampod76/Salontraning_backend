@@ -16,7 +16,7 @@ router
 router
   .route('/:id')
   .get(LessionController.getSingleLession)
-  .patch(
+  .put(
     validateRequestZod(LessionValidation.updateLessionZodSchema),
     LessionController.updateLession
   )

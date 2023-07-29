@@ -7,19 +7,9 @@ const createRunContestZodSchema = zod_1.z.object({
         title: zod_1.z.string().optional(),
         header_1: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),
-        // thumbnail: z.string().or(IFileUploadeSchema).optional(),
+        thumbnail: zod_1.z.string().optional(),
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
         winnerList: zod_1.z.array(zod_1.z.unknown()).optional(),
-        // winnerPrize: z
-        //   .array(
-        //     z.object({
-        //       title: z.string().optional(),
-        //       thumbnail: z.string().optional(),
-        //       prize_serial: z.number().optional(),
-        //       prize_value: z.number().optional(),
-        //     })
-        //   )
-        //   .optional(),
         winnerPrize: zod_1.z.array(zod_1.z.object({
             title: zod_1.z.string(),
             thumbnail: zod_1.z.string().optional(),
@@ -41,14 +31,26 @@ const updateRunContestZodSchema = zod_1.z.object({
         title: zod_1.z.string().optional(),
         header_1: zod_1.z.string().optional(),
         description: zod_1.z.string().optional(),
-        // thumbnail: z.string().or(IFileUploadeSchema).optional(),
+        thumbnail: zod_1.z.string().optional(),
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
-        winnerList: zod_1.z.array(zod_1.z.unknown()).optional(),
+        winnerList: zod_1.z
+            .array(zod_1.z.object({
+            photo_contest_id: zod_1.z.string({
+                required_error: 'photo contest id required',
+            }),
+            userId: zod_1.z.string({ required_error: 'user id required' }),
+            email: zod_1.z.string().optional(),
+            name: zod_1.z.string().optional(),
+            phone: zod_1.z.string().optional(),
+        }))
+            .optional(),
         winnerPrize: zod_1.z.array(zod_1.z.unknown()).optional(),
-        total_winer: zod_1.z.object({
+        total_winer: zod_1.z
+            .object({
             number: zod_1.z.number().min(0).optional(),
             condition: zod_1.z.object({}).optional(),
-        }),
+        })
+            .optional(),
         duration_time: zod_1.z
             .object({
             startDate: zod_1.z.string().optional(),

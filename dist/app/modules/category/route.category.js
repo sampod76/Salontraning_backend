@@ -20,6 +20,6 @@ router
     .route('/:id')
     // This route is open
     .get(constroller_category_1.CategoryController.getSingleCategory)
-    .patch((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(validation_category_1.CategoryValidation.updateCategoryZodSchema), constroller_category_1.CategoryController.updateCategory)
-    .delete(constroller_category_1.CategoryController.deleteCategory);
+    .put((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), (0, validateRequestZod_1.default)(validation_category_1.CategoryValidation.updateCategoryZodSchema), constroller_category_1.CategoryController.updateCategory)
+    .delete((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), constroller_category_1.CategoryController.deleteCategory);
 exports.CategoryRoute = router;

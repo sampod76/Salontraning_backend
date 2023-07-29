@@ -6,6 +6,7 @@ export const moderatorFilterableFields = [
   'phone',
   'emergencyphone',
   'designation',
+  'status',
 ];
 
 export const moderatorSearchableFields = [

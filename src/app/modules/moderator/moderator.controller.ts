@@ -34,7 +34,7 @@ const getAllModerators = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleModerator = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await ModeratorService.getSingleModeratorFromDb(id);
+  const result = await ModeratorService.getSingleModeratorFromDb(id, req);
 
   sendResponse<IModerator>(res, {
     statusCode: httpStatus.OK,
@@ -57,7 +57,11 @@ const createModerator = catchAsync(async (req: Request, res: Response) => {
 const updateModerator = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const updatedData = req.body;
-  const result = await ModeratorService.updateModeratorFromDb(id, updatedData);
+  const result = await ModeratorService.updateModeratorFromDb(
+    id,
+    updatedData,
+    req
+  );
 
   sendResponse<IModerator>(res, {
     statusCode: httpStatus.OK,

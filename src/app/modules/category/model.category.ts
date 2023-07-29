@@ -14,6 +14,10 @@ const CategorySchema = new Schema<ICategory, CategoryModel>(
       type: Types.ObjectId,
       ref: 'FileUploade',
     },
+    status: {
+      type: String,
+      default: 'active',
+    },
   },
   {
     timestamps: true,

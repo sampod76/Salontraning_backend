@@ -13,10 +13,12 @@ import { PhotoContestUserService } from './photoContest.service';
 // import { z } from 'zod'
 const createPhotoContestUser = catchAsync(
   async (req: Request, res: Response) => {
+    console.log(req.body, 'photo contest join 16 conteroller');
     const result = await PhotoContestUserService.createPhotoContestUserByDb({
       ...req.body,
       // userId: req?.user?._id,
     });
+    console.log(result, 'photo contest join 21 conteroller');
 
     sendResponse<IPhotoContestUser>(res, {
       success: true,
