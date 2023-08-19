@@ -9,7 +9,7 @@ type IPurchaseCourses = {
 };
 
 export type IGeneralUser = {
-  _id: unknown;
+  _id: string;
   // _id?: string;
   name: string; //embedded object
   gender?: 'male' | 'female';
@@ -19,7 +19,8 @@ export type IGeneralUser = {
   phone?: string;
   address?: string;
   profileImage?: string;
-  uid?: string;
+  uid: string;
+  fcm_token?: string;
   otherInfo?: IOtherInfo;
   role: string;
   status?: 'active' | 'deactive';
@@ -37,4 +38,5 @@ export type IGeneralUserFilters = {
   email?: string;
   phone?: string;
   status?: string;
+  uid?: string;
 };

@@ -42,6 +42,10 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       type: String,
       unique: true,
     },
+    fcm_token: {
+      type: String,
+      unique: true,
+    },
     status: {
       type: String,
       enum: ['active', 'deactive'],

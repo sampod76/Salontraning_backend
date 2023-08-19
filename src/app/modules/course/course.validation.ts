@@ -26,6 +26,7 @@ const createCourseZodSchema = z.object({
     description: z.string().optional(),
     thumbnail: z.string().optional(),
     status: z.enum(['active', 'deactive', 'save']).optional(),
+    course_mode: z.enum(['pre_recorded', 'jobs', 'events']).optional(),
     publish: z.object({ date: z.string().optional() }).optional(), // Assuming publish is a string representing the ID of a related document
     publisher: z.string({ required_error: 'publisher field is required' }), // Assuming publisher is a string representing the ID of a related document
     publisherName: z.string({
@@ -61,6 +62,7 @@ const updateCourseZodSchema = z.object({
     description: z.string().optional(),
     thumbnail: z.string().optional(),
     status: z.enum(['active', 'deactive', 'save']).optional(),
+    course_mode: z.enum(['pre_recorded', 'jobs', 'events']).optional(),
     publish: z
       .object({ status: z.boolean().optional(), time: z.string().optional() })
       .optional(), // Assuming publish is a string representing the ID of a related document

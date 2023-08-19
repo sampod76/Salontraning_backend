@@ -10,6 +10,7 @@ import { IPaginationOption } from '../../interface/pagination';
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
 import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
+import { logger } from '../../share/logger';
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 
@@ -26,15 +27,13 @@ const createGeneralUserByFirebaseFromDb = async (
   };
 
   removeFalseValue(payload);
-  console.log(payload, 'apple login 29 serveice');
-  // return payload;
+  logger.info({ payload, line: 'apple login 29 serveice' });
   let result = null;
-
   result = await GeneralUser.findOne({ uid: payload?.uid });
   if (!result) {
     result = await GeneralUser.create(payload);
   }
-  console.log(result, 'apple login 37 serveice');
+  logger.info({ result, line: "result, 'apple login 37 serveice" });
   return result;
 };
 
