@@ -95,6 +95,8 @@ app.set('views', path.resolve('./views/success.ejs'));
 import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
+import { GeneralUser } from './app/modules/generalUser/model.GeneralUser';
+import { sendNotificationsToUsers } from './app/modules/notification/sendPush.notification';
 import routers from './app/routes/index_route';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -156,10 +158,27 @@ const test = async () => {
     // const result2 = await PhotoContestUser.deleteMany({});
     // const result2 = await RunContest.deleteMany({});
     // console.log(result2);
+  //   const token = await GeneralUser.find({}).select({ fcm_token: 1, _id: 0 });
+  //   const tokens = [
+  //     'fhO0RDSTQjeIVBE0jL12sM:APA91bFqsIF_2TeSdHLrqSdnIpE7sc-1WQnJlppASH_pbZcE0dcIUyy89G-yyrE0_IkU5e1QQ3BLQTUfjJXR2BuqDAXCKftc0jImqA6MR5HIITxgE73e9e6tKaR4WuXIWXgfVZTnS1DH',
+  //     'dzxh2ZCa60ALt0Zq7CHDAS:APA91bEX2eicWF100gvcX_etXPFthsefNGoLPLSiV4d0iiYMnW0QExwIji0W_c1AHlrXP-w2-1rNATPwjvBwys-hHJLtGA9xcb5buXaDcJCaZ7SMqqnjad29nfJUNB_6HBQ_Lxxb0u2O'
+  //   ];
+  //   const notification = {
+  //     body: 'sampod data send my',
+  //     id: '6378baf1c1a009d17fc2c1fc',
+  //     title: 'app notifications',
+  //   };
+
+  //  sendNotificationsToUsers(tokens, notification);
+
+
+    // const tokesCollectins: any[] =token.map(c=>c.fcm_token)
+    // const result = await sendPushNotification(tokesCollectins, 'Sampod nath');
+    // console.log(result);
   } catch (error) {
     console.log(error);
   }
 };
-test();
+// test();
 
 export default app;

@@ -1,0 +1,65 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\.0221bac09c7ddf09dcd76844d097dac1092eaed3-audit.json",
+    "files": [
+        {
+            "date": 1692697829155,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-22-15-error.log",
+            "hash": "cb44d52267739e8b943e6fc34cfca6cb8443024f4996a320d54878bfea2764d0"
+        },
+        {
+            "date": 1692955341807,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-25-15-error.log",
+            "hash": "9c3c162670e0893a7804f33eee04f24bd2784e8e8ba462f6c1db9bc7862ee837"
+        },
+        {
+            "date": 1692957933266,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-25-16-error.log",
+            "hash": "824272d288f92e0c715ea74820a10aee16a22c414fa3a7502e845f8d14412b89"
+        },
+        {
+            "date": 1693258999417,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-29-03-error.log",
+            "hash": "c0614050433accc694812b702144d34b3bdb90e80d5392dcb7a452b78ac5e8a6"
+        },
+        {
+            "date": 1693303839497,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-29-16-error.log",
+            "hash": "5d668eede695fc588750520f53ca058a40d11430fe1e4139ad86e415c5c6f2b4"
+        },
+        {
+            "date": 1693339702620,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-30-02-error.log",
+            "hash": "901977c2fc8e7f1cfd4b1d5195266fa5d70c626c171d8cc07d0fb0950ec4b0c0"
+        },
+        {
+            "date": 1693344590773,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-30-03-error.log",
+            "hash": "364ac81cdab0265910960dddf946a210a075a7ee964efcafad517c3858409972"
+        },
+        {
+            "date": 1693347364721,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-30-04-error.log",
+            "hash": "db9f1262fdf3674d864183e3f98d7aae64798c3de965c5c78945e24dec4e54b8"
+        },
+        {
+            "date": 1693429308924,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-31-03-error.log",
+            "hash": "fb32a3e88b0c2b5583d794c6c8af5e3d61b6b3b34163a35ffbff5dd664234a50"
+        },
+        {
+            "date": 1693433268355,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-31-04-error.log",
+            "hash": "b40373a9e3b2edffe1bdda8785aa3e657340ac6547a0a9737e1e4e96d19e4fad"
+        },
+        {
+            "date": 1693436442752,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server\\logger\\winston\\errors\\PHU-2023-08-31-05-error.log",
+            "hash": "818bd519ee16290919980c8f48e9b16aa0869956cbc4ee104698c471617d862f"
+        }
+    ],
+    "hashType": "sha256"
+}

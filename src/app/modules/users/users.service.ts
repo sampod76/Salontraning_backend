@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 import { ENUM_USER_ROLE } from '../../../enums/users';
 import ApiError from '../../errors/ApiError';
@@ -37,7 +37,7 @@ const createGeneralUserFromdb = async (
       );
     }
     //set GeneralUser -->  _id into user.GeneralUser
-    user.generalUser = newGeneralUser[0]._id;
+    user.generalUser =new Types.ObjectId(newGeneralUser[0]._id);
 
     const newUser = await User.create([user], { session });
 

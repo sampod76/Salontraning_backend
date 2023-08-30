@@ -1,5 +1,5 @@
 import { Schema, Types, model } from 'mongoose';
-import { COURSE_MODES, COURSE_TYPES } from './course.consent';
+import { COURSE_TYPES } from './course.consent';
 import { CourseModel, ICourse } from './course.interface';
 // import { format } from 'date-fns';
 
@@ -27,7 +27,7 @@ const courseSchema = new Schema<ICourse, CourseModel>(
     },
     course_mode: {
       type: String,
-      enum: COURSE_MODES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
+      // enum: COURSE_MODES, 
     },
     categoryDetails: {
       type: {

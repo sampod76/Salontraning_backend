@@ -10,6 +10,7 @@ import { FileUploadeRoute } from '../modules/fileUploade/route.fileUploade';
 import { GeneralUserRoutes } from '../modules/generalUser/route.GeneralUser';
 import { LessionRoute } from '../modules/lession/lession.route';
 import { ModeratorRoutes } from '../modules/moderator/moderator.route';
+import { NotificationRoute } from '../modules/notification/route.notification';
 import { PaymentRoute } from '../modules/payment/payment.router';
 import { PhotoContestUserRoute } from '../modules/photoContest/photoContest.route';
 import { Purchased_coursesRoute } from '../modules/purchased_courses/purchased_courses.route';
@@ -82,6 +83,10 @@ const moduleRoutes = [
   {
     path: '/upload',
     route: FileUploadeRoute,
+  },
+  {
+    path: '/notification',
+    route: NotificationRoute,
   },
 ];
 

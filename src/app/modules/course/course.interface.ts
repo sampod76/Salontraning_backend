@@ -34,7 +34,8 @@ export type ICourse = {
   title: string;
   price?: number;
   type: 'free' | 'paid' | 'open' | 'closed' | 'recurrig';
-  course_mode: 'pre_recorded' | 'jobs' | 'events' 
+  // course_mode: 'pre_recorded' | 'jobs' | 'events' 
+  course_mode?: string 
   category: string;
   discount?: {
     value: number;

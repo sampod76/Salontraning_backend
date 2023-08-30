@@ -17,6 +17,7 @@ import { logger } from '../../share/logger';
 const createGeneralUserByFirebaseFromDb = async (
   payload: IGeneralUser
 ): Promise<IGeneralUser | null> => {
+  //
   const removeFalseValue = (obj: any) => {
     const falseValues = [undefined, '', 'undefined', null, 'null'];
     for (const key in obj) {
@@ -25,13 +26,18 @@ const createGeneralUserByFirebaseFromDb = async (
       }
     }
   };
-
   removeFalseValue(payload);
+  //
   logger.info({ payload, line: 'apple login 29 serveice' });
   let result = null;
   result = await GeneralUser.findOne({ uid: payload?.uid });
   if (!result) {
     result = await GeneralUser.create(payload);
+  } else {
+    await GeneralUser.findOneAndUpdate(
+      { uid: payload?.uid },
+      { fcm_token: payload?.fcm_token }
+    );
   }
   logger.info({ result, line: "result, 'apple login 37 serveice" });
   return result;
