@@ -51,7 +51,7 @@ const purchasedCoursesSchema = new Schema<
         },
         method: {
           type: String,
-          enum: ['stripe', 'paypal','manual', 'free'],
+          enum: ['stripe', 'paypal','manual', 'free','other'],
         },
         paymentType: {
           type: String,

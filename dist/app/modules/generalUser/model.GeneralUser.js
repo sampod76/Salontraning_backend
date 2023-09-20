@@ -51,6 +51,7 @@ const GeneralUserSchema = new mongoose_1.Schema({
     uid: {
         type: String,
         unique: true,
+        required: [true, "Uid must be provided"]
     },
     fcm_token: {
         type: String,

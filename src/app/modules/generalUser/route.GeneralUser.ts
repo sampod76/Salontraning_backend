@@ -19,6 +19,13 @@ router
     ),
     GeneralUserController.createGeneralUserByFirebase
   );
+// general user create by admin
+router
+  .route('/create-general-user-by-admin')
+  .post(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    GeneralUserController.createGeneralUserByAdmin
+  );
 
 router
   .route('/get-course/:id')
@@ -26,7 +33,6 @@ router
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     GeneralUserController.getSingleGeneralUserToCourse
   );
-
 
 router
   .route('/update-course-quiz/:id')

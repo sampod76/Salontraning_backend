@@ -41,6 +41,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     uid: {
       type: String,
       unique: true,
+      required:[true,"Uid must be provided"]
     },
     fcm_token: {
       type: String,

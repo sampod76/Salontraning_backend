@@ -16,6 +16,10 @@ router
     .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), controller_GeneralUser_1.GeneralUserController.getAllGeneralUsers)
     // sign up user
     .post((0, validateRequestZod_1.default)(validation_GeneralUser_1.GeneralUserValidation.createGeneralUserByFirebaseZodSchema), controller_GeneralUser_1.GeneralUserController.createGeneralUserByFirebase);
+// general user create by admin
+router
+    .route('/create-general-user-by-admin')
+    .post((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN), controller_GeneralUser_1.GeneralUserController.createGeneralUserByAdmin);
 router
     .route('/get-course/:id')
     .get((0, authMiddleware_1.default)(users_1.ENUM_USER_ROLE.ADMIN, users_1.ENUM_USER_ROLE.GENERAL_USER), controller_GeneralUser_1.GeneralUserController.getSingleGeneralUserToCourse);

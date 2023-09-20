@@ -26,6 +26,7 @@ const createPurchased_coursesByDb = async (
   // const session = await mongoose.startSession();
   // try {
   //   session.startTransaction();
+ 
   const addCourseByUser = await GeneralUser.updateOne(
     {
       _id: new ObjectId(userId),

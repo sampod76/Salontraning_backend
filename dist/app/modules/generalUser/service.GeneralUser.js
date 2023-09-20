@@ -30,9 +30,9 @@ const mongoose_1 = require("mongoose");
 const users_1 = require("../../../enums/users");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const logger_1 = require("../../share/logger");
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const model_GeneralUser_1 = require("./model.GeneralUser");
-const logger_1 = require("../../share/logger");
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -49,18 +49,13 @@ const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0,
     //
     logger_1.logger.info({ payload, line: 'apple login 29 serveice' });
     let result = null;
-    if (payload.email) {
-        result = yield model_GeneralUser_1.GeneralUser.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
-    }
-    else {
-        result = yield model_GeneralUser_1.GeneralUser.findOne({ uid: payload === null || payload === void 0 ? void 0 : payload.uid });
-    }
-    // have a email but not get a uid then update uid
-    if (!(result === null || result === void 0 ? void 0 : result.uid) && (result === null || result === void 0 ? void 0 : result.email)) {
-        // result = await GeneralUser.create(payload);
-        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ email: payload.email }, payload);
-    }
-    else if (!(result === null || result === void 0 ? void 0 : result.uid) && !(result === null || result === void 0 ? void 0 : result.email)) {
+    // if (payload.email) {
+    result = yield model_GeneralUser_1.GeneralUser.findOne({ $or: [{ uid: payload === null || payload === void 0 ? void 0 : payload.uid }, { email: payload === null || payload === void 0 ? void 0 : payload.email }] });
+    // } 
+    //  if(!result?.uid) {
+    // result = await GeneralUser.findOne({ uid: payload?.uid });
+    // }
+    if (!(result === null || result === void 0 ? void 0 : result.uid)) {
         // create new user
         result = yield model_GeneralUser_1.GeneralUser.create(payload);
     }
@@ -74,7 +69,7 @@ const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0,
         if (payload === null || payload === void 0 ? void 0 : payload.email) {
             data.email = payload === null || payload === void 0 ? void 0 : payload.email;
         }
-        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ $or: [{ uid: payload === null || payload === void 0 ? void 0 : payload.uid }, { email: payload === null || payload === void 0 ? void 0 : payload.email }] }, data);
+        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ $or: [{ uid: payload === null || payload === void 0 ? void 0 : payload.uid }, { email: payload === null || payload === void 0 ? void 0 : payload.email }] }, data, { new: true, runValidators: true });
     }
     logger_1.logger.info({ result, line: "result, 'apple login 37 serveice" });
     return result;

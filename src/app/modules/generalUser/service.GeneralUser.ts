@@ -7,10 +7,10 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
+import { logger } from '../../share/logger';
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
 import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
-import { logger } from '../../share/logger';
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 
@@ -30,20 +30,15 @@ const createGeneralUserByFirebaseFromDb = async (
   //
   logger.info({ payload, line: 'apple login 29 serveice' });
   let result = null;
-  if (payload.email) {
-    result = await GeneralUser.findOne({ email: payload?.email });
-  } else {
-    result = await GeneralUser.findOne({ uid: payload?.uid });
-  }
+  // if (payload.email) {
+    result = await GeneralUser.findOne( { $or: [{ uid: payload?.uid }, { email: payload?.email }] },);
+  // } 
+  //  if(!result?.uid) {
+    // result = await GeneralUser.findOne({ uid: payload?.uid });
+  // }
 
-  // have a email but not get a uid then update uid
-  if (!result?.uid && result?.email) {
-    // result = await GeneralUser.create(payload);
-    result = await GeneralUser.findOneAndUpdate(
-      { email: payload.email },
-      payload
-    );
-  } else if (!result?.uid && !result?.email) {
+
+  if (!result?.uid) {
     // create new user
     result = await GeneralUser.create(payload);
   } else {
@@ -59,12 +54,15 @@ const createGeneralUserByFirebaseFromDb = async (
 
     result = await GeneralUser.findOneAndUpdate(
       { $or: [{ uid: payload?.uid }, { email: payload?.email }] },
-      data
+      data,
+      {new: true,runValidators:true}
     );
   }
   logger.info({ result, line: "result, 'apple login 37 serveice" });
   return result;
 };
+
+
 
 const getAllGeneralUsersFromDb = async (
   filters: IGeneralUserFilters,

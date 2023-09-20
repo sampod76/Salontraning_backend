@@ -1,3 +1,4 @@
+// import crypto from 'crypto';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
@@ -13,7 +14,6 @@ import sendResponse from '../../share/sendResponse';
 import { GeneralUserFilterableFields } from './constant.GeneralUser';
 import { IGeneralUser } from './interface.GeneralUser';
 import { GeneralUserService } from './service.GeneralUser';
-import crypto from 'crypto';
 
 const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
   let queryObject = req.query;
@@ -40,10 +40,11 @@ const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
 
 const createGeneralUserByFirebase = catchAsync(
   async (req: Request, res: Response) => {
-    console.log('login apple 41 controller');
-    if (!req.body?.uid && req.query?.setUid === 'yes') {
-      req.body.uid = crypto.randomBytes(28).toString('hex');
-    }
+    console.log(req.query);
+    // if (!req.body?.uid && req.query?.setUid === 'yes') {
+    //   req.body.uid = crypto.randomBytes(28).toString('hex');
+    //   console.log(req.body.uid)
+    // }
     const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
       req.body
     )) as IGeneralUser & { _id: Types.ObjectId };
@@ -92,18 +93,28 @@ const createGeneralUserByFirebase = catchAsync(
         accessToken,
       },
     });
-
-    // sendResponse<ILoginUserResponse>(res, {
-    //   statusCode: httpStatus.OK,
-    //   success: true,
-    //   message: 'user found successfully !',
-    //   // data:result,
-    //   data: {
-    //     accessToken,
-    //   },
-    // });
   }
 );
+//!------- only admin add course then create user---------
+const createGeneralUserByAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
+      req.body
+    ))
+    console.log(result, 'login apple 45 controller');
+    if (!result) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
+    }
+    res.status(200).send({
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user found successfully !',
+      // data:result,
+      data: result,
+    });
+  }
+);
+//
 
 const getSingleGeneralUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -194,4 +205,5 @@ export const GeneralUserController = {
   updateCourseVedioOrQuiz,
   updateGeneralUser,
   deleteGeneralUser,
+  createGeneralUserByAdmin
 };
