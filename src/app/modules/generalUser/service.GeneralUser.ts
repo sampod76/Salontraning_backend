@@ -30,13 +30,36 @@ const createGeneralUserByFirebaseFromDb = async (
   //
   logger.info({ payload, line: 'apple login 29 serveice' });
   let result = null;
-  result = await GeneralUser.findOne({ uid: payload?.uid });
-  if (!result) {
+  if (payload.email) {
+    result = await GeneralUser.findOne({ email: payload?.email });
+  } else {
+    result = await GeneralUser.findOne({ uid: payload?.uid });
+  }
+
+  // have a email but not get a uid then update uid
+  if (!result?.uid && result?.email) {
+    // result = await GeneralUser.create(payload);
+    result = await GeneralUser.findOneAndUpdate(
+      { email: payload.email },
+      payload
+    );
+  } else if (!result?.uid && !result?.email) {
+    // create new user
     result = await GeneralUser.create(payload);
   } else {
-    await GeneralUser.findOneAndUpdate(
-      { uid: payload?.uid },
-      { fcm_token: payload?.fcm_token }
+    const data: any = {
+      fcm_token: payload?.fcm_token,
+    };
+    if (payload?.uid) {
+      data.uid = payload?.uid;
+    }
+    if (payload?.email) {
+      data.email = payload?.email;
+    }
+
+    result = await GeneralUser.findOneAndUpdate(
+      { $or: [{ uid: payload?.uid }, { email: payload?.email }] },
+      data
     );
   }
   logger.info({ result, line: "result, 'apple login 37 serveice" });

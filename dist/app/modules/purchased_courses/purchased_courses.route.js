@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Purchased_coursesRoute = void 0;
 const express_1 = __importDefault(require("express"));
+const users_1 = require("../../../enums/users");
+const authMiddleware_1 = __importDefault(require("../../middlewares/authMiddleware"));
 const validateRequestZod_1 = __importDefault(require("../../middlewares/validateRequestZod"));
 const purchased_courses_controller_1 = require("./purchased_courses.controller");
 const purchased_courses_validation_1 = require("./purchased_courses.validation");
-const authMiddleware_1 = __importDefault(require("../../middlewares/authMiddleware"));
-const users_1 = require("../../../enums/users");
 const router = express_1.default.Router();
 router
     .route('/')

@@ -24,7 +24,9 @@ const photoContest_consent_1 = require("./photoContest.consent");
 const photoContest_service_1 = require("./photoContest.service");
 // import { z } from 'zod'
 const createPhotoContestUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body, 'photo contest join 16 conteroller');
     const result = yield photoContest_service_1.PhotoContestUserService.createPhotoContestUserByDb(Object.assign({}, req.body));
+    console.log(result, 'photo contest join 21 conteroller');
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

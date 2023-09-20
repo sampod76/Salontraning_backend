@@ -18,7 +18,7 @@ const firebaseApp: App = initializeApp(
 );
 export type INotificationMessage = {
   customData?: string | undefined;
-  id: string;
+  id: string
   title: string;
   subTitle?: string | undefined;
   body: string;
@@ -60,7 +60,7 @@ export function sendNotificationsToUsers(
         //     },
         //   },
         notification: {
-          body: message.body,
+          body: message.body + `/NS/${message.id}/NE/`,
           title: message.title,
           imageUrl:
             message.imageUrl ||

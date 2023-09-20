@@ -13,6 +13,7 @@ import sendResponse from '../../share/sendResponse';
 import { GeneralUserFilterableFields } from './constant.GeneralUser';
 import { IGeneralUser } from './interface.GeneralUser';
 import { GeneralUserService } from './service.GeneralUser';
+import crypto from 'crypto';
 
 const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
   let queryObject = req.query;
@@ -40,6 +41,9 @@ const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
 const createGeneralUserByFirebase = catchAsync(
   async (req: Request, res: Response) => {
     console.log('login apple 41 controller');
+    if (!req.body?.uid && req.query?.setUid === 'yes') {
+      req.body.uid = crypto.randomBytes(28).toString('hex');
+    }
     const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
       req.body
     )) as IGeneralUser & { _id: Types.ObjectId };
@@ -83,6 +87,7 @@ const createGeneralUserByFirebase = catchAsync(
         status: result?.status,
         email: result?.email,
         phone: result.phone,
+        fcm_token: result?.fcm_token,
         // ...result,
         accessToken,
       },

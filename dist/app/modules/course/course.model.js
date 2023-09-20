@@ -25,6 +25,10 @@ const courseSchema = new mongoose_1.Schema({
         type: String,
         enum: course_consent_1.COURSE_TYPES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
     },
+    course_mode: {
+        type: String,
+        // enum: COURSE_MODES, 
+    },
     categoryDetails: {
         type: {
             category: {

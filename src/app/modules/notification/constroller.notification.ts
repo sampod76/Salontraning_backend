@@ -1,5 +1,3 @@
-
-
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { PAGINATION_FIELDS } from '../../../constant/pagination';
@@ -9,17 +7,40 @@ import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
 
+import { GeneralUser } from '../generalUser/model.GeneralUser';
 import { NOTIFICATION_FILTERABLE_FIELDS } from './consent.notification';
-import { INotification } from './interface.notification';
+import { INotification, INotificationAndId } from './interface.notification';
+import { sendNotificationsToUsers } from './sendPush.notification';
 import { NotificationService } from './service.notification';
 
 // import { z } from 'zod'
 const createNotification = catchAsync(async (req: Request, res: Response) => {
   const { ...NotificationData } = req.body;
-  const result = await NotificationService.createNotificationByDb(
+  const result = (await NotificationService.createNotificationByDb(
     NotificationData
-  );
-  
+  )) as INotificationAndId;
+  // console.log(req.body.users)
+  let fcm_tokens: string[] = [];
+  if (!req.body?.fcm_tokens?.length) {
+    const datas = await GeneralUser.find({
+      _id: { $in: req.body.users },
+    }).select({ fcm_token: 1, _id: 0 });
+    // console.log(datas)
+    if (datas.length) {
+      datas.forEach(data => {
+        if (data?.fcm_token) {
+          fcm_tokens.push(data.fcm_token);
+        }
+      });
+    }
+  } else {
+    fcm_tokens = req.body?.fcm_tokens;
+  }
+  // console.log(fcm_tokens)
+  sendNotificationsToUsers(fcm_tokens, {
+    ...NotificationData,
+    id: result._id.toString(),
+  });
 
   sendResponse<INotification>(res, {
     success: true,
@@ -27,12 +48,6 @@ const createNotification = catchAsync(async (req: Request, res: Response) => {
     message: 'successfull create Notification',
     data: result,
   });
-  // next();
-  /* res.status(200).send({
-      success: true,
-      data: result,
-      message: 'successfull create Notification',
-    }); */
 });
 
 const getAllNotification = catchAsync(async (req: Request, res: Response) => {

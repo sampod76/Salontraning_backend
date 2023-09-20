@@ -52,7 +52,7 @@ const purchasedCoursesSchema = new mongoose_1.Schema({
             },
             method: {
                 type: String,
-                enum: ['stripe', 'paypal', 'free'],
+                enum: ['stripe', 'paypal', 'manual', 'free'],
             },
             paymentType: {
                 type: String,

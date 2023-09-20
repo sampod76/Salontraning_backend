@@ -1,4 +1,4 @@
-import { PipelineStage, Types } from 'mongoose';
+import mongoose, { PipelineStage, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
@@ -8,7 +8,9 @@ import { NOTIFICATION_SEARCHABLE_FIELDS } from './consent.notification';
 import { INotification, INotificationFilters } from './interface.notification';
 import { Notification } from './model.notification';
 
-const createNotificationByDb = async (payload: INotification): Promise<INotification> => {
+const createNotificationByDb = async (
+  payload: INotification
+): Promise<INotification> => {
   const result = (await Notification.create(payload)).populate('thumbnail');
   return result;
 };
@@ -34,11 +36,14 @@ const getAllNotificationFromDb = async (
 
   if (Object.keys(filtersData).length) {
     andConditions.push({
-      $and: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      $and: Object.entries(filtersData).map(([field, value]) =>
+        field === 'userId'
+          ? { ['users']: { $in: [new mongoose.Types.ObjectId(value)] } }
+          : { [field]: value }
+      ),
     });
   }
+
 
   //****************search and filters end**********/
 

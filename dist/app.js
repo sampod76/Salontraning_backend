@@ -21,13 +21,11 @@ const paypal_rest_sdk_1 = __importDefault(require("paypal-rest-sdk"));
 const path_1 = __importDefault(require("path"));
 const xss_clean_1 = __importDefault(require("xss-clean"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-// app.use(
-//   cors({
-//     origin: ['https://salontrainingpro.app/'],
-//     credentials: true,
-//   })
-// );
+// app.use(cors());
+app.use((0, cors_1.default)({
+    origin: ['https://salontrainingpro.app', 'http://localhost:3000'],
+    credentials: true,
+}));
 // app.use(
 //   cors({
 //     origin: '*',

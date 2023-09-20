@@ -24,9 +24,12 @@ const pick_1 = __importDefault(require("../../share/pick"));
 const sendResponse_1 = __importDefault(require("../../share/sendResponse"));
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const service_GeneralUser_1 = require("./service.GeneralUser");
+const crypto_1 = __importDefault(require("crypto"));
 const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let queryObject = req.query;
-    queryObject = Object.fromEntries(Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
     const filter = (0, pick_1.default)(queryObject, constant_GeneralUser_1.GeneralUserFilterableFields);
     const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield service_GeneralUser_1.GeneralUserService.getAllGeneralUsersFromDb(filter, paginationOptions);
@@ -39,7 +42,13 @@ const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     });
 }));
 const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    console.log('login apple 41 controller');
+    if (!((_a = req.body) === null || _a === void 0 ? void 0 : _a.uid) && ((_b = req.query) === null || _b === void 0 ? void 0 : _b.setUid) === 'yes') {
+        req.body.uid = crypto_1.default.randomBytes(28).toString('hex');
+    }
     const result = (yield service_GeneralUser_1.GeneralUserService.createGeneralUserByFirebaseFromDb(req.body));
+    console.log(result, 'login apple 45 controller');
     if (!result) {
         throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'forbidden access!');
     }
@@ -69,6 +78,7 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
             status: result === null || result === void 0 ? void 0 : result.status,
             email: result === null || result === void 0 ? void 0 : result.email,
             phone: result.phone,
+            fcm_token: result === null || result === void 0 ? void 0 : result.fcm_token,
             // ...result,
             accessToken,
         },
@@ -84,9 +94,9 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
     // });
 }));
 const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _c, _d;
     const id = req.params.id;
-    if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) !== users_1.ENUM_USER_ROLE.ADMIN && ((_b = req.user) === null || _b === void 0 ? void 0 : _b._id) !== id) {
+    if (((_c = req.user) === null || _c === void 0 ? void 0 : _c.role) !== users_1.ENUM_USER_ROLE.ADMIN && ((_d = req.user) === null || _d === void 0 ? void 0 : _d._id) !== id) {
         throw new ApiError_1.default(500, 'unauthorise access!!');
     }
     const result = yield service_GeneralUser_1.GeneralUserService.getSingleGeneralUserFromDb(id);
@@ -109,10 +119,10 @@ const getSingleGeneralUserToCourse = (0, catchAsync_1.default)((req, res) => __a
     });
 }));
 const updateGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _e, _f;
     const id = req.params.id;
     const updatedData = req.body;
-    if (((_c = req.user) === null || _c === void 0 ? void 0 : _c.role) !== users_1.ENUM_USER_ROLE.ADMIN && ((_d = req.user) === null || _d === void 0 ? void 0 : _d._id) !== id) {
+    if (((_e = req.user) === null || _e === void 0 ? void 0 : _e.role) !== users_1.ENUM_USER_ROLE.ADMIN && ((_f = req.user) === null || _f === void 0 ? void 0 : _f._id) !== id) {
         throw new ApiError_1.default(500, 'unauthorise access!!');
     }
     const result = yield service_GeneralUser_1.GeneralUserService.updateGeneralUserFromDb(id, updatedData, req);

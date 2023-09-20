@@ -52,6 +52,10 @@ const GeneralUserSchema = new mongoose_1.Schema({
         type: String,
         unique: true,
     },
+    fcm_token: {
+        type: String,
+        unique: true,
+    },
     status: {
         type: String,
         enum: ['active', 'deactive'],
