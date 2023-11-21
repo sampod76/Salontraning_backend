@@ -9,6 +9,7 @@ const createFileUploadezodSchema = z.object({
     size: z.number().optional(),
     mimetype: z.string().optional(),
     category: z.string().optional(),
+    directoryPath: z.string().optional(),
     url: z.string().optional(),
     tag: z.array(z.string().optional()).optional(),
   }),
@@ -24,6 +25,7 @@ const updateFileUploadezodSchema = z.object({
     size: z.number().optional(),
     mimetype: z.string().optional(),
     category: z.string().optional(),
+    directoryPath: z.string().optional(),
     tag: z.array(z.string().optional()).optional(),
   }),
 });

@@ -14,6 +14,7 @@ export const COURSE_FILTERABLE_FIELDS = [
   'reviews.star',
   'select',
   'course_mode',
+  "type",// price type free/paid
 ];
 
 export const COURSE_TYPES = ['free', 'paid', 'open', 'closed', 'recurrig'];

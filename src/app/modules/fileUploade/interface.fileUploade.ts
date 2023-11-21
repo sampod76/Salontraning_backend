@@ -18,6 +18,7 @@ export type IFileUploade = {
   url?: string;
   mimetype?: string;
   category?: string;
+  directoryPath?: string;
   tag?: string[];
 };
 

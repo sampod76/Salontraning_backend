@@ -3,5 +3,5 @@ export const NOTIFICATION_FILTERABLE_FIELDS = [
   'searchTerm',
   "title",
   'userId',
-  "fcm_token"
+  // "fcm_token"
 ];

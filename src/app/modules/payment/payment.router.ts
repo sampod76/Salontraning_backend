@@ -14,7 +14,7 @@ const router = express.Router();
 //     validateRequestZod(PaymentValidation.createPaymentZodSchema),
 //     createPaymentController.createPaymentStripe
 //   );
-
+// stripe
 router
   .route('/create-payment-intent')
   .post(
@@ -22,6 +22,8 @@ router
     validateRequestZod(PaymentValidation.createPaymentZodSchema),
     createPaymentController.createPaymentStripeAdvanceForNative
   );
+
+// ! ------------- paypal --start--------
 router
   .route('/paypal')
   .post(

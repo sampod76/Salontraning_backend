@@ -1,4 +1,5 @@
 import { Model } from 'mongoose';
+import { ICourse } from '../course/course.interface';
 
 type IOtherInfo = { uid: string; photoURL: string };
 
@@ -23,6 +24,11 @@ export type IGeneralUser = {
   fcm_token?: string;
   otherInfo?: IOtherInfo;
   role: string;
+  subscribe?: {
+    startDate: string;
+    endDate: string;
+    totalCourses?:[string|ICourse]
+  };
   status?: 'active' | 'deactive';
   learnedToday?: {
     date?: string;

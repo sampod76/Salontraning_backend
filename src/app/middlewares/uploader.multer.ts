@@ -153,6 +153,55 @@ export const uploadMultipleImage: RequestHandler = multer({
 }).array('images', 10);
 //------------upload multiple images--end---------------
 
+
+//!-----------upload multiple photo-contest---start---------------
+const storageMultiplePhotoContest: StorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../../uploadFile/photo-contest/'));
+  },
+  filename: (req, file, cb) => {
+    const fileExt = path.extname(file.originalname);
+    const fileName =
+      file.originalname
+        .replace(fileExt, '')
+        .toLowerCase()
+        .split(' ')
+        .join('-') +
+      '-' +
+      Date.now();
+    cb(null, fileName + fileExt);
+  },
+});
+
+const fileFilterMultiplePhotoContest = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only jpg, jpeg, png formats are allowed!'));
+  }
+};
+
+export const uploadMultiplePhotoContestImage: RequestHandler = multer({
+  storage: storageMultiplePhotoContest,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50 MB
+  },
+  fileFilter: fileFilterMultiplePhotoContest,
+}).array('images', 10);
+
+
+//!------------upload multiple-photo-contest--end---------------
+
+
+
 //------------upload video file ---start-----------
 const videoStorage: StorageEngine = multer.diskStorage({
   destination: (req: any, file: any, cb: (arg0: null, arg1: string) => any) => {

@@ -1,4 +1,4 @@
-import mongoose, { PipelineStage, Types } from 'mongoose';
+import { PipelineStage, Types } from 'mongoose';
 import { paginationHelper } from '../../../helper/paginationHelper';
 
 import { IGenericResponse } from '../../interface/common';
@@ -33,12 +33,12 @@ const getAllNotificationFromDb = async (
       })),
     });
   }
-
+console.log(filtersData)
   if (Object.keys(filtersData).length) {
     andConditions.push({
       $and: Object.entries(filtersData).map(([field, value]) =>
         field === 'userId'
-          ? { ['users']: { $in: [new mongoose.Types.ObjectId(value)] } }
+          ? { ['users']: { $in: [new Types.ObjectId(value)] } }
           : { [field]: value }
       ),
     });

@@ -59,12 +59,18 @@ export function sendNotificationsToUsers(
         //         'https://images.unsplash.com/photo-1613963761543-cc92783708fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=300',
         //     },
         //   },
-        notification: {
+     /*    notification: {
           body: message.body + `/NS/${message.id}/NE/`,
           title: message.title,
           imageUrl:
             message.imageUrl ||
             'https://images.unsplash.com/photo-1512207846876-bb54ef5056fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=300',
+        }, */
+        notification: {
+          body: message.body ,
+          title: message.title,
+          imageUrl:
+            message.imageUrl 
         },
       })
       .then(response => {

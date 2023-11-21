@@ -36,6 +36,7 @@ const createNotification = catchAsync(async (req: Request, res: Response) => {
   } else {
     fcm_tokens = req.body?.fcm_tokens;
   }
+
   // console.log(fcm_tokens)
   sendNotificationsToUsers(fcm_tokens, {
     ...NotificationData,

@@ -80,6 +80,8 @@ const uploadeMultipalFileByServer = catchAsync(
   }
 );
 
+
+
 const createFileUploade = catchAsync(async (req: Request, res: Response) => {
   const { ...FileUploadeData } = req.body;
   req.body.userId = req?.user?._id;

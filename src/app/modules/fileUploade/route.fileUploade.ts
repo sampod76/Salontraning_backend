@@ -3,6 +3,7 @@ import { ENUM_USER_ROLE } from '../../../enums/users';
 import authMiddleware from '../../middlewares/authMiddleware';
 import {
   uploadMultipleImage,
+
   uploadSingleImage,
   uploadSingleImageByProfile,
   uploadVideoFile,
@@ -36,6 +37,7 @@ router
     uploadMultipleImage,
     FileUploadeController.uploadeMultipalFileByServer
   );
+
 
 router
   .route('/uploade-vedio')

@@ -204,7 +204,7 @@ const updateCourseVedioOrQuizFromDb = async (
   if (course_id && lessionId) {
     result = await GeneralUser.findOneAndUpdate(
       {
-        _id: id,
+        _id: new Types.ObjectId(id),
         'purchase_courses.course': course_id,
         'purchase_courses.total_completed_lessions': { $ne: lessionId },
       },
@@ -257,9 +257,9 @@ const updateGeneralUserFromDb = async (
   if (!resultFind?._id) {
     throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found !');
   }
-
+console.log(resultFind)
   if (
-    resultFind?._id !== req?.user?._id ||
+    String(resultFind?._id)!== req?.user?._id &&
     req.user.role !== ENUM_USER_ROLE.ADMIN
   ) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Unauthorise person!');

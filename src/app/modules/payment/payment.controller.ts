@@ -151,7 +151,7 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
     },
   };
 
-  const encriptData = encrypt(data);
+  const encryptData = encrypt(data);
 
   const payment: Payment = {
     intent: 'sale',
@@ -159,7 +159,7 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
       payment_method: 'paypal',
     },
     redirect_urls: {
-      return_url: `${process.env.REAL_HOST_SERVER_SIDE}/api/v1/payment/success?app=${encriptData}`,
+      return_url: `${process.env.REAL_HOST_SERVER_SIDE}/api/v1/payment/success?app=${encryptData}`,
       // return_url: `${process.env.LOCALHOST_SERVER_SIDE}/api/v1/payment/success?app=${encriptData}`,
       cancel_url: `${process.env.REAL_HOST_SERVER_SIDE}/api/v1/payment/cancel`,
     },
@@ -182,14 +182,14 @@ const createPaymentPayple = catchAsync(async (req: Request, res: Response) => {
       return res.status(404).send({
         success: false,
         statusCode: 404,
-        message: 'Payple pryment faild !!!',
+        message: 'Paypal payment fail !!!',
       });
     } else {
       for (let i = 0; i < payment.links.length; i++) {
         if (payment.links[i].rel === 'approval_url') {
           res.status(200).send({
             success: true,
-            message: `Successfully Payple payment instant`,
+            message: `Successfully Paypal payment instant`,
             data: {
               url: payment.links[i].href,
             },
@@ -238,44 +238,48 @@ const chackPayplePayment = catchAsync(async (req: Request, res: Response) => {
     });
     console.log(payment);
 
-    // {
-    //   id: 'PAYID-MS2BCPA4BT713665C9605913',
-    //   intent: 'sale',
-    //   state: 'approved',
-    //   cart: '0N1193480W3023509',
-    //   payer: {
-    //     payment_method: 'paypal',
-    //     status: 'VERIFIED',
-    //     payer_info: {
-    //       email: 'sb-4jbgp26719602@personal.example.com',
-    //       first_name: 'John',
-    //       last_name: 'Doe',
-    //       payer_id: 'L3CREV92USD28',
-    //       shipping_address: [Object],
-    //       country_code: 'US'
-    //     }
-    //   },
-    //   transactions: [
-    //     {
-    //       amount: [Object],
-    //       payee: [Object],
-    //       description: 'Payment for order #12345',
-    //       item_list: [Object],
-    //       related_resources: [Array]
-    //     }
-    //   ],
-    //   failed_transactions: [],
-    //   create_time: '2023-07-16T15:48:12Z',
-    //   update_time: '2023-07-16T15:54:15Z',
-    //   links: [
-    //     {
-    //       href: 'https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MS2BCPA4BT713665C9605913',
-    //       rel: 'self',
-    //       method: 'GET'
-    //     }
-    //   ],
-    //   httpStatusCode: 200
-    // }
+    /* 
+    {
+      id: 'PAYID-MS2BCPA4BT713665C9605913',
+      intent: 'sale',
+      state: 'approved',
+      cart: '0N1193480W3023509',
+      payer: {
+        payment_method: 'paypal',
+        status: 'VERIFIED',
+        payer_info: {
+          email: 'sb-4jbgp26719602@personal.example.com',
+          first_name: 'John',
+          last_name: 'Doe',
+          payer_id: 'L3CREV92USD28',
+          shipping_address: [Object],
+          country_code: 'US'
+        }
+      },
+      transactions: [
+        {
+          amount: [Object],
+          payee: [Object],
+          description: 'Payment for order #12345',
+          item_list: [Object],
+          related_resources: [Array]
+        }
+      ],
+      failed_transactions: [],
+      create_time: '2023-07-16T15:48:12Z',
+      update_time: '2023-07-16T15:54:15Z',
+      links: [
+        {
+          href: 'https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MS2BCPA4BT713665C9605913',
+          rel: 'self',
+          method: 'GET'
+        }
+      ],
+      httpStatusCode: 200
+    }
+     */
+    
+    // if payment status not approved then throw error
     if (!(payment?.state === 'approved')) {
       return res.sendFile(
         path.join(path.join(__dirname, '../../../views/sumthingWrong.html'))
@@ -304,10 +308,10 @@ const chackPayplePayment = catchAsync(async (req: Request, res: Response) => {
         return res.sendFile(
           path.join(path.join(__dirname, '../../../views/sumthingWrong.html'))
         );
-        return res.status(400).json({
-          success: false,
-          message: 'Payment failed!',
-        });
+        // return res.status(400).json({
+        //   success: false,
+        //   message: 'Payment failed!',
+        // });
       } else {
         return res.sendFile(
           path.join(__dirname, '../../../views/success.html')

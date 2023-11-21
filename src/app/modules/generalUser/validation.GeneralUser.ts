@@ -28,6 +28,10 @@ const updateGeneralUserZodSchema = z.object({
     profileImage: z.string().optional(),
     status: z.enum(['active', 'deactive']).optional(),
     fcm_token: z.string().optional(),
+    subscribe: z.object({
+      startDate: z.string().optional(),
+      endDate: z.string().optional(),
+    }),
     learnedToday: z
       .object({
         date: z.string().optional(),

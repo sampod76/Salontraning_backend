@@ -12,10 +12,13 @@ import express, {
 import paypal from 'paypal-rest-sdk';
 // create xss-clean.d.ts file after work this xss
 import path from 'path';
-import xss from 'xss-clean';
+// import xss from 'xss-clean';
+import helmetOriginal from 'helmet';
+
 const app: Application = express();
 // app.use(cors());
 
+app.use(helmetOriginal());
 app.use(
   cors({
     origin: ['https://salontrainingpro.app', 'http://localhost:3000'],
@@ -51,7 +54,7 @@ app.use(
 //   })
 // );
 
-app.use(xss());
+// app.use(xss());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -96,6 +99,7 @@ import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 // import { uploadSingleImage } from './app/middlewares/uploader.multer';
 import routers from './app/routes/index_route';
+import helmet from 'helmet';
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -156,9 +160,6 @@ const test = async () => {
     // const result2 = await PhotoContestUser.deleteMany({});
     // const result2 = await RunContest.deleteMany({});
     // console.log(result2);
- 
-
-
   } catch (error) {
     console.log(error);
   }
