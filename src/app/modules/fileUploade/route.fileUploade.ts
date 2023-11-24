@@ -2,6 +2,7 @@ import express from 'express';
 import { ENUM_USER_ROLE } from '../../../enums/users';
 import authMiddleware from '../../middlewares/authMiddleware';
 import {
+  multerImgbbUploder,
   uploadMultipleImage,
 
   uploadSingleImage,
@@ -14,6 +15,13 @@ import { FileUploadeValidation } from './validation.fileUploade';
 
 const router = express.Router();
 
+router
+  .route('/imgbb')
+  .post(
+    authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
+    multerImgbbUploder.single("image"),
+    FileUploadeController.uploadeImgbbSingleFile
+  );
 router
   .route('/uploade-single-image')
   .post(

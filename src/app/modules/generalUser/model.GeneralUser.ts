@@ -72,6 +72,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
         total_completed_lessions: [{ type: Types.ObjectId, ref: 'Lession' }],
       },
     ],
+    
     subscribe: {
       startDate: {
         type: Date,

@@ -48,6 +48,7 @@ const createPaymentStripe = catchAsync(async (req: Request, res: Response) => {
       amount,
       currency: 'USD',
       payment_method_types: ['card'],
+      
     });
 
   if (paymentIntent.client_secret) {
@@ -99,6 +100,7 @@ const createPaymentStripeAdvanceForNative = catchAsync(
       automatic_payment_methods: {
         enabled: true,
       },
+      
     });
 
     if (paymentIntent.client_secret) {
@@ -212,7 +214,7 @@ const chackPayplePayment = catchAsync(async (req: Request, res: Response) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized access !!');
   }
   const data = decrypt(app);
-  console.log(data, '215');
+  
   const execute_payment_json = {
     payer_id: payerId,
     transactions: [

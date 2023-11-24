@@ -2,20 +2,77 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { PAGINATION_FIELDS } from '../../../constant/pagination';
-// import { globalImport } from '../../../import/global_Import';
-// import ApiError from '../../errors/ApiError';
+
+import axios from 'axios';
+import FormData from 'form-data';
+
+import config from '../../../config';
+import ApiError from '../../errors/ApiError';
 import catchAsync from '../../share/catchAsync';
 import pick from '../../share/pick';
 import sendResponse from '../../share/sendResponse';
-
 import { FILEUPLOADE_FILTERABLE_FIELDS } from './consent.fileUploade';
 import { IFileUploade } from './interface.fileUploade';
 import { FileUploadeService } from './service.fileUploade';
 
 // import { z } from 'zod'
+const uploadeImgbbSingleFile = catchAsync(
+  async (req: Request, res: Response) => {
+    // Check if req.file is defined
+    if (!req.file) {
+      throw new ApiError(404,"No file uploaded")
+    }
+    // Upload to ImgBB
+    const formData = new FormData();
+    formData.append('image', req.file.buffer.toString('base64'));
+
+    const imgbbResponse = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${config.imgbb_key}&folder=${"sampod"}`,
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      }
+    );
+
+    // Extract relevant information from the Axios response
+    const { data } = imgbbResponse;
+    sendResponse<any>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'successfull uploade single file imgbb',
+      data: data?.data,
+    });
+  }
+);
 const uploadeSingleFileByServer = catchAsync(
   async (req: Request, res: Response) => {
     const fileDetails = req.file;
+
+    const apiKey = '614779edaf6e29425b8b29401cf9288f';
+
+    try {
+      const formData = new FormData();
+      formData.append('image', req.file?.buffer?.toString('base64'), {
+        filename: req.file?.filename || 'djkfsdf',
+      });
+
+      const response = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${apiKey}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      // const imageUrl = response?.data?.data?.url;
+      console.log(response.data);
+    } catch (error) {
+      console.log('🚀 ~ file: constroller.fileUploade.ts:37 ~ error:', error);
+    }
     const file = {
       filename: fileDetails?.filename,
       mimetype: fileDetails?.mimetype,
@@ -26,6 +83,7 @@ const uploadeSingleFileByServer = catchAsync(
           : `uploadFile/vedios`,
       size: fileDetails?.size,
     };
+
     console.log(fileDetails, '29 conste');
     sendResponse<any>(res, {
       success: true,
@@ -79,8 +137,6 @@ const uploadeMultipalFileByServer = catchAsync(
     });
   }
 );
-
-
 
 const createFileUploade = catchAsync(async (req: Request, res: Response) => {
   const { ...FileUploadeData } = req.body;
@@ -189,6 +245,7 @@ export const FileUploadeController = {
   getSingleFileUploade,
   updateFileUploade,
   deleteFileUploade,
+  uploadeImgbbSingleFile,
   uploadeSingleFileByServer,
   uploadeProfileFileByServer,
   uploadeMultipalFileByServer,

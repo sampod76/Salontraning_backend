@@ -7,7 +7,7 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
-import { logger } from '../../share/logger';
+
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
 import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
@@ -15,7 +15,8 @@ import { GeneralUser } from './model.GeneralUser';
 // const {ObjectId}=mongoose.Types
 
 const createGeneralUserByFirebaseFromDb = async (
-  payload: IGeneralUser
+  payload: IGeneralUser,
+  req:any
 ): Promise<IGeneralUser | null> => {
   //
   const removeFalseValue = (obj: any) => {
@@ -27,38 +28,36 @@ const createGeneralUserByFirebaseFromDb = async (
     }
   };
   removeFalseValue(payload);
-  //
-  logger.info({ payload, line: 'apple login 29 serveice' });
+  
+ 
   let result = null;
-  // if (payload.email) {
-    result = await GeneralUser.findOne( { $or: [{ uid: payload?.uid }, { email: payload?.email }] },);
-  // } 
-  //  if(!result?.uid) {
-    // result = await GeneralUser.findOne({ uid: payload?.uid });
-  // }
-
+    // result = await GeneralUser.findOne( { $or: [{ uid: req?.user?.uid }, { email: payload?.email }] },);
+    result = await GeneralUser.findOne( { uid:req?.user?.uid },);
 
   if (!result?.uid) {
     // create new user
+    payload.uid=req?.user?.uid
+    payload.email=req?.user?.email
+    removeFalseValue(payload)
     result = await GeneralUser.create(payload);
   } else {
     const data: any = {
       fcm_token: payload?.fcm_token,
     };
     if (payload?.uid) {
-      data.uid = payload?.uid;
+      data.uid = req?.user?.uid;
     }
     if (payload?.email) {
-      data.email = payload?.email;
+      data.email = req?.user?.email;
     }
 
     result = await GeneralUser.findOneAndUpdate(
-      { $or: [{ uid: payload?.uid }, { email: payload?.email }] },
+      { uid:req?.user?.uid },
       data,
       {new: true,runValidators:true}
     );
   }
-  logger.info({ result, line: "result, 'apple login 37 serveice" });
+ 
   return result;
 };
 
@@ -257,7 +256,7 @@ const updateGeneralUserFromDb = async (
   if (!resultFind?._id) {
     throw new ApiError(httpStatus.NOT_FOUND, 'GeneralUser not found !');
   }
-console.log(resultFind)
+
   if (
     String(resultFind?._id)!== req?.user?._id &&
     req.user.role !== ENUM_USER_ROLE.ADMIN

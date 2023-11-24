@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
 import express, {
   Application,
   NextFunction,
@@ -14,6 +13,12 @@ import paypal from 'paypal-rest-sdk';
 import path from 'path';
 // import xss from 'xss-clean';
 import helmetOriginal from 'helmet';
+import httpStatus from 'http-status';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+// import { uploadSingleImage } from './app/middlewares/uploader.multer';
+
+
+import routers from './app/routes/index_route';
 
 const app: Application = express();
 // app.use(cors());
@@ -25,6 +30,8 @@ app.use(
     credentials: true,
   })
 );
+
+
 
 // app.use(
 //   cors({
@@ -95,11 +102,7 @@ app.use(
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views/success.ejs'));
 
-import httpStatus from 'http-status';
-import globalErrorHandler from './app/middlewares/globalErrorHandler';
-// import { uploadSingleImage } from './app/middlewares/uploader.multer';
-import routers from './app/routes/index_route';
-import helmet from 'helmet';
+
 
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -109,6 +112,25 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
   // res.send('server is running');
 });
+// const revenuecat = new Revenuecat({
+//   secretKey: "sk_AwzheKPxGcMLbnqWdOeFWhRfcwKIA",
+//   iosKey: "993dd49ebcba4546aa3c4657330ac6e0",
+//   androidKey: process.env.androidKey as string,
+// })
+const test = async () => {
+//   const url = 'https://api.revenuecat.com/v1/apps/appcadee85965/subscribers/882b1b28b5664a0ea3ecc7a6efb56b9b';
+
+//   try {
+// const data =await revenuecat
+// .getSubscriptions({ userId:"$RCAnonymousID:882b1b28b5664a0ea3ecc7a6efb56b9b" })
+// // .then(res => console.log(res.subscriber, 'getSubscriptions'))
+// console.log(data);
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+   
+//   }
+};
+test();
 
 //Application route
 app.use('/api/v1', routers);
@@ -133,37 +155,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-const test = async () => {
-  try {
-    // console.log(result, result2);
-    // const result = await Lession.updateMany(
-    //   {},
-    //   {
-    //     $set: {
-    //       vedio:
-    //         'https://player.vimeo.com/video/829783962?h=47a19669a0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
-    //     },
-    //   }
-    // );
-    // console.log(result);
-    // const result = await PhotoContestUser.deleteMany();
-    // console.log(result);
-    // const result3 = await GeneralUser.updateMany(
-    //   {},
-    //   {
-    //     purchase_courses: [],
-    //   }
-    // );
-    // const result = await FileUploade.deleteMany({});
-    // const result = await RunContest.find({});
-    // const result5 = await Purchased_courses.deleteMany();
-    // const result2 = await PhotoContestUser.deleteMany({});
-    // const result2 = await RunContest.deleteMany({});
-    // console.log(result2);
-  } catch (error) {
-    console.log(error);
-  }
-};
-test();
+
 
 export default app;

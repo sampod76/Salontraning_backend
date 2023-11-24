@@ -11,7 +11,13 @@ import path from 'path';
 
 //*******************note********* */
 
-//-------------single file upload----start------------
+// ! ---- upload only imgbb helper ---------------------
+const storageFack = multer.memoryStorage();
+export const multerImgbbUploder = multer({ storage: storageFack });
+
+
+
+//!-------------single file upload----start------------
 const storage: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log(req);
@@ -61,7 +67,11 @@ export const uploadSingleImage: RequestHandler = multer({
 }).single('image');
 //-------------single file upload----end------------
 
-//-------------single file upload----start------------
+
+
+
+
+//!-------------single file upload----start------------
 const storageByProfile: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../../uploadFile/images/'));
@@ -109,6 +119,10 @@ export const uploadSingleImageByProfile: RequestHandler = multer({
 }).single('image');
 //-------------single file upload----end------------
 
+
+
+
+
 //------------upload multiple images-----------------
 const storageMultiple: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -152,6 +166,8 @@ export const uploadMultipleImage: RequestHandler = multer({
   fileFilter: fileFilterMultiple,
 }).array('images', 10);
 //------------upload multiple images--end---------------
+
+
 
 
 //!-----------upload multiple photo-contest---start---------------

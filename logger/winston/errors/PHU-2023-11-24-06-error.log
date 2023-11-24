@@ -1,0 +1,1 @@
+Fri Nov 24 2023-->6:10:33--> [PH] error: globalErrorHandler: Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.

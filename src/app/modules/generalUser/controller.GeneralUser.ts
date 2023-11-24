@@ -46,9 +46,9 @@ const createGeneralUserByFirebase = catchAsync(
     //   console.log(req.body.uid)
     // }
     const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
-      req.body
+      req.body,req
     )) as IGeneralUser & { _id: Types.ObjectId };
-    console.log(result, 'login apple 45 controller');
+ 
     if (!result) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
     }
@@ -87,7 +87,7 @@ const createGeneralUserByFirebase = catchAsync(
         name: result?.name,
         status: result?.status,
         email: result?.email,
-        phone: result.phone,
+        phone: result?.phone,
         fcm_token: result?.fcm_token,
         // ...result,
         accessToken,
@@ -99,7 +99,7 @@ const createGeneralUserByFirebase = catchAsync(
 const createGeneralUserByAdmin = catchAsync(
   async (req: Request, res: Response) => {
     const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
-      req.body
+      req.body,req
     ))
     console.log(result, 'login apple 45 controller');
     if (!result) {
