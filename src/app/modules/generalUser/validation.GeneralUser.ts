@@ -13,7 +13,8 @@ const createGeneralUserByFirebaseZodSchema = z.object({
     uid: z.string({ required_error: 'uid must be provide' }),
     status: z.enum(['active', 'deactive']).optional(),
     //notifications token
-    fcm_token: z.string().optional(),
+    fcm_token: z.string({ required_error: 'fcm token must be provide' }),
+    deviceId: z.string().optional(),
   }),
 });
 
@@ -28,6 +29,7 @@ const updateGeneralUserZodSchema = z.object({
     profileImage: z.string().optional(),
     status: z.enum(['active', 'deactive']).optional(),
     fcm_token: z.string().optional(),
+    deviceId: z.string().optional(),
     subscribe: z.object({
       startDate: z.string().optional(),
       endDate: z.string().optional(),
