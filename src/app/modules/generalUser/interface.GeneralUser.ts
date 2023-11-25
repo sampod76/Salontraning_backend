@@ -22,6 +22,7 @@ export type IGeneralUser = {
   profileImage?: string;
   uid: string;
   fcm_token?: string;
+  deviceId?: string;
   otherInfo?: IOtherInfo;
   role: string;
   subscribe?: {

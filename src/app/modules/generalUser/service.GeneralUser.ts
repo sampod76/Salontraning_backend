@@ -16,6 +16,7 @@ import { GeneralUser } from './model.GeneralUser';
 
 const createGeneralUserByFirebaseFromDb = async (
   payload: IGeneralUser,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   req:any
 ): Promise<IGeneralUser | null> => {
   //
@@ -32,27 +33,31 @@ const createGeneralUserByFirebaseFromDb = async (
  
   let result = null;
     // result = await GeneralUser.findOne( { $or: [{ uid: req?.user?.uid }, { email: payload?.email }] },);
-    result = await GeneralUser.findOne( { uid:req?.user?.uid },);
+    // result = await GeneralUser.findOne( { uid:req?.user?.uid },);
+    result = await GeneralUser.findOne( { uid:payload?.uid },);
 
   if (!result?.uid) {
     // create new user
-    payload.uid=req?.user?.uid
-    payload.email=req?.user?.email
-    removeFalseValue(payload)
+
+    // payload.uid=req?.user?.uid
+    // payload.email=req?.user?.email
+    // removeFalseValue(payload)
     result = await GeneralUser.create(payload);
   } else {
     const data: any = {
       fcm_token: payload?.fcm_token,
     };
     if (payload?.uid) {
-      data.uid = req?.user?.uid;
+      // data.uid = req?.user?.uid;
+      data.uid = payload?.uid;
     }
     if (payload?.email) {
-      data.email = req?.user?.email;
+      // data.email = req?.user?.email;
+      data.email = payload?.email;
     }
 
     result = await GeneralUser.findOneAndUpdate(
-      { uid:req?.user?.uid },
+      { uid:payload?.uid },
       data,
       {new: true,runValidators:true}
     );

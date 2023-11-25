@@ -14,4 +14,5 @@ export const GeneralUserFilterableFields = [
   'id',
   'status',
   'uid',
+  "deviceId",
 ];

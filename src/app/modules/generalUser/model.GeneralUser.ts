@@ -49,6 +49,9 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       type: String,
       unique: true,
     },
+    deviceId: {
+      type: String,
+    },
     status: {
       type: String,
       enum: ['active', 'deactive'],

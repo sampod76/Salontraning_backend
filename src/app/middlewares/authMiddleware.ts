@@ -17,17 +17,19 @@ const authMiddleware =
       const token = req.headers.authorization;
      
       const firebase_token = req.headers.firebase_token
+      console.log(firebase_token,token);
       if(firebase_token){
         try {
           
           const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebase_token as string);
          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { name,email,uid,_id } = decodedToken
+          // verifiedUser=decodedToken
           // if(!_id){
           //    await firebaseAdmin.auth().setCustomUserClaims("PRHvW67qPqQ4jX3iYmKyrF49b2w1",{_id:"6497ff5cd4516198fb1ac558",role:"admin"}); 
           // }
           console.log(decodedToken);
-          req.user=decodedToken
+          // req.user=decodedToken
         } catch (error) {
           console.log("🚀 ~ file: authMiddleware.ts:36 ~ error:", error)
           throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
@@ -35,14 +37,14 @@ const authMiddleware =
         }
        
       }
-      if (!token && !firebase_token) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
-      } 
+      // if (!token && !firebase_token) {
+      //   throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+      // } 
    
 
-      // if (!token) {
-      //   throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
-      // }
+      if (!token) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+      }
 
 
       // verify token only general user

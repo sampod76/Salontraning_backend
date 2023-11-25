@@ -9,6 +9,7 @@ const router = express.Router();
 router.route('/login').post(
   // any role login -- uid and role must be provide
   validateRequestZod(AuthValidation.loginZodSchema),
+  // authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
   AuthController.loginUser
 );
 

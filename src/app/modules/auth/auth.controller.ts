@@ -12,13 +12,16 @@ import { IRefreshTokenResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const { uid, role = ENUM_USER_ROLE.GENERAL_USER, ...payload } = req.body;
+const {uid,role=ENUM_USER_ROLE.GENERAL_USER}=req.body
+console.log(uid);
+  // const uid =req.user?.uid
+  // const role =req.user?.role
 
   let result = null;
   if (uid) {
     result = await AuthService.loginUserByUidFromDb(uid, role);
   } else {
-    result = await AuthService.loginUserFromDb(payload);
+    // result = await AuthService.loginUserFromDb(payload);
   }
   const { refreshToken, ...othersData } = result;
   // console.log(req.cookies, 13);

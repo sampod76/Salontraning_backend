@@ -112,23 +112,31 @@ app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
   // res.send('server is running');
 });
-// const revenuecat = new Revenuecat({
-//   secretKey: "sk_AwzheKPxGcMLbnqWdOeFWhRfcwKIA",
-//   iosKey: "993dd49ebcba4546aa3c4657330ac6e0",
-//   androidKey: process.env.androidKey as string,
-// })
-const test = async () => {
-//   const url = 'https://api.revenuecat.com/v1/apps/appcadee85965/subscribers/882b1b28b5664a0ea3ecc7a6efb56b9b';
 
-//   try {
-// const data =await revenuecat
-// .getSubscriptions({ userId:"$RCAnonymousID:882b1b28b5664a0ea3ecc7a6efb56b9b" })
-// // .then(res => console.log(res.subscriber, 'getSubscriptions'))
-// console.log(data);
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
+/*
+ const revenuecat = new Revenuecat({
+  secretKey: "sk_AwzheKPxGcMLbnqWdOeFWhRfcwKIA",
+  iosKey: "993dd49ebcba4546aa3c4657330ac6e0",
+  androidKey: process.env.androidKey as string,
+}) 
+*/
+const test = async () => {
+/*  
+ const url = 'https://api.revenuecat.com/v1/apps/appcadee85965/subscribers/882b1b28b5664a0ea3ecc7a6efb56b9b';
+
+  try {
+const data =await revenuecat
+.getSubscriptions({ userId:"$RCAnonymousID:882b1b28b5664a0ea3ecc7a6efb56b9b" })
+// .then(res => console.log(res.subscriber, 'getSubscriptions'))
+console.log(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
    
-//   }
+  } 
+  */
+ 
+//  const result= await firebaseAdmin.auth().setCustomUserClaims("St9VaFVV3JX8QFEGwFQd3A3psR23",{_id:"650fd9626e7c6052b7e19242",role:"general-user"});
+// console.log(result);
 };
 test();
 

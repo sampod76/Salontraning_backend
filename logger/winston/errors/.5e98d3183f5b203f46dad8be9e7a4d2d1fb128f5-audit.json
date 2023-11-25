@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server_change\\logger\\winston\\errors\\.5e98d3183f5b203f46dad8be9e7a4d2d1fb128f5-audit.json",
+    "files": [
+        {
+            "date": 1700931563876,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server_change\\logger\\winston\\errors\\PHU-2023-11-25-22-error.log",
+            "hash": "01f974b792ee1b130f7af13ff989a62be2dcf14925758d88021d33b38debfe5e"
+        },
+        {
+            "date": 1700931641884,
+            "name": "D:\\programming hero\\INTERSHIP\\Ronjit_course_vedio\\CourshVedio_server_change\\logger\\winston\\errors\\PHU-2023-11-25-23-error.log",
+            "hash": "ca6470cb7edc76d4664ab50cce5520aadfa72eed3089e4b263a0f6181fc4ae13"
+        }
+    ],
+    "hashType": "sha256"
+}
