@@ -4,7 +4,7 @@ import httpStatus from 'http-status';
 import { Types } from 'mongoose';
 import paypal, { Payment } from 'paypal-rest-sdk';
 import Stripe from 'stripe';
-import { decrypt, encrypt } from '../../../helper/encryption';
+import { decrypt, encrypt } from '../../../helper/encryptionJwt';
 import ApiError from '../../errors/ApiError';
 import { IEncodedPaymentData } from '../../interface/encrypt';
 import catchAsync from '../../share/catchAsync';

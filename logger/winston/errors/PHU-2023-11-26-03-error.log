@@ -1,2 +1,14 @@
 Sun Nov 26 2023-->3:26:58--> [PH] error: globalErrorHandler: E11000 duplicate key error collection: course_ronjit.general_users index: fcm_token_1 dup key: { fcm_token: null }
 Sun Nov 26 2023-->3:27:10--> [PH] error: globalErrorHandler: E11000 duplicate key error collection: course_ronjit.general_users index: fcm_token_1 dup key: { fcm_token: null }
+Sun Nov 26 2023-->3:29:10--> [PH] error: globalErrorHandler: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "fcm_token"
+    ],
+    "message": "fcm token must be provide"
+  }
+]

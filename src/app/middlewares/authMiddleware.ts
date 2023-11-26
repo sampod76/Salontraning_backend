@@ -17,7 +17,7 @@ const authMiddleware =
       const token = req.headers.authorization;
      
       const firebase_token = req.headers.firebase_token
-      console.log(firebase_token,token);
+  
       if(firebase_token){
         try {
           

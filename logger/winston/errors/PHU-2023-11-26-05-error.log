@@ -1,0 +1,26 @@
+Sun Nov 26 2023-->5:29:7--> [PH] error: globalErrorHandler: Unexpected token '"', "#" is not valid JSON
+Sun Nov 26 2023-->5:30:31--> [PH] error: globalErrorHandler: Unexpected token '"', "#" is not valid JSON
+Sun Nov 26 2023-->5:33:26--> [PH] error: globalErrorHandler: Unexpected end of JSON input
+Sun Nov 26 2023-->5:34:16--> [PH] error: globalErrorHandler: Unexpected end of JSON input
+Sun Nov 26 2023-->5:34:20--> [PH] error: globalErrorHandler: Unexpected end of JSON input
+Sun Nov 26 2023-->5:35:46--> [PH] error: globalErrorHandler: jwt expired
+Sun Nov 26 2023-->5:36:4--> [PH] error: globalErrorHandler: Forbidden access
+Sun Nov 26 2023-->5:37:17--> [PH] error: globalErrorHandler: Unexpected token '"', "#" is not valid JSON
+Sun Nov 26 2023-->5:37:21--> [PH] error: globalErrorHandler: Unexpected token '"', "#" is not valid JSON
+Sun Nov 26 2023-->5:37:41--> [PH] error: globalErrorHandler: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "body",
+      "amount"
+    ],
+    "message": "Required"
+  }
+]
+Sun Nov 26 2023-->5:39:0--> [PH] error: globalErrorHandler: Unexpected end of JSON input
+Sun Nov 26 2023-->5:39:18--> [PH] error: globalErrorHandler: Unexpected end of JSON input
+Sun Nov 26 2023-->5:40:44--> [PH] error: globalErrorHandler: Unexpected end of JSON input
+Sun Nov 26 2023-->5:41:56--> [PH] error: globalErrorHandler: "[object Object]" is not valid JSON
+Sun Nov 26 2023-->5:42:59--> [PH] error: globalErrorHandler: "[object Object]" is not valid JSON

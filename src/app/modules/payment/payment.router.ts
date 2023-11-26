@@ -1,6 +1,7 @@
 import express from 'express';
 import { ENUM_USER_ROLE } from '../../../enums/users';
 import authMiddleware from '../../middlewares/authMiddleware';
+
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { createPaymentController } from './payment.controller';
 import { PaymentValidation } from './payment.validation';
@@ -27,7 +28,7 @@ router
 router
   .route('/paypal')
   .post(
-    authMiddleware(ENUM_USER_ROLE.GENERAL_USER),
+    authMiddleware(ENUM_USER_ROLE.GENERAL_USER,ENUM_USER_ROLE.ADMIN),
     validateRequestZod(PaymentValidation.createPaypleZodSchema),
     createPaymentController.createPaymentPayple
   );

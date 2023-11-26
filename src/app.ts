@@ -103,7 +103,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views/success.ejs'));
 
 
-
 app.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.send({ message: 'server is running....' });
@@ -137,6 +136,9 @@ console.log(data);
  
 //  const result= await firebaseAdmin.auth().setCustomUserClaims("St9VaFVV3JX8QFEGwFQd3A3psR23",{_id:"650fd9626e7c6052b7e19242",role:"general-user"});
 // console.log(result);
+
+
+
 };
 test();
 
