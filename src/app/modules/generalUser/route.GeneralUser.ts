@@ -19,6 +19,13 @@ router
     ),
     GeneralUserController.createGeneralUserByFirebase
   );
+// general user create by admin
+router
+  .route('/create-general-user-by-admin')
+  .post(
+    authMiddleware(ENUM_USER_ROLE.ADMIN),
+    GeneralUserController.createGeneralUserByAdmin
+  );
 
 router
   .route('/get-course/:id')

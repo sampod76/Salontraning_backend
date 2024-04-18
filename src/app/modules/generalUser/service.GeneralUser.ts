@@ -7,6 +7,7 @@ import { paginationHelper } from '../../../helper/paginationHelper';
 import ApiError from '../../errors/ApiError';
 import { IGenericResponse } from '../../interface/common';
 import { IPaginationOption } from '../../interface/pagination';
+
 import { GeneralUserSearchableFields } from './constant.GeneralUser';
 import { IGeneralUser, IGeneralUserFilters } from './interface.GeneralUser';
 import { GeneralUser } from './model.GeneralUser';
@@ -14,8 +15,11 @@ import { GeneralUser } from './model.GeneralUser';
 // const {ObjectId}=mongoose.Types
 
 const createGeneralUserByFirebaseFromDb = async (
-  payload: IGeneralUser
+  payload: IGeneralUser,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  req:any
 ): Promise<IGeneralUser | null> => {
+  //
   const removeFalseValue = (obj: any) => {
     const falseValues = [undefined, '', 'undefined', null, 'null'];
     for (const key in obj) {
@@ -24,19 +28,45 @@ const createGeneralUserByFirebaseFromDb = async (
       }
     }
   };
-
   removeFalseValue(payload);
-  console.log(payload, 'apple login 29 serveice');
-  // return payload;
+  
+ 
   let result = null;
+    // result = await GeneralUser.findOne( { $or: [{ uid: req?.user?.uid }, { email: payload?.email }] },);
+    // result = await GeneralUser.findOne( { uid:req?.user?.uid },);
+    result = await GeneralUser.findOne( { uid:payload?.uid },);
 
-  result = await GeneralUser.findOne({ uid: payload?.uid });
-  if (!result) {
+  if (!result?.uid) {
+    // create new user
+
+    // payload.uid=req?.user?.uid
+    // payload.email=req?.user?.email
+    // removeFalseValue(payload)
     result = await GeneralUser.create(payload);
+  } else {
+    const data: any = {
+      fcm_token: payload?.fcm_token,
+    };
+    if (payload?.uid) {
+      // data.uid = req?.user?.uid;
+      data.uid = payload?.uid;
+    }
+    if (payload?.email) {
+      // data.email = req?.user?.email;
+      data.email = payload?.email;
+    }
+
+    result = await GeneralUser.findOneAndUpdate(
+      { uid:payload?.uid },
+      data,
+      {new: true,runValidators:true}
+    );
   }
-  console.log(result, 'apple login 37 serveice');
+ 
   return result;
 };
+
+
 
 const getAllGeneralUsersFromDb = async (
   filters: IGeneralUserFilters,
@@ -178,7 +208,7 @@ const updateCourseVedioOrQuizFromDb = async (
   if (course_id && lessionId) {
     result = await GeneralUser.findOneAndUpdate(
       {
-        _id: id,
+        _id: new Types.ObjectId(id),
         'purchase_courses.course': course_id,
         'purchase_courses.total_completed_lessions': { $ne: lessionId },
       },
@@ -233,7 +263,7 @@ const updateGeneralUserFromDb = async (
   }
 
   if (
-    resultFind?._id !== req?.user?._id ||
+    String(resultFind?._id)!== req?.user?._id &&
     req.user.role !== ENUM_USER_ROLE.ADMIN
   ) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Unauthorise person!');

@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
+
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import config from '../../config';
 import { jwtHelpers } from '../../helper/jwtHelpers';
 import ApiError from '../errors/ApiError';
+import firebaseAdmin from './firebaseAdmin';
+
 
 const authMiddleware =
   (...requiredRoles: string[]) =>
@@ -12,15 +15,38 @@ const authMiddleware =
       //get authorization token
       let verifiedUser = null;
       const token = req.headers.authorization;
-      // console.log(token, Math.random() * 100);
-      /* const tokenCookie = req.cookies;
-      console.log(tokenCookie, '1717174174');
-      if (!token && !tokenCookie) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
-      } */
+     
+      const firebase_token = req.headers.firebase_token
+  
+      if(firebase_token){
+        try {
+          
+          const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebase_token as string);
+         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { name,email,uid,_id } = decodedToken
+          // verifiedUser=decodedToken
+          // if(!_id){
+          //    await firebaseAdmin.auth().setCustomUserClaims("PRHvW67qPqQ4jX3iYmKyrF49b2w1",{_id:"6497ff5cd4516198fb1ac558",role:"admin"}); 
+          // }
+          console.log(decodedToken);
+          // req.user=decodedToken
+        } catch (error) {
+          console.log("🚀 ~ file: authMiddleware.ts:36 ~ error:", error)
+          throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+      
+        }
+       
+      }
+      // if (!token && !firebase_token) {
+      //   throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+      // } 
+   
+
       if (!token) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
       }
+
+
       // verify token only general user
 
       if (token) {
@@ -28,30 +54,10 @@ const authMiddleware =
           token,
           config.jwt.secret as Secret
         );
+        req.user = verifiedUser;
       }
-      // console.log(verifiedUser);
-      //রিকুয়েস্ট টার মধ্যে আমরা কোন কিছু typescript এর কারণে সরাসরি এড করতে পারবো না | তার জন্য আমাদেরকে index.d.ts --> interface a এই নামে একটা ফাইল বানাতে হবে
-      // {role,email}
+    
 
-      // if (
-      //   !tokenCookie &&
-      //   verifiedUser?.role &&
-      //   verifiedUser.role === ENUM_USER_ROLE.ADMIN
-      // ) {
-      //   throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden access');
-      // }
-
-      // if (tokenCookie) {
-      //   const verifiAdmin = jwtHelpers.verifyToken(
-      //     tokenCookie,
-      //     config.jwt.refresh_secret as Secret
-      //   );
-      //   if (verifiAdmin?.role === ENUM_USER_ROLE.ADMIN) {
-      //     verifiedUser = verifiAdmin;
-      //   }
-      // }
-
-      req.user = verifiedUser;
 
       // role diye guard korar jnno
       if (requiredRoles.length && !requiredRoles.includes(verifiedUser?.role)) {

@@ -30,11 +30,13 @@ const mongoose_1 = require("mongoose");
 const users_1 = require("../../../enums/users");
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const logger_1 = require("../../share/logger");
 const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const model_GeneralUser_1 = require("./model.GeneralUser");
 // import { IPurchased_courses } from '../purchased_courses/purchased_courses.interface';
 // const {ObjectId}=mongoose.Types
 const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    //
     const removeFalseValue = (obj) => {
         const falseValues = [undefined, '', 'undefined', null, 'null'];
         for (const key in obj) {
@@ -44,12 +46,32 @@ const createGeneralUserByFirebaseFromDb = (payload) => __awaiter(void 0, void 0,
         }
     };
     removeFalseValue(payload);
-    // return payload;
+    //
+    logger_1.logger.info({ payload, line: 'apple login 29 serveice' });
     let result = null;
-    result = yield model_GeneralUser_1.GeneralUser.findOne({ uid: payload === null || payload === void 0 ? void 0 : payload.uid });
-    if (!result) {
+    // if (payload.email) {
+    result = yield model_GeneralUser_1.GeneralUser.findOne({ $or: [{ uid: payload === null || payload === void 0 ? void 0 : payload.uid }, { email: payload === null || payload === void 0 ? void 0 : payload.email }] });
+    // } 
+    //  if(!result?.uid) {
+    // result = await GeneralUser.findOne({ uid: payload?.uid });
+    // }
+    if (!(result === null || result === void 0 ? void 0 : result.uid)) {
+        // create new user
         result = yield model_GeneralUser_1.GeneralUser.create(payload);
     }
+    else {
+        const data = {
+            fcm_token: payload === null || payload === void 0 ? void 0 : payload.fcm_token,
+        };
+        if (payload === null || payload === void 0 ? void 0 : payload.uid) {
+            data.uid = payload === null || payload === void 0 ? void 0 : payload.uid;
+        }
+        if (payload === null || payload === void 0 ? void 0 : payload.email) {
+            data.email = payload === null || payload === void 0 ? void 0 : payload.email;
+        }
+        result = yield model_GeneralUser_1.GeneralUser.findOneAndUpdate({ $or: [{ uid: payload === null || payload === void 0 ? void 0 : payload.uid }, { email: payload === null || payload === void 0 ? void 0 : payload.email }] }, data, { new: true, runValidators: true });
+    }
+    logger_1.logger.info({ result, line: "result, 'apple login 37 serveice" });
     return result;
 });
 const getAllGeneralUsersFromDb = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {

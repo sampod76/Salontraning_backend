@@ -1,4 +1,5 @@
 import { Model } from 'mongoose';
+import { ICourse } from '../course/course.interface';
 
 type IOtherInfo = { uid: string; photoURL: string };
 
@@ -9,7 +10,7 @@ type IPurchaseCourses = {
 };
 
 export type IGeneralUser = {
-  _id: unknown;
+  _id: string;
   // _id?: string;
   name: string; //embedded object
   gender?: 'male' | 'female';
@@ -19,9 +20,16 @@ export type IGeneralUser = {
   phone?: string;
   address?: string;
   profileImage?: string;
-  uid?: string;
+  uid: string;
+  fcm_token?: string;
+  deviceId?: string;
   otherInfo?: IOtherInfo;
   role: string;
+  subscribe?: {
+    startDate: string;
+    endDate: string;
+    totalCourses?:[string|ICourse]
+  };
   status?: 'active' | 'deactive';
   learnedToday?: {
     date?: string;
@@ -37,4 +45,5 @@ export type IGeneralUserFilters = {
   email?: string;
   phone?: string;
   status?: string;
+  uid?: string;
 };

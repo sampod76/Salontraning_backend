@@ -12,6 +12,8 @@ export default {
   default_faculty_pass: process.env.DEFAULT_FACULTY_PASS,
   default_admin_pass: process.env.DEFAULT_ADMIN_PASS,
   bycrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
+  imgbb_key: process.env.IMGBB_KEY,
+  crypto_key: process.env.ENCRYPTION_SECRET,
   jwt: {
     secret: process.env.JWT_SECRET,
     refresh_secret: process.env.JWT_REFRESH_SECRET,

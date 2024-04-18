@@ -27,6 +27,8 @@ const createCourseZodSchema = zod_1.z.object({
         description: zod_1.z.string().optional(),
         thumbnail: zod_1.z.string().optional(),
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
+        // course_mode: z.enum(['pre_recorded', 'jobs', 'events']).optional(),
+        course_mode: zod_1.z.string().optional(),
         publish: zod_1.z.object({ date: zod_1.z.string().optional() }).optional(),
         publisher: zod_1.z.string({ required_error: 'publisher field is required' }),
         publisherName: zod_1.z.string({
@@ -59,6 +61,8 @@ const updateCourseZodSchema = zod_1.z.object({
         description: zod_1.z.string().optional(),
         thumbnail: zod_1.z.string().optional(),
         status: zod_1.z.enum(['active', 'deactive', 'save']).optional(),
+        // course_mode: z.enum(['pre_recorded', 'jobs', 'events']).optional(),
+        course_mode: zod_1.z.string().optional(),
         publish: zod_1.z
             .object({ status: zod_1.z.boolean().optional(), time: zod_1.z.string().optional() })
             .optional(),

@@ -4,6 +4,7 @@ import authMiddleware from '../../middlewares/authMiddleware';
 import validateRequestZod from '../../middlewares/validateRequestZod';
 import { Purchased_coursesController } from './purchased_courses.controller';
 import { PurchasedCoursesValidation } from './purchased_courses.validation';
+import decryptMiddleware from '../../middlewares/decryptBodyData';
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router
     Purchased_coursesController.getAllPurchased_courses
   )
   .post(
+    decryptMiddleware(),
     authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.GENERAL_USER),
     validateRequestZod(
       PurchasedCoursesValidation.cteateZodPurchasedCoursesSchema

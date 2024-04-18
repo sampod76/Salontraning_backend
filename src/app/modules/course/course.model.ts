@@ -25,6 +25,10 @@ const courseSchema = new Schema<ICourse, CourseModel>(
       type: String,
       enum: COURSE_TYPES, // ['free', 'paid', 'open', 'closed', 'recurrig'];
     },
+    course_mode: {
+      type: String,
+      // enum: COURSE_MODES, 
+    },
     categoryDetails: {
       type: {
         category: {

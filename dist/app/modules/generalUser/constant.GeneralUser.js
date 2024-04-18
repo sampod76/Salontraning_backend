@@ -10,4 +10,9 @@ exports.GeneralUserSearchableFields = [
     'name',
     'address',
 ];
-exports.GeneralUserFilterableFields = ['searchTerm', 'id', 'status'];
+exports.GeneralUserFilterableFields = [
+    'searchTerm',
+    'id',
+    'status',
+    'uid',
+];

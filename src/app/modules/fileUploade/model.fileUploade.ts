@@ -31,6 +31,10 @@ const FileUploadeSchema = new Schema<IFileUploade, FileUploadeModel>(
       type: String,
       trim: true,
     },
+    directoryPath: {
+      type: String,
+      trim: true,
+    },
 
     tag: [
       {

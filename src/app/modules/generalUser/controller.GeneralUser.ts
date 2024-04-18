@@ -1,3 +1,4 @@
+// import crypto from 'crypto';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
@@ -39,11 +40,15 @@ const getAllGeneralUsers = catchAsync(async (req: Request, res: Response) => {
 
 const createGeneralUserByFirebase = catchAsync(
   async (req: Request, res: Response) => {
-    console.log('login apple 41 controller');
+    console.log(req.query);
+    // if (!req.body?.uid && req.query?.setUid === 'yes') {
+    //   req.body.uid = crypto.randomBytes(28).toString('hex');
+    //   console.log(req.body.uid)
+    // }
     const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
-      req.body
+      req.body,req
     )) as IGeneralUser & { _id: Types.ObjectId };
-    console.log(result, 'login apple 45 controller');
+ 
     if (!result) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
     }
@@ -82,23 +87,34 @@ const createGeneralUserByFirebase = catchAsync(
         name: result?.name,
         status: result?.status,
         email: result?.email,
-        phone: result.phone,
+        phone: result?.phone,
+        fcm_token: result?.fcm_token,
         // ...result,
         accessToken,
       },
     });
-
-    // sendResponse<ILoginUserResponse>(res, {
-    //   statusCode: httpStatus.OK,
-    //   success: true,
-    //   message: 'user found successfully !',
-    //   // data:result,
-    //   data: {
-    //     accessToken,
-    //   },
-    // });
   }
 );
+//!------- only admin add course then create user---------
+const createGeneralUserByAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = (await GeneralUserService.createGeneralUserByFirebaseFromDb(
+      req.body,req
+    ))
+    console.log(result, 'login apple 45 controller');
+    if (!result) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'forbidden access!');
+    }
+    res.status(200).send({
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user found successfully !',
+      // data:result,
+      data: result,
+    });
+  }
+);
+//
 
 const getSingleGeneralUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -189,4 +205,5 @@ export const GeneralUserController = {
   updateCourseVedioOrQuiz,
   updateGeneralUser,
   deleteGeneralUser,
+  createGeneralUserByAdmin
 };

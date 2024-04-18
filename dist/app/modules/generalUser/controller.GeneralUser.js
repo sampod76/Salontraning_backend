@@ -26,7 +26,9 @@ const constant_GeneralUser_1 = require("./constant.GeneralUser");
 const service_GeneralUser_1 = require("./service.GeneralUser");
 const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let queryObject = req.query;
-    queryObject = Object.fromEntries(Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
+    queryObject = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(queryObject).filter(([_, value]) => Boolean(value)));
     const filter = (0, pick_1.default)(queryObject, constant_GeneralUser_1.GeneralUserFilterableFields);
     const paginationOptions = (0, pick_1.default)(queryObject, pagination_1.PAGINATION_FIELDS);
     const result = yield service_GeneralUser_1.GeneralUserService.getAllGeneralUsersFromDb(filter, paginationOptions);
@@ -39,7 +41,13 @@ const getAllGeneralUsers = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     });
 }));
 const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query);
+    // if (!req.body?.uid && req.query?.setUid === 'yes') {
+    //   req.body.uid = crypto.randomBytes(28).toString('hex');
+    //   console.log(req.body.uid)
+    // }
     const result = (yield service_GeneralUser_1.GeneralUserService.createGeneralUserByFirebaseFromDb(req.body));
+    console.log(result, 'login apple 45 controller');
     if (!result) {
         throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'forbidden access!');
     }
@@ -69,20 +77,28 @@ const createGeneralUserByFirebase = (0, catchAsync_1.default)((req, res) => __aw
             status: result === null || result === void 0 ? void 0 : result.status,
             email: result === null || result === void 0 ? void 0 : result.email,
             phone: result.phone,
+            fcm_token: result === null || result === void 0 ? void 0 : result.fcm_token,
             // ...result,
             accessToken,
         },
     });
-    // sendResponse<ILoginUserResponse>(res, {
-    //   statusCode: httpStatus.OK,
-    //   success: true,
-    //   message: 'user found successfully !',
-    //   // data:result,
-    //   data: {
-    //     accessToken,
-    //   },
-    // });
 }));
+//!------- only admin add course then create user---------
+const createGeneralUserByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = (yield service_GeneralUser_1.GeneralUserService.createGeneralUserByFirebaseFromDb(req.body));
+    console.log(result, 'login apple 45 controller');
+    if (!result) {
+        throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, 'forbidden access!');
+    }
+    res.status(200).send({
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'user found successfully !',
+        // data:result,
+        data: result,
+    });
+}));
+//
 const getSingleGeneralUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const id = req.params.id;
@@ -152,4 +168,5 @@ exports.GeneralUserController = {
     updateCourseVedioOrQuiz,
     updateGeneralUser,
     deleteGeneralUser,
+    createGeneralUserByAdmin
 };

@@ -32,6 +32,7 @@ const photoContest_consent_1 = require("./photoContest.consent");
 const photoContest_model_1 = require("./photoContest.model");
 const createPhotoContestUserByDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = (yield photoContest_model_1.PhotoContestUser.create(payload)).populate('thumbnail');
+    console.log(result, 'photo contest join 20 service');
     return result;
 });
 //getAllPhotoContestUserFromDb

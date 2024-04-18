@@ -12,3 +12,4 @@ export const decrypt = (encryptedText: string): any => {
   );
   return obj;
 };
+

@@ -12,7 +12,8 @@ import { Course } from './course.model';
 import { generateCourseId } from './course.utils';
 const { ObjectId } = mongoose.Types;
 const createCourseByDb = async (payload: ICourse): Promise<ICourse> => {
-  payload.courseId = await generateCourseId();
+  payload.courseId =
+    payload.title.slice(0, 5).toLowerCase() + '-' + (await generateCourseId());
   const result = (await Course.create(payload)).populate([
     {
       path: 'publisher',

@@ -24,6 +24,8 @@ export type IPayment = {
   method?: string;
   paymentType?: string;
   method_TransactionID?: string;
+  productId?: string;
+  revenueCatId?: string;
 };
 
 export type IPurchased_courses = {

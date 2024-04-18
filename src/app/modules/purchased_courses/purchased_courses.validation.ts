@@ -5,6 +5,8 @@ const IPaymentSchema = z
     method: z.string().trim().optional(),
     method_TransactionID: z.string().trim().optional(),
     paymentType: z.string().optional(),
+    productId: z.string().optional(),
+    revenueCatId: z.string().optional(),
   })
   .optional();
 
@@ -36,6 +38,8 @@ const IPaymentSchemaUpdate = z
       .optional(),
     method: z.string().trim().optional(),
     method_TransactionID: z.string().trim().optional(),
+    productId: z.string().optional(),
+    revenueCatId: z.string().optional(),
   })
   .optional();
 

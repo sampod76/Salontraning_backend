@@ -235,7 +235,7 @@ const getSinglePhotoContestUserFromDb = async (
     {
       $project: { thumbnail: 0 },
     },
-    //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না
+    //মনে রাখতে হবে যদি এটি দেওয়া না হয় তাহলে সে যখন কোন একটি ক্যাটাগরির থাম্বেল না পাবে সে তাকে দেবে না //not show this photo
     {
       $addFields: {
         thumbnail: {
@@ -276,7 +276,7 @@ const getSinglePhotoContestUserFromDb = async (
       },
     },
     {
-      $project: { share: 0, loveReacts: 0, messages: 0 },
+      $project: { share: 0, loveReacts: 0, },
     },
   ];
 

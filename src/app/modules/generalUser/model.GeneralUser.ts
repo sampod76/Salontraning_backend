@@ -1,7 +1,8 @@
-import { Schema, Types, model } from 'mongoose';
+import mongoose, { Schema, Types, model } from 'mongoose';
 import { ENUM_USER_ROLE } from '../../../enums/users';
 import { GENDER } from './constant.GeneralUser';
 import { GeneralUserModel, IGeneralUser } from './interface.GeneralUser';
+import { format } from 'date-fns';
 const GeneralUserSchema = new Schema<IGeneralUser>(
   {
     name: {
@@ -17,6 +18,7 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
       type: String,
       default: ENUM_USER_ROLE.GENERAL_USER,
     },
+   
     dateOfBirth: {
       type: String,
       // required: true,
@@ -41,12 +43,21 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
     uid: {
       type: String,
       unique: true,
+      required: [true, 'Uid must be provided'],
+    },
+    fcm_token: {
+      type: String,
+      unique: true,
+    },
+    deviceId: {
+      type: String,
     },
     status: {
       type: String,
       enum: ['active', 'deactive'],
       default: 'active',
     },
+
     learnedToday: {
       type: {
         date: {
@@ -64,6 +75,26 @@ const GeneralUserSchema = new Schema<IGeneralUser>(
         total_completed_lessions: [{ type: Types.ObjectId, ref: 'Lession' }],
       },
     ],
+    
+    subscribe: {
+      startDate: {
+        type: Date,
+        default: () => {
+          // Get the current date
+          const today = new Date();
+          const dateString = format(today, 'yyyy-MM-dd');
+          return dateString;
+        },
+      },
+      endDate: {
+        type: Date,
+      },
+      // futures
+      totalCourses:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Course"
+       }]
+    },
   },
   {
     timestamps: true,
